@@ -37,8 +37,8 @@ public class EnemyStats : MonoBehaviour
 
     private void Die()
     {
+        Debug.Log($"[EnemyStats] {gameObject.name} 사망 / expReward: {data.expReward}");
         OnDeath?.Invoke();
-        // 풀링 쓸 거면 여기서 Destroy 대신 반환
         Destroy(gameObject);
     }
 }

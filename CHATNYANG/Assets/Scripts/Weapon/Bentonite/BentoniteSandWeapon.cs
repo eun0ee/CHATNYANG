@@ -22,22 +22,4 @@ public class BentoniteSandWeapon : WeaponBase
             }
         }
     }
-
-    private Transform FindNearestEnemy()
-    {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        Transform nearest = null;
-        float minDistance = Mathf.Infinity;
-
-        foreach (GameObject enemy in enemies)
-        {
-            float dist = Vector2.Distance(transform.position, enemy.transform.position);
-            if (dist < minDistance)
-            {
-                minDistance = dist;
-                nearest = enemy.transform;
-            }
-        }
-        return nearest;
-    }
 }

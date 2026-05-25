@@ -21,16 +21,29 @@ public class PlayerAnimator : MonoBehaviour
 
     private void Update()
     {
-        _animator.SetBool(IsMoving, _controller.IsMoving);
+        if (_animator == null) return;
+
+        // 파라미터 존재 여부 체크 후 설정
+        if (HasParameter("IsMoving"))
+            _animator.SetBool(IsMoving, _controller.IsMoving);
 
         if (_controller.IsMoving)
         {
-            _animator.SetFloat(MoveX, _controller.MoveDirection.x);
-            _animator.SetFloat(MoveY, _controller.MoveDirection.y);
+            if (HasParameter("MoveX"))
+                _animator.SetFloat(MoveX, _controller.MoveDirection.x);
+            if (HasParameter("MoveY"))
+                _animator.SetFloat(MoveY, _controller.MoveDirection.y);
 
-            // 좌우 반전으로 스프라이트 절약
             if (_controller.MoveDirection.x != 0)
                 _spriteRenderer.flipX = _controller.MoveDirection.x < 0;
         }
+    }
+
+    private bool HasParameter(string paramName)
+    {
+        if (_animator == null) return false;
+        foreach (var param in _animator.parameters)
+            if (param.name == paramName) return true;
+        return false;
     }
 }

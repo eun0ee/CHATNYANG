@@ -28,4 +28,22 @@ public class PlayerStats : MonoBehaviour
         if (recovery > 0f)
             currentHp = Mathf.Min(currentHp + recovery * Time.deltaTime, maxHp);
     }
+
+    public void TakeDamage(float amount)
+    {
+        float finalDamage = Mathf.Max(0f, amount - armor);
+        currentHp -= finalDamage;
+
+        if (currentHp <= 0f)
+        {
+            currentHp = 0f;
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Debug.Log("Player Dead");
+        // 나중에 GameManager.Instance.GameOver() 연결
+    }
 }

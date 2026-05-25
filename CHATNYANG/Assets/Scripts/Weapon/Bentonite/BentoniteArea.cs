@@ -52,22 +52,8 @@ public class BentoniteArea : MonoBehaviour
 
     private void ApplySlow(GameObject enemyObj, bool isSlowed)
     {
-        // 주의: 적 이동을 제어하는 스크립트 구조에 맞춰 수정해야 합니다.
-        // 현재 팀원의 EnemyStats에는 속도 변경 로직이 없으므로, 
-        // 적의 이동을 제어하는 컴포넌트(예: EnemyController)를 가져와서 조작해야 합니다.
-
-        /* EnemyController controller = enemyObj.GetComponent<EnemyController>();
-        if (controller != null)
-        {
-            if (isSlowed)
-            {
-                controller.currentSpeed = controller.baseSpeed * slowFactor;
-            }
-            else
-            {
-                controller.currentSpeed = controller.baseSpeed;
-            }
-        }
-        */
+        EnemyAI ai = enemyObj.GetComponent<EnemyAI>();
+        if (ai != null)
+            ai.SetSpeedMultiplier(isSlowed ? slowFactor : 1f);
     }
 }
