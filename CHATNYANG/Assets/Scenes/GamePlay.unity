@@ -667,7 +667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingWeaponPrefabs:
-  - {fileID: 4900652838745613963, guid: 9ee12aa0d71443145b914de1fe06ca67, type: 3}
+  - {fileID: 5970713186794729296, guid: 905da875c1d9c5e4891fbcb61c22b750, type: 3}
   maxWeaponSlots: 6
 --- !u!114 &214378419
 MonoBehaviour:

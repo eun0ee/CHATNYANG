@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de9adddbeee580c4798b58db0ab8f496, type: 3}
+  m_Name: Data_MouseToy
+  m_EditorClassIdentifier: 
+  weaponId: MouseToy
+  damage: 0.2
+  attackCooldown: 1
+  projectilePrefab: {fileID: 603811611715566344, guid: 6cf2343ca95d0a440b4c5add1a737ac6, type: 3}
+  projectileCount: 1
+  bounceCount: 0
+  projectileSpeed: 6
+  areaPrefab: {fileID: 6572700842991583547, guid: b8bfc04c279182c4aafe26b7a75a8330, type: 3}
+  aoeRadius: 2.5
+  slowFactor: 0
+  areaDuration: 0.2

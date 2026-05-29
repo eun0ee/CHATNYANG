@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Text.RegularExpressions;
 
 public class LevelUpManager : MonoBehaviour
 {
@@ -36,6 +37,7 @@ public class LevelUpManager : MonoBehaviour
     private float _timer;
     private bool _isWaitingForInput = false;
     private Coroutine _countdownCoroutine;
+    private string _lastPlayerInput = "";
 
     [System.Serializable]
     public class DealerResponse
@@ -159,6 +161,50 @@ public class LevelUpManager : MonoBehaviour
     {
         _isWaitingForInput = false;
         if (playerInputField != null) playerInputField.interactable = false;
+
+        // 1차 필터링 로직 (API 호출 전 검사)
+        string filterReason = "";
+        bool isFiltered = false;
+
+        // 1. 아무것도 입력 안 하거나 타임아웃 났을 때
+        if (string.IsNullOrWhiteSpace(playerText) || playerText == "타임아웃")
+        {
+            filterReason = "기도를 하다 말다니, 시간 낭비다냥! 물약이나 먹어라.";
+            isFiltered = true;
+        }
+        // 2. 전과 완전히 똑같은 텍스트를 입력했을 때
+        else if (playerText == _lastPlayerInput)
+        {
+            filterReason = "방금 한 말이랑 똑같잖아냥! 성의가 없으니 돌멩이나 받아라.";
+            isFiltered = true;
+        }
+        // 3. 자음이나 모음(초성)이 하나라도 포함되어 있을 때
+        else if (Regex.IsMatch(playerText, "[ㄱ-ㅎㅏ-ㅣ]"))
+        {
+            filterReason = "초성이나 자음 모음만 덜렁 쓰다니 건방지다냥! 쓰레기 얍.";
+            isFiltered = true;
+        }
+
+        // 필터링에 걸렸다면 API 통신 없이 즉시 로컬 처리
+        if (isFiltered)
+        {
+            if (timerText != null) timerText.text = "응답 완료";
+            if (dealerDialogueText != null) dealerDialogueText.text = filterReason;
+
+            // 타임아웃/빈칸은 포션 지급, 나머지는 패널티(돌멩이) 지급
+            string penaltyItem = (playerText == "타임아웃" || string.IsNullOrWhiteSpace(playerText)) ? "Heal_Potion" : "Trash_Item";
+
+            // 타임아웃이 아닐 때만 마지막 입력 기록 갱신
+            if (playerText != "타임아웃") _lastPlayerInput = playerText;
+
+            ApplyRewardEffect(penaltyItem);
+            ShowResultUI();
+
+            return; // 여기서 함수를 종료하여 아래의 API 호출을 막음
+        }
+
+        // 정상적인 입력일 경우 기록 갱신 후 API 통신 시작
+        _lastPlayerInput = playerText;
 
         if (timerText != null) timerText.text = "분석 중...";
         if (dealerDialogueText != null) dealerDialogueText.text = "하늘에 기도를 전달하는 중이다냥. 기다려라...";

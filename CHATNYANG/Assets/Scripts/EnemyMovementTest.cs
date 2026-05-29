@@ -18,6 +18,8 @@ public class EnemyMovementTest : MonoBehaviour
 
     private void Update()
     {
+        if (GetComponent<ConfusionStatus>() != null) return;
+
         // 플레이어가 존재하면 그 방향으로 이동
         if (targetPlayer != null)
         {
