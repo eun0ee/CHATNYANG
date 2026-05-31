@@ -20,6 +20,6 @@ MonoBehaviour:
   bounceCount: 0
   projectileSpeed: 8
   areaPrefab: {fileID: 9112507680966855300, guid: ae1eda10b25424141b4bbc4830d94c3f, type: 3}
-  aoeRadius: 2.5
+  aoeRadius: 1
   slowFactor: 0.5
   areaDuration: 4
