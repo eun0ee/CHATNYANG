@@ -3,8 +3,10 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyStats))]
 public class ExperienceDrop : MonoBehaviour
 {
+    [SerializeField] private GameObject expOrbPrefab; // ExpOrb í”„ë¦¬íŒ¹ ì—°ê²°
+
     private EnemyStats _stats;
-    private static ExperienceSystem _expSystem; // static Ä³½Ì ¸Å¹ø Find ¹æÁö
+    private static ExperienceSystem _expSystem;
 
     private void Awake()
     {
@@ -17,11 +19,15 @@ public class ExperienceDrop : MonoBehaviour
 
     private void DropExperience()
     {
-        _expSystem?.AddExperience(_stats.Data.expReward);
+        if (expOrbPrefab == null || _expSystem == null) return;
+
+        GameObject orb = Instantiate(expOrbPrefab, transform.position, Quaternion.identity);
+        orb.GetComponent<ExpOrb>()?.Init(_stats.Data.expReward, _expSystem);
     }
 
     private void OnDestroy()
     {
-        _stats.OnDeath -= DropExperience;
+        if (_stats != null)
+            _stats.OnDeath -= DropExperience;
     }
 }

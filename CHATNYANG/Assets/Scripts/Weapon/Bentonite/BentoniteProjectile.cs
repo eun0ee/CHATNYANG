@@ -17,10 +17,10 @@ public class BentoniteProjectile : MonoBehaviour
     {
         if (!isInitialized) return;
 
-        // ¸ñÇ¥ ÁöÁ¡À» ÇâÇØ µî¼Ó ÀÌµ¿ (Æ÷¹°¼± ¿¬ÃâÀº ÃßÈÄ ZÃàÀÌ³ª Æ®À§´×À¸·Î Ãß°¡ °¡´É)
+        // ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Zï¿½ï¿½ï¿½Ì³ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½)
         transform.position = Vector2.MoveTowards(transform.position, targetPosition, data.projectileSpeed * Time.deltaTime);
 
-        // ¸ñÇ¥ ÁöÁ¡ µµ´Ş È®ÀÎ
+        // ï¿½ï¿½Ç¥ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
         if (Vector2.Distance(transform.position, targetPosition) < 0.1f)
         {
             Explode();
@@ -29,32 +29,31 @@ public class BentoniteProjectile : MonoBehaviour
 
     private void Explode()
     {
-        // 1. ¹üÀ§ ³» Àûµé¿¡°Ô °­·ÂÇÑ ÇÑ¹æ ´ë¹ÌÁö
+        Debug.Log($"[Explode] ìœ„ì¹˜: {transform.position}, ë°˜ê²½: {data.aoeRadius}");
+        
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, data.aoeRadius);
+        Debug.Log($"[Explode] ê°ì§€ëœ Collider ìˆ˜: {hitEnemies.Length}");
+        
         foreach (Collider2D hit in hitEnemies)
         {
+            Debug.Log($"[Explode] ê°ì§€ë¨: {hit.name} / tag: {hit.tag}");
+            
             if (hit.CompareTag("Enemy"))
             {
                 EnemyStats enemy = hit.GetComponent<EnemyStats>();
+                Debug.Log($"[Explode] EnemyStats: {(enemy != null ? "ìˆìŒ" : "ì—†ìŒ")}");
+                
                 if (enemy != null)
-                {
                     enemy.TakeDamage(data.damage);
-                }
             }
         }
 
-        // 2. ÀåÆÇ(Area) »ı¼º
         if (data.areaPrefab != null)
         {
             GameObject puddle = Instantiate(data.areaPrefab, transform.position, Quaternion.identity);
-            BentoniteArea areaScript = puddle.GetComponent<BentoniteArea>();
-            if (areaScript != null)
-            {
-                areaScript.Initialize(data);
-            }
+            puddle.GetComponent<BentoniteArea>()?.Initialize(data);
         }
 
-        // Æ÷´ë ÆÄ±«
         Destroy(gameObject);
     }
 }

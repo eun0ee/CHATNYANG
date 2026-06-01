@@ -7,18 +7,17 @@ using System.Text.RegularExpressions;
 public class LevelUpManager : MonoBehaviour
 {
     [Header("UI Elements")]
-    public GameObject levelUpPanel;
-    public Image catImage;
-    public TMP_InputField playerInputField;
-    public TextMeshProUGUI timerText;
-    public TextMeshProUGUI dealerDialogueText;
-    public GameObject resultDisplay;
-    public TextMeshProUGUI resultText;
-    public Button closeButton;
+    public GameObject        levelUpPanel;
+    public TMP_InputField    playerInputField;
+    public TextMeshProUGUI   timerText;
+    public TextMeshProUGUI   dealerDialogueText;
+    public GameObject        resultDisplay;
+    public TextMeshProUGUI   resultText;
+    public Button            closeButton;
 
     [Header("Level Up Settings")]
-    public float levelUpTimeout = 20f;
-    public int maxCharacterLimit = 5;
+    public float levelUpTimeout    = 20f;
+    public int   maxCharacterLimit = 5;
 
     [Header("Weapon Prefabs")]
     public GameObject catnipWeaponPrefab;
@@ -29,15 +28,16 @@ public class LevelUpManager : MonoBehaviour
     [Header("API Connection")]
     public GeminiClient geminiClient;
 
-    private GameObject _player;
-    private PlayerStats _playerStats;
-    private WeaponManager _weaponManager;
+    // â”€â”€ ë‚´ë¶€ ì°¸ì¡° â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    private GameObject       _player;
+    private PlayerStats      _playerStats;
+    private WeaponManager    _weaponManager;
     private ExperienceSystem _expSystem;
 
-    private float _timer;
-    private bool _isWaitingForInput = false;
+    private float    _timer;
+    private bool     _isWaitingForInput;
     private Coroutine _countdownCoroutine;
-    private string _lastPlayerInput = "";
+    private string   _lastPlayerInput = "";
 
     [System.Serializable]
     public class DealerResponse
@@ -46,96 +46,77 @@ public class LevelUpManager : MonoBehaviour
         public string dialogue;
     }
 
+    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     private void Start()
     {
         _player = GameObject.FindWithTag("Player");
         if (_player != null)
         {
-            _playerStats = _player.GetComponent<PlayerStats>();
+            _playerStats   = _player.GetComponent<PlayerStats>();
             _weaponManager = _player.GetComponentInChildren<WeaponManager>();
         }
 
-        if (closeButton != null) closeButton.onClick.AddListener(ResumeGame);
+        closeButton?.onClick.AddListener(ResumeGame);
 
         if (playerInputField != null)
         {
             playerInputField.characterLimit = 0;
             playerInputField.onValueChanged.AddListener(TruncateKoreanInput);
-
-            // ¿£ÅÍÅ° ÀÔ·ÂÀ» °¨ÁöÇÏ´Â À¯´ÏÆ¼ ³»Àå ÀÌº¥Æ® ¿¬°á (¸¶¿ì½º Å¬¸¯ ´ëÃ¼)
             playerInputField.onSubmit.AddListener(OnInputFieldSubmit);
         }
 
-        if (levelUpPanel != null) levelUpPanel.SetActive(false);
+        levelUpPanel?.SetActive(false);
 
         _expSystem = FindObjectOfType<ExperienceSystem>();
         if (_expSystem != null)
-        {
             _expSystem.OnLevelUp += TriggerLevelUp;
-        }
     }
 
     private void OnDestroy()
     {
         if (_expSystem != null)
-        {
             _expSystem.OnLevelUp -= TriggerLevelUp;
-        }
     }
 
+    // â”€â”€ Input â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     private void TruncateKoreanInput(string input)
     {
-        if (input.Length > maxCharacterLimit)
-        {
-            playerInputField.text = input.Substring(0, maxCharacterLimit);
-            playerInputField.caretPosition = maxCharacterLimit;
-        }
+        if (input.Length <= maxCharacterLimit) return;
+        playerInputField.text          = input.Substring(0, maxCharacterLimit);
+        playerInputField.caretPosition = maxCharacterLimit;
     }
 
-    // ÀÎÇ²ÇÊµå¿¡¼­ ¿£ÅÍÅ°°¡ ´­·ÈÀ» ¶§ ÀÚµ¿À¸·Î È£ÃâµÇ´Â ÇÔ¼ö
     private void OnInputFieldSubmit(string text)
     {
-        // ´ë±â ÁßÀÌ°í ÀÔ·ÂµÈ ±ÛÀÚ°¡ ÇÑ ±ÛÀÚ¶óµµ ÀÖÀ» ¶§¸¸ ÀÛµ¿
-        if (_isWaitingForInput && text.Length > 0)
-        {
-            SubmitRequest(text);
-        }
-        else if (_isWaitingForInput && text.Length == 0)
-        {
-            // ºó Ä­À¸·Î ¿£ÅÍ¸¦ ´©¸£¸é ÀÔ·ÂÀ» °­Á¦·Î ´Ù½Ã À¯µµ
-            playerInputField.ActivateInputField();
-        }
+        if (!_isWaitingForInput) return;
+        if (text.Length > 0) SubmitRequest(text);
+        else playerInputField.ActivateInputField();
     }
 
+    // â”€â”€ Level Up ì§„ì… â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     [ContextMenu("Trigger Level Up (Test)")]
-    public void TriggerLevelUp()
+    public void TriggerLevelUp(int level)
     {
         Time.timeScale = 0f;
 
-        if (levelUpPanel != null) levelUpPanel.SetActive(true);
-        if (resultDisplay != null) resultDisplay.SetActive(false);
-        if (closeButton != null) closeButton.gameObject.SetActive(false);
+        levelUpPanel?.SetActive(true);
+        resultDisplay?.SetActive(false);
+        closeButton?.gameObject.SetActive(false);
 
         if (playerInputField != null)
         {
-            playerInputField.text = "";
+            playerInputField.text         = "";
             playerInputField.interactable = true;
             playerInputField.ActivateInputField();
         }
 
         if (dealerDialogueText != null)
-        {
-            dealerDialogueText.text = $"¿øÇÏ´Â °ÍÀ» {maxCharacterLimit}±ÛÀÚ ³»¿Ü·Î Àû°í [Enter]¸¦ ´©¸£¶ó³É.";
-        }
+            dealerDialogueText.text = $"ì›í•˜ëŠ” ê²ƒì„ {maxCharacterLimit}ê¸€ì ì´ë‚´ë¡œ ë§í•´ [Enter]ë¥¼ ëˆŒëŸ¬ì£¼ì„¸ìš”.";
 
-        _timer = levelUpTimeout;
+        _timer             = levelUpTimeout;
         _isWaitingForInput = true;
 
-        if (_countdownCoroutine != null)
-        {
-            StopCoroutine(_countdownCoroutine);
-        }
-
+        if (_countdownCoroutine != null) StopCoroutine(_countdownCoroutine);
         _countdownCoroutine = StartCoroutine(CountdownRoutine());
     }
 
@@ -144,180 +125,161 @@ public class LevelUpManager : MonoBehaviour
         while (_timer > 0 && _isWaitingForInput)
         {
             _timer -= Time.unscaledDeltaTime;
-            if (timerText != null) timerText.text = _timer.ToString("F1") + "ÃÊ";
+            if (timerText != null) timerText.text = _timer.ToString("F1") + "ì´ˆ";
             yield return null;
         }
 
-        // ½Ã°£ ÃÊ°ú ½Ã ¹«Á¶°Ç °­Á¦ Á¦Ãâ È°¼ºÈ­
         if (_isWaitingForInput)
         {
-            // ±ÛÀÚ¸¦ Àû´Ù ¸»¾ÒÀ¸¸é ÀûÈù ±ÛÀÚ·Î, ¾Æ¿¹ ¾È Àû¾úÀ¸¸é Å¸ÀÓ¾Æ¿ô ¹®ÀÚ·Î Á¦Ãâ
-            string finalInput = (playerInputField != null && playerInputField.text.Length > 0) ? playerInputField.text : "Å¸ÀÓ¾Æ¿ô";
+            string finalInput = (playerInputField != null && playerInputField.text.Length > 0)
+                ? playerInputField.text
+                : "íƒ€ì„ì•„ì›ƒ";
             SubmitRequest(finalInput);
         }
     }
 
+    // â”€â”€ Submit / Filter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     private void SubmitRequest(string playerText)
     {
         _isWaitingForInput = false;
         if (playerInputField != null) playerInputField.interactable = false;
 
-        // 1Â÷ ÇÊÅÍ¸µ ·ÎÁ÷ (API È£Ãâ Àü °Ë»ç)
-        string filterReason = "";
-        bool isFiltered = false;
-
-        // 1. ¾Æ¹«°Íµµ ÀÔ·Â ¾È ÇÏ°Å³ª Å¸ÀÓ¾Æ¿ô ³µÀ» ¶§
-        if (string.IsNullOrWhiteSpace(playerText) || playerText == "Å¸ÀÓ¾Æ¿ô")
+        // í•„í„° 1: ë¹ˆ ì…ë ¥ or íƒ€ì„ì•„ì›ƒ
+        if (string.IsNullOrWhiteSpace(playerText) || playerText == "íƒ€ì„ì•„ì›ƒ")
         {
-            filterReason = "±âµµ¸¦ ÇÏ´Ù ¸»´Ù´Ï, ½Ã°£ ³¶ºñ´Ù³É! ¹°¾àÀÌ³ª ¸Ô¾î¶ó.";
-            isFiltered = true;
+            Finish("ê¸°ë„ë„ ì•ˆ í•œë‹¤ëŠ” ê±°ëƒ, ì‹œê°„ë„ ì—†ë‹¤ë‹ˆ! í¬ì…˜ì´ë‚˜ ë°›ì•„.", "Heal_Potion");
+            return;
         }
-        // 2. Àü°ú ¿ÏÀüÈ÷ ¶È°°Àº ÅØ½ºÆ®¸¦ ÀÔ·ÂÇßÀ» ¶§
-        else if (playerText == _lastPlayerInput)
+        // í•„í„° 2: ì§ì „ê³¼ ë™ì¼í•œ ì…ë ¥
+        if (playerText == _lastPlayerInput)
         {
-            filterReason = "¹æ±İ ÇÑ ¸»ÀÌ¶û ¶È°°Àİ¾Æ³É! ¼ºÀÇ°¡ ¾øÀ¸´Ï µ¹¸æÀÌ³ª ¹Ş¾Æ¶ó.";
-            isFiltered = true;
+            Finish("ë˜ ê°™ì€ ë§ì´ë¼ ì•ˆ ë°›ì•„ì¤€ë‹¤! ì„±ì˜ê°€ ì—†ìœ¼ë©´ í¬ì…˜ì´ë‚˜ ë°›ì•„ë¼.", "Heal_Potion");
+            return;
         }
-        // 3. ÀÚÀ½ÀÌ³ª ¸ğÀ½(ÃÊ¼º)ÀÌ ÇÏ³ª¶óµµ Æ÷ÇÔµÇ¾î ÀÖÀ» ¶§
-        else if (Regex.IsMatch(playerText, "[¤¡-¤¾¤¿-¤Ó]"))
+        // í•„í„° 3: ì´ˆì„±Â·ììŒë§Œ ì…ë ¥
+        if (Regex.IsMatch(playerText, "[ã„±-ã…ã…-ã…£]"))
         {
-            filterReason = "ÃÊ¼ºÀÌ³ª ÀÚÀ½ ¸ğÀ½¸¸ ´ú·· ¾²´Ù´Ï °Ç¹æÁö´Ù³É! ¾²·¹±â ¾å.";
-            isFiltered = true;
+            Finish("ì´ˆì„±ì´ë‚˜ ììŒ ë‹¨ë…ì€ ë§ì´ ì•ˆ ëœë‹¤ëŠ” ëœ»ì´ëƒ! ë‹¤ì‹œ ì™€.", "Trash_Item");
+            return;
         }
 
-        // ÇÊÅÍ¸µ¿¡ °É·È´Ù¸é API Åë½Å ¾øÀÌ Áï½Ã ·ÎÄÃ Ã³¸®
-        if (isFiltered)
-        {
-            if (timerText != null) timerText.text = "ÀÀ´ä ¿Ï·á";
-            if (dealerDialogueText != null) dealerDialogueText.text = filterReason;
-
-            // Å¸ÀÓ¾Æ¿ô/ºóÄ­Àº Æ÷¼Ç Áö±Ş, ³ª¸ÓÁö´Â ÆĞ³ÎÆ¼(µ¹¸æÀÌ) Áö±Ş
-            string penaltyItem = (playerText == "Å¸ÀÓ¾Æ¿ô" || string.IsNullOrWhiteSpace(playerText)) ? "Heal_Potion" : "Trash_Item";
-
-            // Å¸ÀÓ¾Æ¿ôÀÌ ¾Æ´Ò ¶§¸¸ ¸¶Áö¸· ÀÔ·Â ±â·Ï °»½Å
-            if (playerText != "Å¸ÀÓ¾Æ¿ô") _lastPlayerInput = playerText;
-
-            ApplyRewardEffect(penaltyItem);
-            ShowResultUI();
-
-            return; // ¿©±â¼­ ÇÔ¼ö¸¦ Á¾·áÇÏ¿© ¾Æ·¡ÀÇ API È£ÃâÀ» ¸·À½
-        }
-
-        // Á¤»óÀûÀÎ ÀÔ·ÂÀÏ °æ¿ì ±â·Ï °»½Å ÈÄ API Åë½Å ½ÃÀÛ
         _lastPlayerInput = playerText;
 
-        if (timerText != null) timerText.text = "ºĞ¼® Áß...";
-        if (dealerDialogueText != null) dealerDialogueText.text = "ÇÏ´Ã¿¡ ±âµµ¸¦ Àü´ŞÇÏ´Â ÁßÀÌ´Ù³É. ±â´Ù·Á¶ó...";
+        if (timerText != null)         timerText.text         = "ë¶„ì„ ì¤‘...";
+        if (dealerDialogueText != null) dealerDialogueText.text = "í•˜ëŠ˜ì— ê¸°ë„ë¥¼ ì „ë‹¬í•˜ëŠ” ì¤‘ì´ë‹¤. ê¸°ë‹¤ë ¤ë¼...";
 
         if (geminiClient != null)
-        {
             StartCoroutine(geminiClient.CallGemini(playerText, ProcessAIResponse));
-        }
     }
 
+    // í•„í„° ê²°ê³¼ë¥¼ í•œ ê³³ì—ì„œ ì²˜ë¦¬
+    private void Finish(string message, string itemTag)
+    {
+        if (timerText != null)          timerText.text          = "ì²˜ë¦¬ ì™„ë£Œ";
+        if (dealerDialogueText != null) dealerDialogueText.text = message;
+        ApplyRewardEffect(itemTag);
+        ShowResultUI();
+    }
+
+    // â”€â”€ AI ì‘ë‹µ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     private void ProcessAIResponse(string rawJson)
     {
         if (string.IsNullOrEmpty(rawJson))
         {
-            if (dealerDialogueText != null) dealerDialogueText.text = "Åë½Å ¿À·ù´Ù³É! ±âµµ°¡ Èå·ÁÁ³À¸´Ï Ä¡·á ¹°¾àÀÌ³ª ¸Ô¾î¶ó.";
-            ApplyRewardEffect("Heal_Potion");
-            ShowResultUI();
+            Finish("ì‘ë‹µ ì—†ë‹¤! ê¸°ë„ë¥¼ ëª» ë“¤ì—ˆìœ¼ë‹ˆ ì¹˜ìœ  í¬ì…˜ì´ë‚˜ ë°›ì•„.", "Heal_Potion");
             return;
         }
 
         string cleanJson = rawJson.Replace("```json", "").Replace("```", "").Trim();
-
         try
         {
             DealerResponse response = JsonUtility.FromJson<DealerResponse>(cleanJson);
             if (dealerDialogueText != null) dealerDialogueText.text = response.dialogue;
-
             ApplyRewardEffect(response.item_tag);
         }
         catch (System.Exception e)
         {
             Debug.LogError("JSON Parsing Error: " + e.Message);
-            if (dealerDialogueText != null) dealerDialogueText.text = "¾Ë¾ÆµéÀ» ¼ö ¾ø´Â ½Å¼º¸ğµ¶ÀÌ´Ù³É! ¹ú·Î µ¹¸æÀÌ³ª ¹Ş¾Æ¶ó.";
-            ApplyRewardEffect("Trash_Item");
+            Finish("ì•Œì•„ë“¤ì„ ìˆ˜ ì—†ëŠ” ì‹ íƒì´ë‹¤! ì“°ë ˆê¸°ë‚˜ ë°›ì•„ë¼.", "Trash_Item");
+            return;
         }
 
         ShowResultUI();
     }
 
+    // â”€â”€ ë³´ìƒ ì ìš© â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     private void ApplyRewardEffect(string itemTag)
     {
-        if (_player == null) _player = GameObject.FindWithTag("Player");
-        if (_playerStats == null && _player != null) _playerStats = _player.GetComponent<PlayerStats>();
+        // null ë°©ì–´
+        if (_player       == null) _player       = GameObject.FindWithTag("Player");
+        if (_playerStats  == null && _player != null) _playerStats  = _player.GetComponent<PlayerStats>();
         if (_weaponManager == null && _player != null) _weaponManager = _player.GetComponentInChildren<WeaponManager>();
 
-        string rewardName = "Æò¹üÇÑ µ¹¸æÀÌ";
-        bool isWeaponGiven = false;
+        string rewardName  = "ì•Œ ìˆ˜ ì—†ëŠ” ë³´ìƒ";
+        bool   rewardGiven = false;
 
         switch (itemTag)
         {
             case "Weapon_Catnip":
-                rewardName = "Ä¹´Ø ±¸½½ ¹«±â";
-                isWeaponGiven = GiveWeaponToManager(catnipWeaponPrefab);
+                rewardName  = "ìº£ë‹¢ ì”¨ì•— ë¬´ê¸°";
+                rewardGiven = GiveWeapon(catnipWeaponPrefab);
                 break;
             case "Weapon_Bentonite":
-                rewardName = "º¥Åä³ªÀÌÆ® ¸ğ·¡ ¹«±â";
-                isWeaponGiven = GiveWeaponToManager(bentoniteWeaponPrefab);
+                rewardName  = "ë²¤í† ë‚˜ì´íŠ¸ í™ ë¬´ê¸°";
+                rewardGiven = GiveWeapon(bentoniteWeaponPrefab);
                 break;
             case "Weapon_FurBrush":
-                rewardName = "ÅĞ»Õ»Õ ºê·¯½Ã ¹«±â";
-                isWeaponGiven = GiveWeaponToManager(furBrushWeaponPrefab);
+                rewardName  = "ë¹—ì‚´ë¬´ëŠ¬ ë¸ŒëŸ¬ì‰¬ ë¬´ê¸°";
+                rewardGiven = GiveWeapon(furBrushWeaponPrefab);
                 break;
             case "Weapon_Laser":
-                rewardName = "ÀÚµ¿ ·¹ÀÌÀú Æ÷ÀÎÅÍ ¹«±â";
-                isWeaponGiven = GiveWeaponToManager(laserWeaponPrefab);
+                rewardName  = "ìë™ ë ˆì´ì € í¬ì¸í„° ë¬´ê¸°";
+                rewardGiven = GiveWeapon(laserWeaponPrefab);
                 break;
             case "Heal_Potion":
-                rewardName = "»ı¸í·Â È¸º¹ Æ÷¼Ç";
+                rewardName = "íšŒë³µ í¬ì…˜";
                 if (_playerStats != null)
                 {
                     _playerStats.currentHp = Mathf.Min(_playerStats.currentHp + 30f, _playerStats.maxHp);
-                    isWeaponGiven = true;
+                    rewardGiven = true;
                 }
                 break;
             case "Trash_Item":
             default:
-                rewardName = "Æò¹üÇÑ µ¹¸æÀÌ (¾²·¹±â)";
-                isWeaponGiven = true;
+                rewardName  = "ì“¸ëª¨ì—†ëŠ” ì“°ë ˆê¸° (íŒ¨ë„í‹°)";
+                rewardGiven = true;
                 break;
         }
 
-        if (!isWeaponGiven && itemTag.StartsWith("Weapon_"))
+        // ë¬´ê¸° ìŠ¬ë¡¯ ì´ˆê³¼ ë˜ëŠ” ì¤‘ë³µ ì‹œ ëŒ€ì²´ ë³´ìƒ
+        if (!rewardGiven && itemTag.StartsWith("Weapon_"))
         {
-            rewardName = "¹«±â ½½·Ô ÃÊ°ú (¶Ç´Â ÀÌ¹Ì º¸À¯Áß)";
-            dealerDialogueText.text = "ÀÌ¹Ì °¡Á³°Å³ª ´õ µé ¼ö ¾ø´Ù³É! ¹°¾àÀÌ³ª ¸Ô¾î¶ó.";
-            if (_playerStats != null) _playerStats.currentHp = Mathf.Min(_playerStats.currentHp + 30f, _playerStats.maxHp);
+            rewardName = "ë¬´ê¸° ì¶”ê°€ ë¶ˆê°€ (ìŠ¬ë¡¯ ì´ˆê³¼ ë˜ëŠ” ì¤‘ë³µ)";
+            if (dealerDialogueText != null)
+                dealerDialogueText.text = "ì´ë¯¸ ìˆê±°ë‚˜ ë” ì´ìƒ ë“¤ ìˆ˜ ì—†ë‹¤! í¬ì…˜ì´ë‚˜ ë°›ì•„.";
+            if (_playerStats != null)
+                _playerStats.currentHp = Mathf.Min(_playerStats.currentHp + 30f, _playerStats.maxHp);
         }
 
         if (resultText != null)
-        {
-            resultText.text = $"[ {rewardName} ] ÇÏ»ç ¿Ï·á!";
-        }
+            resultText.text = $"[ {rewardName} ] ë³´ìƒ ì™„ë£Œ!";
     }
 
-    private bool GiveWeaponToManager(GameObject weaponPrefab)
+    private bool GiveWeapon(GameObject prefab)
     {
-        if (_weaponManager != null && weaponPrefab != null)
-        {
-            return _weaponManager.AddWeapon(weaponPrefab);
-        }
-        return false;
+        if (_weaponManager == null || prefab == null) return false;
+        return _weaponManager.AddWeapon(prefab);
     }
 
     private void ShowResultUI()
     {
-        if (resultDisplay != null) resultDisplay.SetActive(true);
-        if (closeButton != null) closeButton.gameObject.SetActive(true);
+        resultDisplay?.SetActive(true);
+        closeButton?.gameObject.SetActive(true);
     }
 
     private void ResumeGame()
     {
-        if (levelUpPanel != null) levelUpPanel.SetActive(false);
-        // Time.scaleÀ» Time.timeScale·Î ¼öÁ¤
-        Time.timeScale = 1.0f;
+        levelUpPanel?.SetActive(false);
+        Time.timeScale = 1f;
     }
 }

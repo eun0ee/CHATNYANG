@@ -7,7 +7,7 @@ public class PlayerStats : MonoBehaviour
     public float currentHp;
     public float moveSpeed = 5f;
     public float armor = 0f;
-    public float recovery = 0f;  // 초당 HP 회복
+    public float recovery = 0f;
 
     private PlayerController _controller;
 
@@ -24,7 +24,6 @@ public class PlayerStats : MonoBehaviour
 
     private void Update()
     {
-        // 자연 회복
         if (recovery > 0f)
             currentHp = Mathf.Min(currentHp + recovery * Time.deltaTime, maxHp);
     }
@@ -43,7 +42,7 @@ public class PlayerStats : MonoBehaviour
 
     private void Die()
     {
+        Application.Quit();
         Debug.Log("Player Dead");
-        // 나중에 GameManager.Instance.GameOver() 연결
     }
 }

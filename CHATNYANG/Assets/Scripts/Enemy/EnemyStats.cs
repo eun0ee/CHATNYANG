@@ -27,17 +27,18 @@ public class EnemyStats : MonoBehaviour
     }
 
     public void TakeDamage(float amount)
-    {
-        CurrentHp -= amount;
-        OnDamaged?.Invoke(amount);
+{
+    Debug.Log($"[TakeDamage] í˜¸ì¶œë¨ / amount: {amount} / CurrentHp: {CurrentHp}");
+    CurrentHp -= amount;
+    OnDamaged?.Invoke(amount);
 
-        if (CurrentHp <= 0f)
-            Die();
-    }
+    if (CurrentHp <= 0f)
+        Die();
+}
 
     private void Die()
     {
-        Debug.Log($"[EnemyStats] {gameObject.name} »ç¸Á / expReward: {data.expReward}");
+        Debug.Log($"[EnemyStats] {gameObject.name} ï¿½ï¿½ï¿½ / expReward: {data.expReward}");
         OnDeath?.Invoke();
         Destroy(gameObject);
     }

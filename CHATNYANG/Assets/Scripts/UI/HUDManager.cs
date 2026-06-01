@@ -25,6 +25,11 @@ public class HUDManager : MonoBehaviour
     [Header("Panels")]
     [SerializeField] private GameObject settingPanel;
 
+    [Header("Experience")]
+    [SerializeField] private Slider expSlider;
+    [SerializeField] private TextMeshProUGUI levelText;
+    [SerializeField] private ExperienceSystem expSystem;
+
     // ───────────────────────────────────────────────
     #region Unity Lifecycle
 
@@ -39,11 +44,28 @@ public class HUDManager : MonoBehaviour
     {
         stopButton.onClick.AddListener(OnStopButtonClicked);
         settingButton.onClick.AddListener(OnSettingButtonClicked);
-
         settingPanel.SetActive(false);
+
+        if (expSystem != null)
+        {
+            expSystem.OnExpChanged += RefreshExpUI;
+            expSystem.OnLevelUp    += RefreshLevelUI;
+        }
+
         UpdateTimerUI();
         UpdateKillUI();
         UpdateCoinUI();
+        RefreshExpUI(0f, expSystem != null ? expSystem.RequiredExp : 100f);
+        RefreshLevelUI(1);
+    }
+
+    private void OnDestroy()
+    {
+        if (expSystem != null)
+        {
+            expSystem.OnExpChanged -= RefreshExpUI;
+            expSystem.OnLevelUp    -= RefreshLevelUI;
+        }
     }
 
     private void Update()
@@ -60,6 +82,32 @@ public class HUDManager : MonoBehaviour
         }
 
         UpdateTimerUI();
+    }
+
+    #endregion
+
+    // ───────────────────────────────────────────────
+    #region Exp / Level UI
+
+    // OnExpChanged(currentExp, requiredExp) 수신
+    private void RefreshExpUI(float current, float required)
+    {
+        if (expSlider != null)
+        {
+            expSlider.minValue = 0f;
+            expSlider.maxValue = required;
+            expSlider.value    = current;
+        }
+    }
+
+    // OnLevelUp(newLevel) 수신
+    private void RefreshLevelUI(int newLevel)
+    {
+        if (levelText != null)
+            levelText.text = $"Lv. {newLevel}";
+
+        if (expSystem != null)
+            RefreshExpUI(expSystem.CurrentExp, expSystem.RequiredExp);
     }
 
     #endregion

@@ -5,19 +5,18 @@ public class ExperienceSystem : MonoBehaviour
 {
     [Header("Level Settings")]
     [SerializeField] private int maxLevel = 40;
-    [SerializeField] private AnimationCurve expCurve; // Inspector¿¡¼­ Ä¿ºê·Î °æÇèÄ¡ Å×ÀÌºí Á¶Á¤
+    [SerializeField] private AnimationCurve expCurve;
 
-    public int CurrentLevel { get; private set; } = 1;
-    public float CurrentExp { get; private set; } = 0f;
-    public float RequiredExp { get; private set; }
+    public int   CurrentLevel { get; private set; } = 1;
+    public float CurrentExp   { get; private set; } = 0f;
+    public float RequiredExp  { get; private set; }
 
-    // ·¹º§¾÷ ½Ã LevelUpUI°¡ ±¸µ¶
-    public event UnityAction OnLevelUp;
-    public event UnityAction<float, float> OnExpChanged; // (current, required)
+    public event UnityAction<int>          OnLevelUp;    // (ìƒˆ ë ˆë²¨)
+    public event UnityAction<float, float> OnExpChanged; // (í˜„ìž¬, í•„ìš”)
 
     private void Start()
     {
-        RequiredExp = GetRequiredExp(CurrentLevel);
+        RequiredExp = CalcRequiredExp(CurrentLevel);
     }
 
     public void AddExperience(float amount)
@@ -25,27 +24,22 @@ public class ExperienceSystem : MonoBehaviour
         if (CurrentLevel >= maxLevel) return;
 
         CurrentExp += amount;
-        Debug.Log($"[ExpSystem] °æÇèÄ¡ È¹µæ: +{amount} / ÇöÀç: {CurrentExp}/{RequiredExp}");
         OnExpChanged?.Invoke(CurrentExp, RequiredExp);
 
         while (CurrentExp >= RequiredExp && CurrentLevel < maxLevel)
         {
-            CurrentExp -= RequiredExp;
+            CurrentExp  -= RequiredExp;
             CurrentLevel++;
-            RequiredExp = GetRequiredExp(CurrentLevel);
-            Debug.Log($"[ExpSystem] ·¹º§¾÷! ÇöÀç ·¹º§: {CurrentLevel}");
-            OnLevelUp?.Invoke();
+            RequiredExp  = CalcRequiredExp(CurrentLevel);
+            OnLevelUp?.Invoke(CurrentLevel);
         }
     }
 
-    // AnimationCurve ¾øÀÌµµ ¾µ ¼ö ÀÖ´Â ±âº» °ø½Ä
-    // Inspector¿¡¼­ expCurve ¼³Á¤ÇÏ¸é Ä¿ºê ¿ì¼± »ç¿ë
-    private float GetRequiredExp(int level)
+    private float CalcRequiredExp(int level)
     {
         if (expCurve != null && expCurve.keys.Length > 0)
             return expCurve.Evaluate(level);
 
-        // ±âº» °ø½Ä: ·¹º§ * 100 + (·¹º§^1.5 * 10)
         return level * 100f + Mathf.Pow(level, 1.5f) * 10f;
     }
 }
