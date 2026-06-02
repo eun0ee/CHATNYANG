@@ -134,29 +134,61 @@ Trash_Item : 위 가드레일 3번, 4번에 해당하는 경우.
 
         string jsonPayload = JsonUtility.ToJson(requestBody);
 
-        using (UnityWebRequest request = new UnityWebRequest(fullUrl, "POST"))
+        // 최대 재시도 횟수 설정
+        int maxRetries = 2;
+        int currentRetry = 0;
+        bool isSuccess = false;
+
+        while (currentRetry < maxRetries && !isSuccess)
         {
-            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
-            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-            request.downloadHandler = new DownloadHandlerBuffer();
-            request.SetRequestHeader("Content-Type", "application/json");
-
-            yield return request.SendWebRequest();
-
-            if (request.result == UnityWebRequest.Result.Success)
+            using (UnityWebRequest request = new UnityWebRequest(fullUrl, "POST"))
             {
-                var response = JsonUtility.FromJson<GeminiResponse>(request.downloadHandler.text);
-                if (response != null && response.candidates != null && response.candidates.Length > 0)
+                byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+                request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+                request.downloadHandler = new DownloadHandlerBuffer();
+                request.SetRequestHeader("Content-Type", "application/json");
+
+                yield return request.SendWebRequest();
+
+                if (request.result == UnityWebRequest.Result.Success)
                 {
-                    string aiResult = response.candidates[0].content.parts[0].text;
-                    callback?.Invoke(aiResult);
+                    isSuccess = true;
+                    var response = JsonUtility.FromJson<GeminiResponse>(request.downloadHandler.text);
+                    if (response != null && response.candidates != null && response.candidates.Length > 0)
+                    {
+                        string aiResult = response.candidates[0].content.parts[0].text;
+                        callback?.Invoke(aiResult);
+                    }
+                    else
+                    {
+                        callback?.Invoke(null);
+                    }
                 }
-            }
-            else
-            {
-                Debug.LogError("API Request Failed: " + request.error);
-                Debug.LogError("Server Response: " + request.downloadHandler.text);
-                callback?.Invoke(null);
+                else if (request.responseCode == 503)
+                {
+                    currentRetry++;
+                    Debug.LogWarning("Server is temporarily unavailable. Retrying... (" + currentRetry + "/" + maxRetries + ")");
+
+                    if (currentRetry >= maxRetries)
+                    {
+                        // 재시도 횟수 초과 시 에러 처리
+                        Debug.LogError("API Request Failed after retries: " + request.error);
+                        callback?.Invoke(null);
+                    }
+                    else
+                    {
+                        // 3초 대기 후 루프를 통해 재시도
+                        yield return new WaitForSecondsRealtime(3f);
+                    }
+                }
+                else
+                {
+                    // 503 이외의 에러는 즉시 중단
+                    Debug.LogError("API Request Failed: " + request.error);
+                    Debug.LogError("Server Response: " + request.downloadHandler.text);
+                    callback?.Invoke(null);
+                    break;
+                }
             }
         }
     }

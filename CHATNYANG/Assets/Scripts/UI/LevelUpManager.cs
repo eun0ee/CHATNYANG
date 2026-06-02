@@ -7,17 +7,17 @@ using System.Text.RegularExpressions;
 public class LevelUpManager : MonoBehaviour
 {
     [Header("UI Elements")]
-    public GameObject        levelUpPanel;
-    public TMP_InputField    playerInputField;
-    public TextMeshProUGUI   timerText;
-    public TextMeshProUGUI   dealerDialogueText;
-    public GameObject        resultDisplay;
-    public TextMeshProUGUI   resultText;
-    public Button            closeButton;
+    public GameObject levelUpPanel;
+    public TMP_InputField playerInputField;
+    public TextMeshProUGUI timerText;
+    public TextMeshProUGUI dealerDialogueText;
+    public GameObject resultDisplay;
+    public TextMeshProUGUI resultText;
+    public Button closeButton;
 
     [Header("Level Up Settings")]
-    public float levelUpTimeout    = 20f;
-    public int   maxCharacterLimit = 5;
+    public float levelUpTimeout = 20f;
+    public int maxCharacterLimit = 5;
 
     [Header("Weapon Prefabs")]
     public GameObject catnipWeaponPrefab;
@@ -25,19 +25,24 @@ public class LevelUpManager : MonoBehaviour
     public GameObject furBrushWeaponPrefab;
     public GameObject laserWeaponPrefab;
 
+    // 신규 무기 3종 프리팹 추가
+    public GameObject featherRodWeaponPrefab;
+    public GameObject mouseToyWeaponPrefab;
+    public GameObject catnipDiffuserWeaponPrefab;
+
     [Header("API Connection")]
     public GeminiClient geminiClient;
 
-    // ── 내부 참조 ──────────────────────────────────
-    private GameObject       _player;
-    private PlayerStats      _playerStats;
-    private WeaponManager    _weaponManager;
+    // 내부 참조
+    private GameObject _player;
+    private PlayerStats _playerStats;
+    private WeaponManager _weaponManager;
     private ExperienceSystem _expSystem;
 
-    private float    _timer;
-    private bool     _isWaitingForInput;
+    private float _timer;
+    private bool _isWaitingForInput;
     private Coroutine _countdownCoroutine;
-    private string   _lastPlayerInput = "";
+    private string _lastPlayerInput = "";
 
     [System.Serializable]
     public class DealerResponse
@@ -46,13 +51,12 @@ public class LevelUpManager : MonoBehaviour
         public string dialogue;
     }
 
-    // ───────────────────────────────────────────────
     private void Start()
     {
         _player = GameObject.FindWithTag("Player");
         if (_player != null)
         {
-            _playerStats   = _player.GetComponent<PlayerStats>();
+            _playerStats = _player.GetComponent<PlayerStats>();
             _weaponManager = _player.GetComponentInChildren<WeaponManager>();
         }
 
@@ -78,11 +82,10 @@ public class LevelUpManager : MonoBehaviour
             _expSystem.OnLevelUp -= TriggerLevelUp;
     }
 
-    // ── Input ──────────────────────────────────────
     private void TruncateKoreanInput(string input)
     {
         if (input.Length <= maxCharacterLimit) return;
-        playerInputField.text          = input.Substring(0, maxCharacterLimit);
+        playerInputField.text = input.Substring(0, maxCharacterLimit);
         playerInputField.caretPosition = maxCharacterLimit;
     }
 
@@ -93,7 +96,6 @@ public class LevelUpManager : MonoBehaviour
         else playerInputField.ActivateInputField();
     }
 
-    // ── Level Up 진입 ──────────────────────────────
     [ContextMenu("Trigger Level Up (Test)")]
     public void TriggerLevelUp(int level)
     {
@@ -105,7 +107,7 @@ public class LevelUpManager : MonoBehaviour
 
         if (playerInputField != null)
         {
-            playerInputField.text         = "";
+            playerInputField.text = "";
             playerInputField.interactable = true;
             playerInputField.ActivateInputField();
         }
@@ -113,7 +115,7 @@ public class LevelUpManager : MonoBehaviour
         if (dealerDialogueText != null)
             dealerDialogueText.text = $"원하는 것을 {maxCharacterLimit}글자 이내로 말해 [Enter]를 눌러주세요.";
 
-        _timer             = levelUpTimeout;
+        _timer = levelUpTimeout;
         _isWaitingForInput = true;
 
         if (_countdownCoroutine != null) StopCoroutine(_countdownCoroutine);
@@ -138,25 +140,21 @@ public class LevelUpManager : MonoBehaviour
         }
     }
 
-    // ── Submit / Filter ────────────────────────────
     private void SubmitRequest(string playerText)
     {
         _isWaitingForInput = false;
         if (playerInputField != null) playerInputField.interactable = false;
 
-        // 필터 1: 빈 입력 or 타임아웃
         if (string.IsNullOrWhiteSpace(playerText) || playerText == "타임아웃")
         {
             Finish("기도도 안 한다는 거냐, 시간도 없다니! 포션이나 받아.", "Heal_Potion");
             return;
         }
-        // 필터 2: 직전과 동일한 입력
         if (playerText == _lastPlayerInput)
         {
             Finish("또 같은 말이라 안 받아준다! 성의가 없으면 포션이나 받아라.", "Heal_Potion");
             return;
         }
-        // 필터 3: 초성·자음만 입력
         if (Regex.IsMatch(playerText, "[ㄱ-ㅎㅏ-ㅣ]"))
         {
             Finish("초성이나 자음 단독은 말이 안 된다는 뜻이냐! 다시 와.", "Trash_Item");
@@ -165,23 +163,21 @@ public class LevelUpManager : MonoBehaviour
 
         _lastPlayerInput = playerText;
 
-        if (timerText != null)         timerText.text         = "분석 중...";
+        if (timerText != null) timerText.text = "분석 중...";
         if (dealerDialogueText != null) dealerDialogueText.text = "하늘에 기도를 전달하는 중이다. 기다려라...";
 
         if (geminiClient != null)
             StartCoroutine(geminiClient.CallGemini(playerText, ProcessAIResponse));
     }
 
-    // 필터 결과를 한 곳에서 처리
     private void Finish(string message, string itemTag)
     {
-        if (timerText != null)          timerText.text          = "처리 완료";
+        if (timerText != null) timerText.text = "처리 완료";
         if (dealerDialogueText != null) dealerDialogueText.text = message;
         ApplyRewardEffect(itemTag);
         ShowResultUI();
     }
 
-    // ── AI 응답 ────────────────────────────────────
     private void ProcessAIResponse(string rawJson)
     {
         if (string.IsNullOrEmpty(rawJson))
@@ -207,35 +203,48 @@ public class LevelUpManager : MonoBehaviour
         ShowResultUI();
     }
 
-    // ── 보상 적용 ──────────────────────────────────
     private void ApplyRewardEffect(string itemTag)
     {
-        // null 방어
-        if (_player       == null) _player       = GameObject.FindWithTag("Player");
-        if (_playerStats  == null && _player != null) _playerStats  = _player.GetComponent<PlayerStats>();
+        if (_player == null) _player = GameObject.FindWithTag("Player");
+        if (_playerStats == null && _player != null) _playerStats = _player.GetComponent<PlayerStats>();
         if (_weaponManager == null && _player != null) _weaponManager = _player.GetComponentInChildren<WeaponManager>();
 
-        string rewardName  = "알 수 없는 보상";
-        bool   rewardGiven = false;
+        string rewardName = "알 수 없는 보상";
+        bool rewardGiven = false;
 
         switch (itemTag)
         {
             case "Weapon_Catnip":
-                rewardName  = "캣닢 씨앗 무기";
+                rewardName = "캣닢 씨앗 무기";
                 rewardGiven = GiveWeapon(catnipWeaponPrefab);
                 break;
             case "Weapon_Bentonite":
-                rewardName  = "벤토나이트 흙 무기";
+                rewardName = "벤토나이트 흙 무기";
                 rewardGiven = GiveWeapon(bentoniteWeaponPrefab);
                 break;
             case "Weapon_FurBrush":
-                rewardName  = "빗살무늬 브러쉬 무기";
+                rewardName = "빗살무늬 브러쉬 무기";
                 rewardGiven = GiveWeapon(furBrushWeaponPrefab);
                 break;
             case "Weapon_Laser":
-                rewardName  = "자동 레이저 포인터 무기";
+                rewardName = "자동 레이저 포인터 무기";
                 rewardGiven = GiveWeapon(laserWeaponPrefab);
                 break;
+
+            // 신규 무기 3종 케이스 추가
+            case "Weapon_FeatherRod":
+                rewardName = "깃털 낚시대 무기";
+                rewardGiven = GiveWeapon(featherRodWeaponPrefab);
+                break;
+            case "Weapon_MouseToy":
+                rewardName = "태엽 쥐돌이 무기";
+                rewardGiven = GiveWeapon(mouseToyWeaponPrefab);
+                break;
+            case "Weapon_CatnipDiffuser":
+                rewardName = "캣닢 디퓨저 무기";
+                rewardGiven = GiveWeapon(catnipDiffuserWeaponPrefab);
+                break;
+
             case "Heal_Potion":
                 rewardName = "회복 포션";
                 if (_playerStats != null)
@@ -246,12 +255,11 @@ public class LevelUpManager : MonoBehaviour
                 break;
             case "Trash_Item":
             default:
-                rewardName  = "쓸모없는 쓰레기 (패널티)";
+                rewardName = "쓸모없는 쓰레기 (패널티)";
                 rewardGiven = true;
                 break;
         }
 
-        // 무기 슬롯 초과 또는 중복 시 대체 보상
         if (!rewardGiven && itemTag.StartsWith("Weapon_"))
         {
             rewardName = "무기 추가 불가 (슬롯 초과 또는 중복)";

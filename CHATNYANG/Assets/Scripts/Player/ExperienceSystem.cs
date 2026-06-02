@@ -4,7 +4,7 @@ using UnityEngine.Events;
 public class ExperienceSystem : MonoBehaviour
 {
     [Header("Level Settings")]
-    [SerializeField] private int maxLevel = 40;
+    [SerializeField] private int maxLevel = 100;
     [SerializeField] private AnimationCurve expCurve;
 
     public int   CurrentLevel { get; private set; } = 1;
