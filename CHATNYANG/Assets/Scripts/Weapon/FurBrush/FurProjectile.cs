@@ -5,8 +5,6 @@ public class FurProjectile : MonoBehaviour
 {
     private float damage;
     private Rigidbody2D rb;
-
-    // 관통형이므로 화면 끝까지 뚫고 가도록 수명을 조금 늘립니다.
     private float lifeTime = 4f;
 
     private void Awake()
@@ -14,14 +12,22 @@ public class FurProjectile : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Initialize(Vector2 direction, WeaponData data)
+    public void Initialize(Vector2 direction, WeaponData data, WeaponRarity rarity = WeaponRarity.Normal, int upgradeLevel = 0)
     {
-        damage = data.damage;
+        WeaponStatValues stats = data.GetStats(rarity, upgradeLevel);
 
-        rb.velocity = direction * data.projectileSpeed;
+        if (stats == null)
+        {
+            Debug.LogWarning("[FurProjectile] Stats not found. Using Normal 0 stats.");
+            stats = data.GetStats(WeaponRarity.Normal, 0);
+        }
 
-        // Atan2는 오른쪽(Right)을 0도로 계산합니다. 
-        // 원본 스프라이트가 위(Up)를 보고 있으므로 90도를 빼서 방향을 맞춥니다.
+        if (stats != null)
+        {
+            damage = stats.damage;
+            rb.velocity = direction * stats.projectileSpeed;
+        }
+
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
         transform.rotation = Quaternion.Euler(0f, 0f, angle);
 
@@ -37,8 +43,6 @@ public class FurProjectile : MonoBehaviour
             {
                 enemy.TakeDamage(damage);
             }
-
-            // 관통을 위해 적과 충돌해도 Destroy(gameObject)를 호출하지 않습니다.
         }
     }
 }

@@ -13,13 +13,176 @@ MonoBehaviour:
   m_Name: Data_MouseToy
   m_EditorClassIdentifier: 
   weaponId: MouseToy
-  damage: 0.2
-  attackCooldown: 1
   projectilePrefab: {fileID: 603811611715566344, guid: 6cf2343ca95d0a440b4c5add1a737ac6, type: 3}
-  projectileCount: 1
-  bounceCount: 0
-  projectileSpeed: 6
   areaPrefab: {fileID: 6572700842991583547, guid: b8bfc04c279182c4aafe26b7a75a8330, type: 3}
-  aoeRadius: 2.5
-  slowFactor: 0
-  areaDuration: 0.2
+  rarityTiers:
+  - rarity: 0
+    upgradeLevels:
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+  - rarity: 1
+    upgradeLevels:
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+  - rarity: 2
+    upgradeLevels:
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+  - rarity: 3
+    upgradeLevels:
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+  - rarity: 4
+    upgradeLevels:
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2
+    - damage: 25
+      attackCooldown: 4
+      projectileCount: 0
+      bounceCount: 0
+      projectileSpeed: 5
+      aoeRadius: 1.8
+      slowFactor: 0
+      areaDuration: 0.2

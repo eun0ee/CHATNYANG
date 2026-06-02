@@ -13,13 +13,176 @@ MonoBehaviour:
   m_Name: Data_LaserPointer
   m_EditorClassIdentifier: 
   weaponId: LaserPointer
-  damage: 2
-  attackCooldown: 4
   projectilePrefab: {fileID: 1829248936396933632, guid: 6dda4940b8cfa9c49996cf2e1d71914f, type: 3}
-  projectileCount: 2
-  bounceCount: 0
-  projectileSpeed: 20
   areaPrefab: {fileID: 0}
-  aoeRadius: 4
-  slowFactor: 0
-  areaDuration: 0
+  rarityTiers:
+  - rarity: 0
+    upgradeLevels:
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+  - rarity: 1
+    upgradeLevels:
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+  - rarity: 2
+    upgradeLevels:
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+  - rarity: 3
+    upgradeLevels:
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+  - rarity: 4
+    upgradeLevels:
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 3
+      attackCooldown: 2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 8
+      aoeRadius: 2
+      slowFactor: 0
+      areaDuration: 0

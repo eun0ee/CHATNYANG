@@ -26,7 +26,6 @@ public class MouseToyWeapon : WeaponBase
         foreach (GameObject enemy in enemies)
         {
             EnemyStats stats = enemy.GetComponent<EnemyStats>();
-            // 팀원 코드에 맞춰 대문자 CurrentHp로 수정
             if (stats != null && stats.CurrentHp > maxHp)
             {
                 maxHp = stats.CurrentHp;

@@ -8,15 +8,24 @@ public class BentoniteArea : MonoBehaviour
     private float duration;
     private List<Collider2D> affectedEnemies = new List<Collider2D>();
 
-    public void Initialize(WeaponData data)
+    // 확장성을 위해 매개변수 추가
+    public void Initialize(WeaponData data, WeaponRarity rarity = WeaponRarity.Normal, int upgradeLevel = 0)
     {
-        slowFactor = data.slowFactor;
-        duration = data.areaDuration;
+        WeaponStatValues stats = data.GetStats(rarity, upgradeLevel);
 
-        // 데이터에 맞게 장판 크기 조절
-        transform.localScale = new Vector3(data.aoeRadius, data.aoeRadius, 1f);
+        if (stats == null)
+        {
+            Debug.LogWarning("[BentoniteArea] Stats not found. Using Normal 0 stats.");
+            stats = data.GetStats(WeaponRarity.Normal, 0);
+        }
 
-        // 일정 시간 뒤 장판 자동 소멸
+        if (stats != null)
+        {
+            slowFactor = stats.slowFactor;
+            duration = stats.areaDuration;
+            transform.localScale = new Vector3(stats.aoeRadius, stats.aoeRadius, 1f);
+        }
+
         Destroy(gameObject, duration);
     }
 
@@ -40,7 +49,6 @@ public class BentoniteArea : MonoBehaviour
 
     private void OnDestroy()
     {
-        // 장판이 사라질 때 묶여있던 적들 속도 풀어주기
         foreach (Collider2D enemy in affectedEnemies)
         {
             if (enemy != null)

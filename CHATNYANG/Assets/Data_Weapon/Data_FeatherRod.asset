@@ -13,13 +13,176 @@ MonoBehaviour:
   m_Name: Data_FeatherRod
   m_EditorClassIdentifier: 
   weaponId: FeatherRod
-  damage: 0.1
-  attackCooldown: 0.8
   projectilePrefab: {fileID: 0}
-  projectileCount: 1
-  bounceCount: 0
-  projectileSpeed: 0
   areaPrefab: {fileID: 3587647679527656551, guid: b2cdfd486eed2604aaaf2f611fe76ca3, type: 3}
-  aoeRadius: 1
-  slowFactor: 0
-  areaDuration: 0
+  rarityTiers:
+  - rarity: 0
+    upgradeLevels:
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+  - rarity: 1
+    upgradeLevels:
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+  - rarity: 2
+    upgradeLevels:
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+  - rarity: 3
+    upgradeLevels:
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+  - rarity: 4
+    upgradeLevels:
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0
+    - damage: 12
+      attackCooldown: 1.2
+      projectileCount: 1
+      bounceCount: 0
+      projectileSpeed: 0
+      aoeRadius: 1.2
+      slowFactor: 0
+      areaDuration: 0

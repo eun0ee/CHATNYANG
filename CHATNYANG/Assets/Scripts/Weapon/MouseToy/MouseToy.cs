@@ -4,9 +4,11 @@ public class MouseToy : MonoBehaviour
 {
     private WeaponData data;
     private Transform targetTransform;
+
     private float speed;
     private float explosionRadius;
     private float damage;
+    private float areaDuration;
 
     [Header("Zigzag Settings")]
     [SerializeField] private float zigzagFrequency = 15f;
@@ -14,13 +16,26 @@ public class MouseToy : MonoBehaviour
 
     private float aliveTimer = 0f;
 
-    public void Initialize(WeaponData weaponData, Transform target)
+    public void Initialize(WeaponData weaponData, Transform target, WeaponRarity rarity = WeaponRarity.Normal, int upgradeLevel = 0)
     {
         data = weaponData;
         targetTransform = target;
-        speed = data.projectileSpeed;
-        explosionRadius = data.aoeRadius;
-        damage = data.damage;
+
+        WeaponStatValues stats = data.GetStats(rarity, upgradeLevel);
+
+        if (stats == null)
+        {
+            Debug.LogWarning("[MouseToy] Stats not found. Using Normal 0 stats.");
+            stats = data.GetStats(WeaponRarity.Normal, 0);
+        }
+
+        if (stats != null)
+        {
+            speed = stats.projectileSpeed;
+            explosionRadius = stats.aoeRadius;
+            damage = stats.damage;
+            areaDuration = stats.areaDuration;
+        }
 
         Destroy(gameObject, 7f);
     }
@@ -79,7 +94,7 @@ public class MouseToy : MonoBehaviour
         {
             GameObject effect = Instantiate(data.areaPrefab, transform.position, Quaternion.identity);
 
-            float destroyTime = data.areaDuration > 0f ? data.areaDuration : 0.2f;
+            float destroyTime = areaDuration > 0f ? areaDuration : 0.2f;
             Destroy(effect, destroyTime);
         }
 

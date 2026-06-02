@@ -3,9 +3,26 @@ using UnityEngine;
 public abstract class WeaponBase : MonoBehaviour
 {
     public WeaponData WeaponData => weaponData;
-
     [SerializeField] protected WeaponData weaponData;
+
+    [Header("Current Weapon State")]
+    public WeaponRarity currentRarity = WeaponRarity.Normal;
+    public int currentUpgradeLevel = 0;
+
     protected float currentCooldown;
+
+    // 외부(WeaponManager 등)에서 무기를 생성할 때 등급과 레벨을 주입해주는 함수
+    public virtual void InitializeWeapon(WeaponRarity rarity, int upgradeLevel)
+    {
+        currentRarity = rarity;
+        currentUpgradeLevel = upgradeLevel;
+
+        WeaponStatValues stats = weaponData.GetStats(currentRarity, currentUpgradeLevel);
+        if (stats != null)
+        {
+            currentCooldown = stats.attackCooldown;
+        }
+    }
 
     protected virtual void Update()
     {
@@ -13,7 +30,24 @@ public abstract class WeaponBase : MonoBehaviour
         if (currentCooldown <= 0f)
         {
             ExecuteAttack();
-            currentCooldown = weaponData.attackCooldown;
+
+            // 바뀐 데이터 구조에 맞춰 현재 등급의 쿨타임을 다시 가져옴
+            WeaponStatValues stats = weaponData.GetStats(currentRarity, currentUpgradeLevel);
+
+            // 안전장치: 스탯을 못 찾으면 노말 0강 스탯으로 대체
+            if (stats == null)
+            {
+                stats = weaponData.GetStats(WeaponRarity.Normal, 0);
+            }
+
+            if (stats != null)
+            {
+                currentCooldown = stats.attackCooldown;
+            }
+            else
+            {
+                currentCooldown = 1f; // 최후의 예외 처리 방어
+            }
         }
     }
 

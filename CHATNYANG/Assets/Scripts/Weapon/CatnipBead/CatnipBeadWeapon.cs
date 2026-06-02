@@ -6,13 +6,15 @@ public class CatnipBeadWeapon : WeaponBase
     {
         if (weaponData.projectilePrefab == null) return;
 
+        WeaponStatValues stats = weaponData.GetStats(WeaponRarity.Normal, 0);
+        if (stats == null) return;
+
         Transform target = FindNearestEnemy();
         if (target == null) return;
 
         Vector2 direction = (target.position - transform.position).normalized;
 
-        // 발사체 생성 및 초기화
-        for (int i = 0; i < weaponData.projectileCount; i++)
+        for (int i = 0; i < stats.projectileCount; i++)
         {
             GameObject bead = Instantiate(weaponData.projectilePrefab, transform.position, Quaternion.identity);
             CatnipBeadProjectile projectileScript = bead.GetComponent<CatnipBeadProjectile>();

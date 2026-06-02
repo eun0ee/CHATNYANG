@@ -8,7 +8,6 @@ public class CatnipBeadProjectile : MonoBehaviour
     private int currentBounce;
     private Rigidbody2D rb;
 
-    // 투사체 최대 생존 시간
     private float lifeTime = 10f;
 
     private void Awake()
@@ -16,21 +15,30 @@ public class CatnipBeadProjectile : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    public void Initialize(Vector2 direction, WeaponData data)
+    // 확장성을 위해 매개변수 추가
+    public void Initialize(Vector2 direction, WeaponData data, WeaponRarity rarity = WeaponRarity.Normal, int upgradeLevel = 0)
     {
-        damage = data.damage;
-        maxBounce = data.bounceCount;
+        WeaponStatValues stats = data.GetStats(rarity, upgradeLevel);
+
+        if (stats == null)
+        {
+            Debug.LogWarning("[CatnipBeadProjectile] Stats not found. Using Normal 0 stats.");
+            stats = data.GetStats(WeaponRarity.Normal, 0);
+        }
+
+        if (stats != null)
+        {
+            damage = stats.damage;
+            maxBounce = stats.bounceCount;
+            rb.velocity = direction * stats.projectileSpeed;
+        }
+
         currentBounce = 0;
-
-        rb.velocity = direction * data.projectileSpeed;
-
-        // 발사 후 lifeTime 초가 지나면 무조건 파괴하여 무한 비행 방지
         Destroy(gameObject, lifeTime);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // 적 타격 처리
         if (collision.gameObject.CompareTag("Enemy"))
         {
             EnemyStats enemy = collision.gameObject.GetComponent<EnemyStats>();
@@ -40,7 +48,6 @@ public class CatnipBeadProjectile : MonoBehaviour
             }
         }
 
-        // 바운스 처리 로직
         if (currentBounce < maxBounce)
         {
             currentBounce++;
@@ -49,7 +56,6 @@ public class CatnipBeadProjectile : MonoBehaviour
         }
         else
         {
-            // 최대 바운스 횟수 도달 시 파괴
             Destroy(gameObject);
         }
     }

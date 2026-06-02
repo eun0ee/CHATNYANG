@@ -5,13 +5,16 @@ public class FeatherRodWeapon : WeaponBase
 {
     protected override void ExecuteAttack()
     {
-        // Projectile 대신 Area Prefab이 비어있는지 확인하도록 변경
         if (weaponData.areaPrefab == null) return;
 
-        StartCoroutine(SwingRoutine());
+        // 임시로 Normal 0강 스탯을 가져옵니다.
+        WeaponStatValues stats = weaponData.GetStats(WeaponRarity.Normal, 0);
+        if (stats == null) return;
+
+        StartCoroutine(SwingRoutine(stats.projectileCount));
     }
 
-    private IEnumerator SwingRoutine()
+    private IEnumerator SwingRoutine(int count)
     {
         Transform target = FindNearestEnemy();
         Vector2 direction = Vector2.up;
@@ -27,9 +30,8 @@ public class FeatherRodWeapon : WeaponBase
         float spawnOffset = 0.6f;
         Vector3 spawnPos = transform.position + (Vector3)(direction * spawnOffset);
 
-        for (int i = 0; i < weaponData.projectileCount; i++)
+        for (int i = 0; i < count; i++)
         {
-            // Projectile 대신 Area Prefab을 생성하도록 변경
             GameObject slash = Instantiate(weaponData.areaPrefab, spawnPos, rotation, transform);
             FeatherRodSlash slashScript = slash.GetComponent<FeatherRodSlash>();
 

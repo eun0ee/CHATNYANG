@@ -7,27 +7,29 @@ public class CatnipDiffuserWeapon : WeaponBase
 
     protected override void ExecuteAttack()
     {
+        WeaponStatValues stats = weaponData.GetStats(WeaponRarity.Normal, 0);
+        if (stats == null) return;
+
         if (weaponData.areaPrefab != null)
         {
             GameObject aura = Instantiate(weaponData.areaPrefab, transform.position, Quaternion.identity, transform);
 
-            // 프리팹의 크기를 데이터의 Aoe Radius에 맞춰서 키워줌 (지름이므로 2배 곱하기)
-            float effectScale = weaponData.aoeRadius * 2f;
+            float effectScale = stats.aoeRadius * 2f;
             aura.transform.localScale = new Vector3(effectScale, effectScale, 1f);
 
             Destroy(aura, 0.5f);
         }
 
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, weaponData.aoeRadius);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, stats.aoeRadius);
 
         foreach (Collider2D col in colliders)
         {
             if (col.CompareTag("Enemy"))
             {
-                EnemyStats stats = col.GetComponent<EnemyStats>();
-                if (stats != null)
+                EnemyStats enemyStats = col.GetComponent<EnemyStats>();
+                if (enemyStats != null)
                 {
-                    stats.TakeDamage(weaponData.damage);
+                    enemyStats.TakeDamage(stats.damage);
 
                     ConfusionStatus confusion = col.GetComponent<ConfusionStatus>();
                     if (confusion == null)
@@ -35,7 +37,7 @@ public class CatnipDiffuserWeapon : WeaponBase
                         confusion = col.gameObject.AddComponent<ConfusionStatus>();
                     }
 
-                    confusion.ActivateStatus(confusionDuration, stats.Data.moveSpeed);
+                    confusion.ActivateStatus(confusionDuration, enemyStats.Data.moveSpeed);
                 }
             }
         }
