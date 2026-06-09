@@ -84,7 +84,7 @@ public class LevelUpManager : MonoBehaviour
         }
 
         if (levelUpCloseButton != null) levelUpCloseButton.onClick.AddListener(ResumeGame);
-        if (resultCloseButton != null) resultCloseButton.onClick.AddListener(ResumeGame);
+        if (resultCloseButton != null) resultCloseButton.onClick.AddListener(CloseResultUI);
 
         if (playerInputField != null)
         {
@@ -137,6 +137,7 @@ public class LevelUpManager : MonoBehaviour
         if (levelUpPanel != null) levelUpPanel.SetActive(true);
         if (levelUpDimBackground != null) levelUpDimBackground.SetActive(true);
 
+        // 보상을 받기 전에는 메인 창을 닫을 수 없도록 버튼 숨김
         if (levelUpCloseButton != null) levelUpCloseButton.gameObject.SetActive(false);
 
         if (playerInputField != null)
@@ -338,21 +339,45 @@ public class LevelUpManager : MonoBehaviour
     private bool GiveWeapon(GameObject prefab)
     {
         if (_weaponManager == null || prefab == null) return false;
-        return _weaponManager.AddWeapon(prefab);
+
+        WeaponDisplayManager displayManager = FindObjectOfType<WeaponDisplayManager>();
+        bool success = _weaponManager.AddWeapon(prefab);
+
+        if (success && displayManager != null)
+        {
+            displayManager.RefreshUI();
+        }
+
+        return success;
     }
 
     private void ShowResultUI()
     {
-        // 결과창을 띄울 때 기존 렙업창과 배경을 숨기고 결과창과 배경을 켬
-        if (levelUpPanel != null) levelUpPanel.SetActive(false);
-        if (levelUpDimBackground != null) levelUpDimBackground.SetActive(false);
-
         if (resultPanel != null) resultPanel.SetActive(true);
         if (resultDimBackground != null) resultDimBackground.SetActive(true);
     }
 
+    // 결과창만 닫고, 뒤에 남은 렙업창의 닫기 버튼을 활성화하는 함수
+    private void CloseResultUI()
+    {
+        if (resultPanel != null) resultPanel.SetActive(false);
+        if (resultDimBackground != null) resultDimBackground.SetActive(false);
+
+        // 보상을 확인하고 결과창을 닫았으므로 이제 메인 창을 닫을 수 있게 버튼 활성화
+        if (levelUpCloseButton != null) levelUpCloseButton.gameObject.SetActive(true);
+    }
+
     private void ResumeGame()
     {
+        // 혹시라도 돌아가고 있을지 모르는 타이머 강제 종료 방어 로직
+        if (_countdownCoroutine != null)
+        {
+            StopCoroutine(_countdownCoroutine);
+            _countdownCoroutine = null;
+        }
+
+        _isWaitingForInput = false;
+
         // 게임 재개 시 모든 패널과 배경 숨김
         if (levelUpPanel != null) levelUpPanel.SetActive(false);
         if (levelUpDimBackground != null) levelUpDimBackground.SetActive(false);

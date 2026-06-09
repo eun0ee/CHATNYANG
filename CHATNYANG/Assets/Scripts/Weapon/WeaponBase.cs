@@ -11,7 +11,7 @@ public abstract class WeaponBase : MonoBehaviour
 
     protected float currentCooldown;
 
-    // 외부(WeaponManager 등)에서 무기를 생성할 때 등급과 레벨을 주입해주는 함수
+    // 가챠 결과에 따라 외부에서 언제든 등급과 레벨을 갱신할 수 있는 함수
     public virtual void InitializeWeapon(WeaponRarity rarity, int upgradeLevel)
     {
         currentRarity = rarity;
@@ -31,10 +31,8 @@ public abstract class WeaponBase : MonoBehaviour
         {
             ExecuteAttack();
 
-            // 바뀐 데이터 구조에 맞춰 현재 등급의 쿨타임을 다시 가져옴
             WeaponStatValues stats = weaponData.GetStats(currentRarity, currentUpgradeLevel);
 
-            // 안전장치: 스탯을 못 찾으면 노말 0강 스탯으로 대체
             if (stats == null)
             {
                 stats = weaponData.GetStats(WeaponRarity.Normal, 0);
@@ -46,7 +44,7 @@ public abstract class WeaponBase : MonoBehaviour
             }
             else
             {
-                currentCooldown = 1f; // 최후의 예외 처리 방어
+                currentCooldown = 1f;
             }
         }
     }
@@ -69,6 +67,5 @@ public abstract class WeaponBase : MonoBehaviour
         return nearest;
     }
 
-    // 개별 무기들의 공격 로직
     protected abstract void ExecuteAttack();
 }

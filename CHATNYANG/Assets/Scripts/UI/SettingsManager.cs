@@ -88,18 +88,22 @@ public class SettingsManager : MonoBehaviour
 
     private void SetBGMVolume(float volume)
     {
-        // 슬라이더 값(0.0001 ~ 1)을 데시벨(-80dB ~ 0dB)로 변환하여 믹서에 적용
+        // volume 값이 무조건 0.0001과 1 사이에서만 놀도록 강제 고정
+        float safeVolume = Mathf.Clamp(volume, 0.0001f, 1f);
+
         if (mainMixer != null)
         {
-            mainMixer.SetFloat("BGMVolume", Mathf.Log10(volume) * 20f);
+            mainMixer.SetFloat("BGMVolume", Mathf.Log10(safeVolume) * 20f);
         }
     }
 
     private void SetSFXVolume(float volume)
     {
+        float safeVolume = Mathf.Clamp(volume, 0.0001f, 1f);
+
         if (mainMixer != null)
         {
-            mainMixer.SetFloat("SFXVolume", Mathf.Log10(volume) * 20f);
+            mainMixer.SetFloat("SFXVolume", Mathf.Log10(safeVolume) * 20f);
         }
     }
 }

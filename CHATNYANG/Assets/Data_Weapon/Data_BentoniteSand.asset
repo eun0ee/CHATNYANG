@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Data_BentoniteSand
   m_EditorClassIdentifier: 
   weaponId: Bentonite
+  weaponIcon: {fileID: 21300000, guid: b740ca608ab830349851f7be22fe00ff, type: 3}
   projectilePrefab: {fileID: 2660824942159221157, guid: 3cb68744bb7f7284abae206162947be6, type: 3}
   areaPrefab: {fileID: 9112507680966855300, guid: ae1eda10b25424141b4bbc4830d94c3f, type: 3}
   rarityTiers:

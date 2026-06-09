@@ -57,6 +57,9 @@ public class WeaponData : ScriptableObject
     // 무기 식별 아이디
     public string weaponId;
 
+    // 무기 인벤토리 및 UI 표시용 아이콘
+    public Sprite weaponIcon;
+
     // 투사체 프리팹
     public GameObject projectilePrefab;
 

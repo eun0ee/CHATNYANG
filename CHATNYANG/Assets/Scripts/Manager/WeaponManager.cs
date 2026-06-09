@@ -15,57 +15,124 @@ public class WeaponManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log($"[WeaponManager] Start / 등록된 프리팹 수: {startingWeaponPrefabs.Count}");
+        Debug.Log($"[WeaponManager] Start / Registered Prefabs: {startingWeaponPrefabs.Count}");
         foreach (var prefab in startingWeaponPrefabs)
         {
-            Debug.Log($"[WeaponManager] 무기 추가 시도: {prefab?.name ?? "NULL"}");
-            AddWeapon(prefab);
+            // 시작 무기는 기본적으로 Normal 등급으로 추가
+            AddWeapon(prefab, WeaponRarity.Normal);
         }
     }
 
-    public bool AddWeapon(GameObject weaponPrefab)
+    // AI가 반환한 등급을 함께 받도록 파라미터 추가
+    public bool AddWeapon(GameObject weaponPrefab, WeaponRarity drawnRarity = WeaponRarity.Normal)
     {
-        if (_weapons.Count >= maxWeaponSlots)
+        WeaponBase existingWeapon = GetWeaponByPrefab(weaponPrefab);
+
+        if (existingWeapon != null)
         {
-            Debug.LogWarning("[WeaponManager] 무기 슬롯이 가득 찼습니다.");
+            // 이미 들고 있는 무기라면 강화, 승급, 교체 로직으로 진입
+            return UpgradeOrReplaceWeapon(existingWeapon, drawnRarity);
+        }
+        else
+        {
+            // 없는 무기라면 슬롯 확인 후 신규 장착
+            if (_weapons.Count >= maxWeaponSlots)
+            {
+                Debug.LogWarning("[WeaponManager] Weapon slots are full.");
+                return false;
+            }
+
+            GameObject go = Instantiate(weaponPrefab, transform);
+            WeaponBase weapon = go.GetComponent<WeaponBase>();
+
+            if (weapon == null)
+            {
+                Debug.LogError($"[WeaponManager] WeaponBase component missing: {weaponPrefab.name}");
+                Destroy(go);
+                return false;
+            }
+
+            weapon.InitializeWeapon(drawnRarity, 0);
+            _weapons.Add(weapon);
+            Debug.Log($"[WeaponManager] Added new weapon: {weaponPrefab.name} ({_weapons.Count}/{maxWeaponSlots})");
+
+            // 무기 획득 또는 강화 성공 시 UI 새로고침 호출
+            WeaponDisplayManager displayManager = FindObjectOfType<WeaponDisplayManager>();
+            if (displayManager != null)
+            {
+                displayManager.RefreshUI();
+            }
+
+            return true;
+        }
+    }
+
+    // 4가지 챗냥 기획 룰 판별 로직
+    private bool UpgradeOrReplaceWeapon(WeaponBase existingWeapon, WeaponRarity drawnRarity)
+    {
+        int currentRarityValue = (int)existingWeapon.currentRarity;
+        int drawnRarityValue = (int)drawnRarity;
+
+        // 룰 1: 더 높은 등급이 나온 경우 (교체)
+        if (drawnRarityValue > currentRarityValue)
+        {
+            existingWeapon.InitializeWeapon(drawnRarity, 0);
+            Debug.Log($"[WeaponManager] Replaced with higher rarity: {drawnRarity} 0");
+            return true;
+        }
+        // 룰 2 & 3 & 4: 같은 등급이 나온 경우
+        else if (drawnRarityValue == currentRarityValue)
+        {
+            if (existingWeapon.currentUpgradeLevel < 3)
+            {
+                // 룰 2: 3강 미만이면 강화
+                existingWeapon.InitializeWeapon(existingWeapon.currentRarity, existingWeapon.currentUpgradeLevel + 1);
+                Debug.Log($"[WeaponManager] Upgraded: {existingWeapon.currentRarity} {existingWeapon.currentUpgradeLevel}");
+                return true;
+            }
+            else
+            {
+                // 룰 4: 최고 등급(Legendary) 3강에서 또 같은 게 나오면 꽝 처리
+                if (existingWeapon.currentRarity == WeaponRarity.Legendary)
+                {
+                    Debug.Log("[WeaponManager] Legendary Max Level duplicate. Considered as trash.");
+                    return false;
+                }
+                else
+                {
+                    // 룰 3: 3강에서 같은 게 나오면 다음 상위 등급 0강으로 승급
+                    WeaponRarity nextRarity = (WeaponRarity)(currentRarityValue + 1);
+                    existingWeapon.InitializeWeapon(nextRarity, 0);
+                    Debug.Log($"[WeaponManager] Promoted to next rarity: {nextRarity} 0");
+                    return true;
+                }
+            }
+        }
+        // 기획 외 예외: 현재 들고 있는 것보다 낮은 등급이 나오면 꽝 처리
+        else
+        {
+            Debug.Log("[WeaponManager] Lower rarity drawn. Ignored.");
             return false;
         }
+    }
 
-        if (HasWeapon(weaponPrefab))
-        {
-            Debug.LogWarning($"[WeaponManager] 이미 보유한 무기입니다: {weaponPrefab.name}");
-            return false;
-        }
-
-        // 플레이어 자식으로 생성 위치 자동 따라옴
-        GameObject go = Instantiate(weaponPrefab, transform);
-        WeaponBase weapon = go.GetComponent<WeaponBase>();
-
-        if (weapon == null)
-        {
-            Debug.LogError($"[WeaponManager] WeaponBase 컴포넌트가 없습니다: {weaponPrefab.name}");
-            Destroy(go);
-            return false;
-        }
-
-        _weapons.Add(weapon);
-        Debug.Log($"[WeaponManager] 무기 추가: {weaponPrefab.name} ({_weapons.Count}/{maxWeaponSlots})");
-        return true;
+    // 프리팹으로 이미 생성된 무기를 찾는 헬퍼 함수
+    private WeaponBase GetWeaponByPrefab(GameObject prefab)
+    {
+        string prefabName = prefab.name + "(Clone)";
+        return _weapons.Find(w => w.gameObject.name == prefabName);
     }
 
     public bool HasWeapon(GameObject prefab)
     {
-        string prefabName = prefab.name + "(Clone)";
-        return _weapons.Exists(w => w.gameObject.name == prefabName);
+        return GetWeaponByPrefab(prefab) != null;
     }
 
-    // WeaponData 기준으로 보유 여부 확인 (LevelUpUI에서 사용)
     public bool HasWeaponByData(WeaponData data)
     {
         return _weapons.Exists(w => w.WeaponData == data);
     }
 
-    // 보유 무기 슬롯 수 확인 (UI 표시용)
     public int WeaponCount => _weapons.Count;
     public bool IsFull => _weapons.Count >= maxWeaponSlots;
 }
