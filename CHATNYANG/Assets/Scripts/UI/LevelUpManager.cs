@@ -8,6 +8,7 @@ public class LevelUpManager : MonoBehaviour
 {
     [Header("Main Panel UI")]
     public GameObject levelUpPanel;
+    public GameObject levelUpDimBackground;
     public TMP_InputField playerInputField;
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI dealerDialogueText;
@@ -15,6 +16,7 @@ public class LevelUpManager : MonoBehaviour
 
     [Header("Result Panel UI")]
     public GameObject resultPanel;
+    public GameObject resultDimBackground;
     public TextMeshProUGUI resultText;
     public Image itemIconImage;
     public Image rarityAuraImage;
@@ -68,7 +70,7 @@ public class LevelUpManager : MonoBehaviour
     public class DealerResponse
     {
         public string item_tag;
-        public string rarity; // 제미나이 응답에서 등급을 받기 위해 추가
+        public string rarity;
         public string dialogue;
     }
 
@@ -81,9 +83,8 @@ public class LevelUpManager : MonoBehaviour
             _weaponManager = _player.GetComponentInChildren<WeaponManager>();
         }
 
-        // 두 패널의 닫기 버튼 모두 게임 재개 함수로 연결
-        levelUpCloseButton?.onClick.AddListener(ResumeGame);
-        resultCloseButton?.onClick.AddListener(ResumeGame);
+        if (levelUpCloseButton != null) levelUpCloseButton.onClick.AddListener(ResumeGame);
+        if (resultCloseButton != null) resultCloseButton.onClick.AddListener(ResumeGame);
 
         if (playerInputField != null)
         {
@@ -92,8 +93,11 @@ public class LevelUpManager : MonoBehaviour
             playerInputField.onSubmit.AddListener(OnInputFieldSubmit);
         }
 
-        levelUpPanel?.SetActive(false);
-        resultPanel?.SetActive(false);
+        // 시작 시 모든 패널과 배경 비활성화
+        if (levelUpPanel != null) levelUpPanel.SetActive(false);
+        if (resultPanel != null) resultPanel.SetActive(false);
+        if (levelUpDimBackground != null) levelUpDimBackground.SetActive(false);
+        if (resultDimBackground != null) resultDimBackground.SetActive(false);
 
         _expSystem = FindObjectOfType<ExperienceSystem>();
         if (_expSystem != null)
@@ -125,9 +129,15 @@ public class LevelUpManager : MonoBehaviour
     {
         Time.timeScale = 0f;
 
-        levelUpPanel?.SetActive(true);
-        resultPanel?.SetActive(false);
-        levelUpCloseButton?.gameObject.SetActive(false);
+        // 결과창과 결과창 배경은 끄기
+        if (resultPanel != null) resultPanel.SetActive(false);
+        if (resultDimBackground != null) resultDimBackground.SetActive(false);
+
+        // 렙업창과 렙업창 배경 켜기
+        if (levelUpPanel != null) levelUpPanel.SetActive(true);
+        if (levelUpDimBackground != null) levelUpDimBackground.SetActive(true);
+
+        if (levelUpCloseButton != null) levelUpCloseButton.gameObject.SetActive(false);
 
         if (playerInputField != null)
         {
@@ -333,13 +343,23 @@ public class LevelUpManager : MonoBehaviour
 
     private void ShowResultUI()
     {
-        resultPanel?.SetActive(true);
+        // 결과창을 띄울 때 기존 렙업창과 배경을 숨기고 결과창과 배경을 켬
+        if (levelUpPanel != null) levelUpPanel.SetActive(false);
+        if (levelUpDimBackground != null) levelUpDimBackground.SetActive(false);
+
+        if (resultPanel != null) resultPanel.SetActive(true);
+        if (resultDimBackground != null) resultDimBackground.SetActive(true);
     }
 
     private void ResumeGame()
     {
-        levelUpPanel?.SetActive(false);
-        resultPanel?.SetActive(false);
+        // 게임 재개 시 모든 패널과 배경 숨김
+        if (levelUpPanel != null) levelUpPanel.SetActive(false);
+        if (levelUpDimBackground != null) levelUpDimBackground.SetActive(false);
+
+        if (resultPanel != null) resultPanel.SetActive(false);
+        if (resultDimBackground != null) resultDimBackground.SetActive(false);
+
         Time.timeScale = 1f;
     }
 }

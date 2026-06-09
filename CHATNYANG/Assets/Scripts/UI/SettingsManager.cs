@@ -6,6 +6,7 @@ public class SettingsManager : MonoBehaviour
 {
     [Header("UI Elements")]
     [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private GameObject dimBackground;
     [SerializeField] private Button closeButton;
 
     [Header("Audio Settings")]
@@ -17,10 +18,15 @@ public class SettingsManager : MonoBehaviour
 
     private void Start()
     {
-        // 시작 시 패널이 열려있지 않도록 비활성화
+        // 시작 시 패널과 어두운 배경이 열려있지 않도록 비활성화
         if (settingsPanel != null)
         {
             settingsPanel.SetActive(false);
+        }
+
+        if (dimBackground != null)
+        {
+            dimBackground.SetActive(false);
         }
 
         // 닫기 버튼 이벤트 등록
@@ -55,7 +61,13 @@ public class SettingsManager : MonoBehaviour
         _isSettingsOpen = !_isSettingsOpen;
         settingsPanel.SetActive(_isSettingsOpen);
 
-        // 설정창이 열렸을 때 게임을 일시정지하고 싶다면 아래 주석 해제
+        // 설정창 상태에 맞춰 어두운 배경도 켜고 끔
+        if (dimBackground != null)
+        {
+            dimBackground.SetActive(_isSettingsOpen);
+        }
+
+        // 설정창이 열렸을 때 게임을 일시정지
         Time.timeScale = _isSettingsOpen ? 0f : 1f;
     }
 
@@ -64,7 +76,13 @@ public class SettingsManager : MonoBehaviour
         _isSettingsOpen = false;
         settingsPanel.SetActive(false);
 
-        // 일시정지를 사용했다면 다시 시간을 흐르게 함
+        // 닫을 때 어두운 배경도 끔
+        if (dimBackground != null)
+        {
+            dimBackground.SetActive(false);
+        }
+
+        // 일시정지를 해제하고 다시 시간을 흐르게 함
         Time.timeScale = 1f;
     }
 
