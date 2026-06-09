@@ -10,12 +10,15 @@ public class CatnipBeadProjectile : MonoBehaviour
 
     private float lifeTime = 10f;
 
+    // 원래 속도와 직전 프레임의 속도를 기억할 변수
+    private float moveSpeed;
+    private Vector2 lastVelocity;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // 확장성을 위해 매개변수 추가
     public void Initialize(Vector2 direction, WeaponData data, WeaponRarity rarity = WeaponRarity.Normal, int upgradeLevel = 0)
     {
         WeaponStatValues stats = data.GetStats(rarity, upgradeLevel);
@@ -30,11 +33,18 @@ public class CatnipBeadProjectile : MonoBehaviour
         {
             damage = stats.damage;
             maxBounce = stats.bounceCount;
-            rb.velocity = direction * stats.projectileSpeed;
+            moveSpeed = stats.projectileSpeed;
+            rb.velocity = direction * moveSpeed;
         }
 
         currentBounce = 0;
         Destroy(gameObject, lifeTime);
+    }
+
+    private void FixedUpdate()
+    {
+        // 충돌 직전의 속도와 방향을 계속 기록
+        lastVelocity = rb.velocity;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -51,8 +61,12 @@ public class CatnipBeadProjectile : MonoBehaviour
         if (currentBounce < maxBounce)
         {
             currentBounce++;
-            Vector2 reflectDir = Vector2.Reflect(rb.velocity.normalized, collision.contacts[0].normal);
-            rb.velocity = reflectDir * rb.velocity.magnitude;
+
+            // 직전 프레임의 방향(lastVelocity)을 기준으로 반사각 계산
+            Vector2 reflectDir = Vector2.Reflect(lastVelocity.normalized, collision.contacts[0].normal);
+
+            // 원래 속도(moveSpeed)를 강제로 다시 곱해줌으로써 속도 감소 방지
+            rb.velocity = reflectDir * Mathf.Max(lastVelocity.magnitude, moveSpeed);
         }
         else
         {

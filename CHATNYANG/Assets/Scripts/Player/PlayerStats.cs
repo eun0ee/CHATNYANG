@@ -9,23 +9,33 @@ public class PlayerStats : MonoBehaviour
     public float armor = 0f;
     public float recovery = 0f;
 
-    private PlayerController _controller;
+    // 인스펙터 창에 노출시켜 직접 할당할 수 있게 변경
+    [SerializeField] private PlayerController _controller;
 
     private void Awake()
     {
-        _controller = GetComponent<PlayerController>();
         currentHp = maxHp;
     }
 
     private void Start()
     {
-        _controller.MoveSpeed = moveSpeed;
+        // Null 체크 후 실행
+        if (_controller != null)
+        {
+            _controller.MoveSpeed = moveSpeed;
+        }
+        else
+        {
+            Debug.LogError("Controller is missing");
+        }
     }
 
     private void Update()
     {
         if (recovery > 0f)
+        {
             currentHp = Mathf.Min(currentHp + recovery * Time.deltaTime, maxHp);
+        }
     }
 
     public void TakeDamage(float amount)
@@ -42,7 +52,6 @@ public class PlayerStats : MonoBehaviour
 
     private void Die()
     {
-        Application.Quit();
         Debug.Log("Player Dead");
     }
 }
