@@ -1126,7 +1126,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &246407944
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1135,8 +1135,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 246407943}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.63606}
+  m_LocalScale: {x: 0.872794, y: 0.872794, z: 0.872794}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 938603928}
@@ -1148,9 +1148,9 @@ RectTransform:
   m_Father: {fileID: 2097048251}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 1093.2, y: 525}
+  m_SizeDelta: {x: 1410, y: 1043}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &246407945
 MonoBehaviour:
@@ -1165,15 +1165,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9827044, b: 0.6367924, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 8986ec7a27668f34e943d0b36d11c6e4, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -4035,9 +4035,9 @@ MonoBehaviour:
   bentoniteWeaponPrefab: {fileID: 4900652838745613963, guid: 9ee12aa0d71443145b914de1fe06ca67, type: 3}
   furBrushWeaponPrefab: {fileID: 2861655170673666994, guid: be2bdc99ebff7244481fb23ae93d9391, type: 3}
   laserWeaponPrefab: {fileID: 4076861878400358032, guid: 6b829d4b45f250647ba0f627d646c391, type: 3}
-  featherRodWeaponPrefab: {fileID: 0}
-  mouseToyWeaponPrefab: {fileID: 0}
-  catnipDiffuserWeaponPrefab: {fileID: 0}
+  featherRodWeaponPrefab: {fileID: 211840340847138722, guid: 061e2bed68e8464469b0153cdd2a68bf, type: 3}
+  mouseToyWeaponPrefab: {fileID: 7102051152929819416, guid: 8ae4c47e7eb3d8e49b0f52eecc055252, type: 3}
+  catnipDiffuserWeaponPrefab: {fileID: 5970713186794729296, guid: 905da875c1d9c5e4891fbcb61c22b750, type: 3}
   geminiClient: {fileID: 1679989193}
 --- !u!114 &1679989195
 MonoBehaviour:
