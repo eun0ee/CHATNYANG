@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Audio;
 
 public enum BgmType
 {
@@ -46,6 +47,9 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    [Header("Mixer Settings")]
+    public AudioMixerGroup sfxMixerGroup;
+
     private void InitializeSfxPool()
     {
         sfxPool = new Queue<AudioSource>();
@@ -56,6 +60,12 @@ public class SoundManager : MonoBehaviour
 
             AudioSource source = obj.AddComponent<AudioSource>();
             source.playOnAwake = false;
+
+            // SFX 믹서 그룹 할당
+            if (sfxMixerGroup != null)
+            {
+                source.outputAudioMixerGroup = sfxMixerGroup;
+            }
 
             sfxPool.Enqueue(source);
         }

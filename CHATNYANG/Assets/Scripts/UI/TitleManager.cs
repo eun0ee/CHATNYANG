@@ -13,6 +13,8 @@ public class TitleManager : MonoBehaviour
 
     private void Start()
     {
+        SoundManager.Instance.PlayBGM(BgmType.Title);
+
         // 환경설정 창은 처음에 꺼둠
         if (settingsPanel != null)
         {
