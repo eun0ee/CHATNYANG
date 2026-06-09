@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Data_MouseToy
   m_EditorClassIdentifier: 
   weaponId: MouseToy
+  weaponIcon: {fileID: 21300000, guid: 90d7c60cc11094f45bf7f047f481469f, type: 3}
   projectilePrefab: {fileID: 603811611715566344, guid: 6cf2343ca95d0a440b4c5add1a737ac6, type: 3}
   areaPrefab: {fileID: 6572700842991583547, guid: b8bfc04c279182c4aafe26b7a75a8330, type: 3}
   rarityTiers:

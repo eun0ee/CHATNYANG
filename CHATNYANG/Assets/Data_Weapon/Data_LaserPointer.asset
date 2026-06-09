@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Data_LaserPointer
   m_EditorClassIdentifier: 
   weaponId: LaserPointer
+  weaponIcon: {fileID: 21300000, guid: 9f0aeaf7a047b16439361ac4414eee79, type: 3}
   projectilePrefab: {fileID: 1829248936396933632, guid: 6dda4940b8cfa9c49996cf2e1d71914f, type: 3}
   areaPrefab: {fileID: 0}
   rarityTiers:

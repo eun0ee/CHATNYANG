@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Data_FeatherRod
   m_EditorClassIdentifier: 
   weaponId: FeatherRod
+  weaponIcon: {fileID: 21300000, guid: 0635319cd5d7d1644bde25529f60c468, type: 3}
   projectilePrefab: {fileID: 0}
   areaPrefab: {fileID: 3587647679527656551, guid: b2cdfd486eed2604aaaf2f611fe76ca3, type: 3}
   rarityTiers:
