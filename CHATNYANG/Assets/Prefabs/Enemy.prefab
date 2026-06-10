@@ -15,7 +15,8 @@ GameObject:
   - component: {fileID: 2126944473371153609}
   - component: {fileID: 5492837639388407255}
   - component: {fileID: 3349405737804448031}
-  m_Layer: 0
+  - component: {fileID: 7729575301802518953}
+  m_Layer: 3
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -180,9 +181,9 @@ MonoBehaviour:
     enemyName: Enemy
     maxHp: 10
     moveSpeed: 2
-    damage: 10
+    damage: 20
     attackCooldown: 1
-    expReward: 40
+    expReward: 25
 --- !u!114 &3349405737804448031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,3 +197,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   expOrbPrefab: {fileID: 1708141714533642986, guid: 7f654cdfe01963145b89235002475708, type: 3}
+--- !u!114 &7729575301802518953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7155164302551491639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c905a2ea873c4a43ac514e3a5739a16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  contactRadius: 1
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -9,17 +10,28 @@ public class PlayerStats : MonoBehaviour
     public float armor = 0f;
     public float recovery = 0f;
 
-    // ÀÎ½ºÆåÅÍ Ã¢¿¡ ³ëÃâ½ÃÄÑ Á÷Á¢ ÇÒ´çÇÒ ¼ö ÀÖ°Ô º¯°æ
+    [Header("Invincibility")]
+    public float invincibilityDuration = 1.5f;
+
+    private float _invincibleTimer = 0f;
+    public bool IsInvincible => _invincibleTimer > 0f;
+    private SpriteRenderer _spriteRenderer;
+
+    // ì´ë²¤íŠ¸ ì„ ì–¸ ì¶”ê°€
+    public event System.Action<float, float> OnHpChanged; // (currentHp, maxHp)
+
+    // ï¿½Î½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½ï¿½
     [SerializeField] private PlayerController _controller;
 
     private void Awake()
     {
         currentHp = maxHp;
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void Start()
     {
-        // Null Ã¼Å© ÈÄ ½ÇÇà
+        // Null Ã¼Å© ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (_controller != null)
         {
             _controller.MoveSpeed = moveSpeed;
@@ -30,18 +42,16 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (recovery > 0f)
-        {
-            currentHp = Mathf.Min(currentHp + recovery * Time.deltaTime, maxHp);
-        }
-    }
-
     public void TakeDamage(float amount)
     {
+        if (IsInvincible) return;
+
         float finalDamage = Mathf.Max(0f, amount - armor);
         currentHp -= finalDamage;
+        OnHpChanged?.Invoke(currentHp, maxHp);
+
+        _invincibleTimer = invincibilityDuration;
+        StartCoroutine(InvincibilityFlash()); // â† ì¶”ê°€
 
         if (currentHp <= 0f)
         {
@@ -50,8 +60,39 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+    private IEnumerator InvincibilityFlash()
+    {
+        float flashInterval = 0.1f; // ê¹œë¹¡ì„ ê°„ê²©
+        Color original = _spriteRenderer.color;
+        Color transparent = new Color(original.r, original.g, original.b, 0.3f);
+
+        while (IsInvincible)
+        {
+            _spriteRenderer.color = transparent;
+            yield return new WaitForSeconds(flashInterval);
+            _spriteRenderer.color = original;
+            yield return new WaitForSeconds(flashInterval);
+        }
+
+        // ë¬´ì  ì¢…ë£Œ í›„ ì›ë˜ ìƒ‰ìœ¼ë¡œ ë³µêµ¬
+        _spriteRenderer.color = original;
+    }
+
+    private void Update()
+    {
+        if (_invincibleTimer > 0f)
+            _invincibleTimer -= Time.deltaTime;
+
+        if (recovery > 0f)
+        {
+            currentHp = Mathf.Min(currentHp + recovery * Time.deltaTime, maxHp);
+            OnHpChanged?.Invoke(currentHp, maxHp); // â† íšŒë³µí•  ë•Œë„ ê°±ì‹ 
+        }
+    }
+
     private void Die()
     {
         Debug.Log("Player Dead");
+        HUDManager.Instance?.ShowGameOver();
     }
 }

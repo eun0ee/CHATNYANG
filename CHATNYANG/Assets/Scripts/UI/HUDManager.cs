@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class HUDManager : MonoBehaviour
 {
@@ -30,6 +31,10 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private ExperienceSystem expSystem;
 
+    [Header("Game Over")]
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private Button titleButton;
+
     // ───────────────────────────────────────────────
     #region Unity Lifecycle
 
@@ -45,6 +50,8 @@ public class HUDManager : MonoBehaviour
         stopButton.onClick.AddListener(OnStopButtonClicked);
         settingButton.onClick.AddListener(OnSettingButtonClicked);
         settingPanel.SetActive(false);
+        gameOverPanel.SetActive(false);
+        titleButton.onClick.AddListener(OnTitleButtonClicked);
 
         if (expSystem != null)
         {
@@ -184,4 +191,18 @@ public class HUDManager : MonoBehaviour
     }
 
     #endregion
+
+    // PlayerStats.Die()에서 호출
+    public void ShowGameOver()
+    {
+        isTimerRunning = false;
+        Time.timeScale = 0f;
+        gameOverPanel.SetActive(true);
+    }
+
+    private void OnTitleButtonClicked()
+    {
+        Time.timeScale = 1f; // timeScale 반드시 복구 후 씬 이동
+        SceneManager.LoadScene("Title"); // 씬 이름을 본인 프로젝트에 맞게 변경
+    }
 }
