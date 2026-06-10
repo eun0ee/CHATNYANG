@@ -3368,7 +3368,7 @@ MonoBehaviour:
     spawnInterval: 3
     waveDuration: 10
   - waveName: Stage2
-    enemyPrefabIndex: 0
+    enemyPrefabIndex: 1
     spawnCount: 10
     spawnInterval: 3
     waveDuration: 10
@@ -3378,7 +3378,7 @@ MonoBehaviour:
     spawnInterval: 3
     waveDuration: 10
   - waveName: Stage4
-    enemyPrefabIndex: 0
+    enemyPrefabIndex: 2
     spawnCount: 10
     spawnInterval: 3
     waveDuration: 10
@@ -3388,7 +3388,7 @@ MonoBehaviour:
     spawnInterval: 3
     waveDuration: 10
   - waveName: Stage6
-    enemyPrefabIndex: 0
+    enemyPrefabIndex: 3
     spawnCount: 10
     spawnInterval: 3
     waveDuration: 10
@@ -6554,6 +6554,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefabs:
   - {fileID: 7155164302551491639, guid: 9acd566489d4db24ea22f6e67ae957bf, type: 3}
+  - {fileID: 2915229799606146193, guid: 4bbe773634b406342a129dbd7bf2d037, type: 3}
+  - {fileID: 2929050505078103463, guid: a74e1792cc425164a88b5d5e16270d04, type: 3}
+  - {fileID: 8547681170993358145, guid: a1daf043825c7c043b34b509d3ab3c06, type: 3}
   spawnRadius: 12
   minSpawnRadius: 8
   spawnDelay: 0.1
