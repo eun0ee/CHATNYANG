@@ -423,8 +423,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startButton: {fileID: 1437749978}
   settingButton: {fileID: 2011897076}
-  settingsPanel: {fileID: 273696278}
-  weaponSelectPanel: {fileID: 1703034127}
+  settingsPanelAnimator: {fileID: 0}
+  weaponSelectPanelAnimator: {fileID: 1703034132}
   weaponSelectUI: {fileID: 1703034128}
 --- !u!4 &221354116
 Transform:
@@ -538,11 +538,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 252864932}
   m_CullTransparentMesh: 1
---- !u!1 &273696278 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 127122095427049480, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
-  m_PrefabInstance: {fileID: 797641007}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &273696281 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3327510051320334154, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
@@ -1804,6 +1799,7 @@ GameObject:
   - component: {fileID: 1703034131}
   - component: {fileID: 1703034130}
   - component: {fileID: 1703034128}
+  - component: {fileID: 1703034132}
   m_Layer: 5
   m_Name: Panel
   m_TagString: Untagged
@@ -1893,6 +1889,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1703034127}
   m_CullTransparentMesh: 1
+--- !u!114 &1703034132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703034127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608b5f435a0545b4f8ae6eae38800013, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0.35
+  easeType: 27
 --- !u!1 &1757958822
 GameObject:
   m_ObjectHideFlags: 0

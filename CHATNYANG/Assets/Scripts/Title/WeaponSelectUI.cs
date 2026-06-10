@@ -48,7 +48,7 @@ public class WeaponSelectUI : MonoBehaviour
     private void OnWeaponSelected(int index)
     {
         Debug.Log($"[WeaponSelectUI] OnWeaponSelected 호출 / index: {index}");
-        
+
         // 두 버튼 모두 기본 이미지로 초기화
         weaponButton0.GetComponent<Image>().sprite = weaponButton0Normal;
         weaponButton1.GetComponent<Image>().sprite = weaponButton1Normal;
@@ -86,6 +86,6 @@ public class WeaponSelectUI : MonoBehaviour
         weaponButton1.GetComponent<Image>().sprite = weaponButton1Normal;
         confirmButton.interactable = false;
 
-        gameObject.SetActive(false);
+        titleManager.CloseWeaponSelect(); // ← 교체
     }
 }

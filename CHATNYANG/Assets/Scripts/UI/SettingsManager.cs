@@ -5,8 +5,8 @@ using UnityEngine.Audio;
 public class SettingsManager : MonoBehaviour
 {
     [Header("UI Elements")]
-    [SerializeField] private GameObject settingsPanel;
-    [SerializeField] private GameObject dimBackground;
+    [SerializeField] private PanelAnimator settingsPanelAnimator;
+    [SerializeField] private PanelAnimator dimBackgroundAnimator; // ìžˆëŠ” ê²½ìš°
     [SerializeField] private Button closeButton;
 
     [Header("Audio Settings")]
@@ -14,96 +14,55 @@ public class SettingsManager : MonoBehaviour
     [SerializeField] private Slider bgmSlider;
     [SerializeField] private Slider sfxSlider;
 
-    private bool _isSettingsOpen = false;
-
     private void Start()
-    {
-        // ½ÃÀÛ ½Ã ÆÐ³Î°ú ¾îµÎ¿î ¹è°æÀÌ ¿­·ÁÀÖÁö ¾Êµµ·Ï ºñÈ°¼ºÈ­
-        if (settingsPanel != null)
-        {
-            settingsPanel.SetActive(false);
-        }
+{
+    // ì—°ê²° ìƒíƒœ í™•ì¸ìš© ë¡œê·¸ ì¶”ê°€
+    Debug.Log($"settingsPanelAnimator: {settingsPanelAnimator}");
+    
+    closeButton?.onClick.AddListener(CloseSettings);
+    bgmSlider?.onValueChanged.AddListener(SetBGMVolume);
+    sfxSlider?.onValueChanged.AddListener(SetSFXVolume);
+}
 
-        if (dimBackground != null)
-        {
-            dimBackground.SetActive(false);
-        }
-
-        // ´Ý±â ¹öÆ° ÀÌº¥Æ® µî·Ï
-        if (closeButton != null)
-        {
-            closeButton.onClick.AddListener(CloseSettings);
-        }
-
-        // ½½¶óÀÌ´õ °ªÀÌ º¯°æµÉ ¶§¸¶´Ù º¼·ý Á¶Àý ÇÔ¼ö°¡ È£ÃâµÇµµ·Ï ¸®½º³Ê µî·Ï
-        if (bgmSlider != null)
-        {
-            bgmSlider.onValueChanged.AddListener(SetBGMVolume);
-        }
-
-        if (sfxSlider != null)
-        {
-            sfxSlider.onValueChanged.AddListener(SetSFXVolume);
-        }
-    }
-
-    private void Update()
-    {
-        // ESC Å° ÀÔ·Â °¨ÁöÇÏ¿© ¼³Á¤Ã¢ Åä±Û
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            ToggleSettings();
-        }
-    }
+private void Update()
+{
+    if (Input.GetKeyDown(KeyCode.Escape) && settingsPanelAnimator != null)
+        ToggleSettings();
+}
 
     private void ToggleSettings()
     {
-        _isSettingsOpen = !_isSettingsOpen;
-        settingsPanel.SetActive(_isSettingsOpen);
+        if (settingsPanelAnimator.IsVisible)
+            CloseSettings();
+        else
+            OpenSettings();
+    }
 
-        // ¼³Á¤Ã¢ »óÅÂ¿¡ ¸ÂÃç ¾îµÎ¿î ¹è°æµµ ÄÑ°í ²û
-        if (dimBackground != null)
-        {
-            dimBackground.SetActive(_isSettingsOpen);
-        }
-
-        // ¼³Á¤Ã¢ÀÌ ¿­·ÈÀ» ¶§ °ÔÀÓÀ» ÀÏ½ÃÁ¤Áö
-        Time.timeScale = _isSettingsOpen ? 0f : 1f;
+    public void OpenSettings()
+    {
+        Time.timeScale = 0f;
+        settingsPanelAnimator.Show();
+        dimBackgroundAnimator?.Show();
     }
 
     public void CloseSettings()
     {
-        _isSettingsOpen = false;
-        settingsPanel.SetActive(false);
-
-        // ´ÝÀ» ¶§ ¾îµÎ¿î ¹è°æµµ ²û
-        if (dimBackground != null)
+        settingsPanelAnimator.Hide(() =>
         {
-            dimBackground.SetActive(false);
-        }
-
-        // ÀÏ½ÃÁ¤Áö¸¦ ÇØÁ¦ÇÏ°í ´Ù½Ã ½Ã°£À» Èå¸£°Ô ÇÔ
-        Time.timeScale = 1f;
+            Time.timeScale = 1f;
+        });
+        dimBackgroundAnimator?.Hide();
     }
 
     private void SetBGMVolume(float volume)
     {
-        // volume °ªÀÌ ¹«Á¶°Ç 0.0001°ú 1 »çÀÌ¿¡¼­¸¸ ³îµµ·Ï °­Á¦ °íÁ¤
         float safeVolume = Mathf.Clamp(volume, 0.0001f, 1f);
-
-        if (mainMixer != null)
-        {
-            mainMixer.SetFloat("BGMVolume", Mathf.Log10(safeVolume) * 20f);
-        }
+        mainMixer?.SetFloat("BGMVolume", Mathf.Log10(safeVolume) * 20f);
     }
 
     private void SetSFXVolume(float volume)
     {
         float safeVolume = Mathf.Clamp(volume, 0.0001f, 1f);
-
-        if (mainMixer != null)
-        {
-            mainMixer.SetFloat("SFXVolume", Mathf.Log10(safeVolume) * 20f);
-        }
+        mainMixer?.SetFloat("SFXVolume", Mathf.Log10(safeVolume) * 20f);
     }
 }

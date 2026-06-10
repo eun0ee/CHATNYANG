@@ -30,10 +30,15 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private Slider expSlider;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private ExperienceSystem expSystem;
+    
+    [Header("Panels")]
+    [SerializeField] private PanelAnimator settingPanelAnimator;
 
     [Header("Game Over")]
-    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private PanelAnimator gameOverPanelAnimator;
     [SerializeField] private Button titleButton;
+
+    
 
     // ───────────────────────────────────────────────
     #region Unity Lifecycle
@@ -49,8 +54,6 @@ public class HUDManager : MonoBehaviour
     {
         stopButton.onClick.AddListener(OnStopButtonClicked);
         settingButton.onClick.AddListener(OnSettingButtonClicked);
-        settingPanel.SetActive(false);
-        gameOverPanel.SetActive(false);
         titleButton.onClick.AddListener(OnTitleButtonClicked);
 
         if (expSystem != null)
@@ -174,20 +177,28 @@ public class HUDManager : MonoBehaviour
 
     private void OnSettingButtonClicked()
     {
-        bool open = !settingPanel.activeSelf;
-        settingPanel.SetActive(open);
+        // PanelAnimator의 blocksRaycasts로 열림 여부 판단
+        bool open = !settingPanelAnimator.IsVisible;
 
-        // 설정창 열릴 때 시간 정지, 닫힐 때 재개
-        isTimerRunning = !open;
-        Time.timeScale  = open ? 0f : 1f;
+        if (open)
+        {
+            isTimerRunning = false;
+            Time.timeScale = 0f;
+            settingPanelAnimator.Show();
+        }
+        else
+        {
+            CloseSettingPanel();
+        }
     }
 
-    // 설정 패널 내부의 닫기 버튼에서 호출
     public void CloseSettingPanel()
     {
-        settingPanel.SetActive(false);
-        isTimerRunning = true;
-        Time.timeScale  = 1f;
+        settingPanelAnimator.Hide(() =>
+        {
+            isTimerRunning = true;
+            Time.timeScale = 1f;
+        });
     }
 
     #endregion
@@ -197,12 +208,12 @@ public class HUDManager : MonoBehaviour
     {
         isTimerRunning = false;
         Time.timeScale = 0f;
-        gameOverPanel.SetActive(true);
+        gameOverPanelAnimator.Show();
     }
 
     private void OnTitleButtonClicked()
     {
-        Time.timeScale = 1f; // timeScale 반드시 복구 후 씬 이동
-        SceneManager.LoadScene("Title"); // 씬 이름을 본인 프로젝트에 맞게 변경
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("Title");
     }
 }
