@@ -423,7 +423,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startButton: {fileID: 1437749978}
   settingButton: {fileID: 2011897076}
-  settingsPanelAnimator: {fileID: 0}
+  settingsPanelAnimator: {fileID: 1847414525}
   weaponSelectPanelAnimator: {fileID: 1703034132}
   weaponSelectUI: {fileID: 1703034128}
 --- !u!4 &221354116
@@ -893,15 +893,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 85664596438206371, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.49995
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 85664596438206371, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 85664596438206371, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.49995
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 127122095427049480, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
       propertyPath: m_Name
@@ -909,35 +909,35 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 127122095427049480, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 703003415878994808, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
+      propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 703003415878994808, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0.49995
-      objectReference: {fileID: 0}
-    - target: {fileID: 703003415878994808, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 703003415878994808, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.49995
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1069500080478704311, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1069500080478704311, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2702192170579153893, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2702192170579153893, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3327510051320334154, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
       propertyPath: m_Pivot.x
@@ -1034,7 +1034,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 127122095427049480, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1847414525}
   m_SourcePrefab: {fileID: 100100000, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
 --- !u!1 &874435846
 GameObject:
@@ -1806,7 +1809,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1703034128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2143,6 +2146,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1843540703}
   m_CullTransparentMesh: 1
+--- !u!1 &1847414522 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 127122095427049480, guid: 6bd31b12240694c4aafdfe5cb0f9a2b2, type: 3}
+  m_PrefabInstance: {fileID: 797641007}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1847414525
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847414522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608b5f435a0545b4f8ae6eae38800013, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0.35
+  easeType: 27
 --- !u!1 &1996915958
 GameObject:
   m_ObjectHideFlags: 0
