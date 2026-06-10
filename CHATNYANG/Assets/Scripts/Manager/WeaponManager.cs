@@ -15,27 +15,32 @@ public class WeaponManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log($"[WeaponManager] Start / Registered Prefabs: {startingWeaponPrefabs.Count}");
-        foreach (var prefab in startingWeaponPrefabs)
+        // íƒ€ì´í‹€ì—ì„œ ì„ íƒí•œ ë¬´ê¸°ê°€ ìžˆìœ¼ë©´ ê·¸ê±¸ë¡œ ì‹œìž‘
+        if (WeaponSelectData.Instance != null && WeaponSelectData.Instance.SelectedWeaponPrefab != null)
         {
-            // ½ÃÀÛ ¹«±â´Â ±âº»ÀûÀ¸·Î Normal µî±ÞÀ¸·Î Ãß°¡
-            AddWeapon(prefab, WeaponRarity.Normal);
+            AddWeapon(WeaponSelectData.Instance.SelectedWeaponPrefab, WeaponRarity.Normal);
+        }
+        else
+        {
+            // ì„ íƒ ì—†ì„ ì‹œ ê¸°ë³¸ ë¬´ê¸°ë¡œ í´ë°±
+            foreach (var prefab in startingWeaponPrefabs)
+                AddWeapon(prefab, WeaponRarity.Normal);
         }
     }
 
-    // AI°¡ ¹ÝÈ¯ÇÑ µî±ÞÀ» ÇÔ²² ¹Þµµ·Ï ÆÄ¶ó¹ÌÅÍ Ãß°¡
+    // AIï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô²ï¿½ ï¿½Þµï¿½ï¿½ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
     public bool AddWeapon(GameObject weaponPrefab, WeaponRarity drawnRarity = WeaponRarity.Normal)
     {
         WeaponBase existingWeapon = GetWeaponByPrefab(weaponPrefab);
 
         if (existingWeapon != null)
         {
-            // ÀÌ¹Ì µé°í ÀÖ´Â ¹«±â¶ó¸é °­È­, ½Â±Þ, ±³Ã¼ ·ÎÁ÷À¸·Î ÁøÀÔ
+            // ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­, ï¿½Â±ï¿½, ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             return UpgradeOrReplaceWeapon(existingWeapon, drawnRarity);
         }
         else
         {
-            // ¾ø´Â ¹«±â¶ó¸é ½½·Ô È®ÀÎ ÈÄ ½Å±Ô ÀåÂø
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ ï¿½ï¿½ ï¿½Å±ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (_weapons.Count >= maxWeaponSlots)
             {
                 Debug.LogWarning("[WeaponManager] Weapon slots are full.");
@@ -56,7 +61,7 @@ public class WeaponManager : MonoBehaviour
             _weapons.Add(weapon);
             Debug.Log($"[WeaponManager] Added new weapon: {weaponPrefab.name} ({_weapons.Count}/{maxWeaponSlots})");
 
-            // ¹«±â È¹µæ ¶Ç´Â °­È­ ¼º°ø ½Ã UI »õ·Î°íÄ§ È£Ãâ
+            // ï¿½ï¿½ï¿½ï¿½ È¹ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ UI ï¿½ï¿½ï¿½Î°ï¿½Ä§ È£ï¿½ï¿½
             WeaponDisplayManager displayManager = FindObjectOfType<WeaponDisplayManager>();
             if (displayManager != null)
             {
@@ -67,32 +72,32 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    // 4°¡Áö Ãª³É ±âÈ¹ ·ê ÆÇº° ·ÎÁ÷
+    // 4ï¿½ï¿½ï¿½ï¿½ Ãªï¿½ï¿½ ï¿½ï¿½È¹ ï¿½ï¿½ ï¿½Çºï¿½ ï¿½ï¿½ï¿½ï¿½
     private bool UpgradeOrReplaceWeapon(WeaponBase existingWeapon, WeaponRarity drawnRarity)
     {
         int currentRarityValue = (int)existingWeapon.currentRarity;
         int drawnRarityValue = (int)drawnRarity;
 
-        // ·ê 1: ´õ ³ôÀº µî±ÞÀÌ ³ª¿Â °æ¿ì (±³Ã¼)
+        // ï¿½ï¿½ 1: ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ (ï¿½ï¿½Ã¼)
         if (drawnRarityValue > currentRarityValue)
         {
             existingWeapon.InitializeWeapon(drawnRarity, 0);
             Debug.Log($"[WeaponManager] Replaced with higher rarity: {drawnRarity} 0");
             return true;
         }
-        // ·ê 2 & 3 & 4: °°Àº µî±ÞÀÌ ³ª¿Â °æ¿ì
+        // ï¿½ï¿½ 2 & 3 & 4: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         else if (drawnRarityValue == currentRarityValue)
         {
             if (existingWeapon.currentUpgradeLevel < 3)
             {
-                // ·ê 2: 3°­ ¹Ì¸¸ÀÌ¸é °­È­
+                // ï¿½ï¿½ 2: 3ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½È­
                 existingWeapon.InitializeWeapon(existingWeapon.currentRarity, existingWeapon.currentUpgradeLevel + 1);
                 Debug.Log($"[WeaponManager] Upgraded: {existingWeapon.currentRarity} {existingWeapon.currentUpgradeLevel}");
                 return true;
             }
             else
             {
-                // ·ê 4: ÃÖ°í µî±Þ(Legendary) 3°­¿¡¼­ ¶Ç °°Àº °Ô ³ª¿À¸é ²Î Ã³¸®
+                // ï¿½ï¿½ 4: ï¿½Ö°ï¿½ ï¿½ï¿½ï¿½(Legendary) 3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ã³ï¿½ï¿½
                 if (existingWeapon.currentRarity == WeaponRarity.Legendary)
                 {
                     Debug.Log("[WeaponManager] Legendary Max Level duplicate. Considered as trash.");
@@ -100,7 +105,7 @@ public class WeaponManager : MonoBehaviour
                 }
                 else
                 {
-                    // ·ê 3: 3°­¿¡¼­ °°Àº °Ô ³ª¿À¸é ´ÙÀ½ »óÀ§ µî±Þ 0°­À¸·Î ½Â±Þ
+                    // ï¿½ï¿½ 3: 3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ 0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â±ï¿½
                     WeaponRarity nextRarity = (WeaponRarity)(currentRarityValue + 1);
                     existingWeapon.InitializeWeapon(nextRarity, 0);
                     Debug.Log($"[WeaponManager] Promoted to next rarity: {nextRarity} 0");
@@ -108,7 +113,7 @@ public class WeaponManager : MonoBehaviour
                 }
             }
         }
-        // ±âÈ¹ ¿Ü ¿¹¿Ü: ÇöÀç µé°í ÀÖ´Â °Íº¸´Ù ³·Àº µî±ÞÀÌ ³ª¿À¸é ²Î Ã³¸®
+        // ï¿½ï¿½È¹ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Íºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Ã³ï¿½ï¿½
         else
         {
             Debug.Log("[WeaponManager] Lower rarity drawn. Ignored.");
@@ -116,7 +121,7 @@ public class WeaponManager : MonoBehaviour
         }
     }
 
-    // ÇÁ¸®ÆÕÀ¸·Î ÀÌ¹Ì »ý¼ºµÈ ¹«±â¸¦ Ã£´Â ÇïÆÛ ÇÔ¼ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¸¦ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     private WeaponBase GetWeaponByPrefab(GameObject prefab)
     {
         string prefabName = prefab.name + "(Clone)";

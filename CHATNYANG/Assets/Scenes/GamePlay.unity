@@ -3480,6 +3480,41 @@ MonoBehaviour:
     spawnCount: 10
     spawnInterval: 3
     waveDuration: 10
+  - waveName: Stage4
+    enemyPrefabIndex: 0
+    spawnCount: 10
+    spawnInterval: 3
+    waveDuration: 10
+  - waveName: Stage5
+    enemyPrefabIndex: 0
+    spawnCount: 10
+    spawnInterval: 3
+    waveDuration: 10
+  - waveName: Stage6
+    enemyPrefabIndex: 0
+    spawnCount: 10
+    spawnInterval: 3
+    waveDuration: 10
+  - waveName: Stage7
+    enemyPrefabIndex: 0
+    spawnCount: 10
+    spawnInterval: 3
+    waveDuration: 10
+  - waveName: Stage8
+    enemyPrefabIndex: 0
+    spawnCount: 10
+    spawnInterval: 3
+    waveDuration: 10
+  - waveName: Stage9
+    enemyPrefabIndex: 0
+    spawnCount: 10
+    spawnInterval: 3
+    waveDuration: 10
+  - waveName: Stage10
+    enemyPrefabIndex: 0
+    spawnCount: 10
+    spawnInterval: 3
+    waveDuration: 10
   spawner: {fileID: 1715103015}
 --- !u!4 &713822521
 Transform:

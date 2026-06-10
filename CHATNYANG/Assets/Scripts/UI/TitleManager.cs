@@ -11,41 +11,34 @@ public class TitleManager : MonoBehaviour
     [Header("Settings UI")]
     [SerializeField] private GameObject settingsPanel;
 
+    [Header("Weapon Select UI")]
+    [SerializeField] private GameObject weaponSelectPanel; // ë¬´ê¸° ì„ íƒ íŒ¨ë„
+    [SerializeField] private WeaponSelectUI weaponSelectUI; // ì•„ë˜ì—ì„œ ë§Œë“¤ ì»´í¬ë„ŒíŠ¸
+
     private void Start()
     {
         SoundManager.Instance.PlayBGM(BgmType.Title);
 
-        // È¯°æ¼³Á¤ Ã¢Àº Ã³À½¿¡ ²¨µÒ
-        if (settingsPanel != null)
-        {
-            settingsPanel.SetActive(false);
-        }
+        settingsPanel?.SetActive(false);
+        weaponSelectPanel?.SetActive(false);
 
-        // ¹öÆ° Å¬¸¯ ÀÌº¥Æ® ¿¬°á
-        if (startButton != null)
-        {
-            startButton.onClick.AddListener(LoadMainGame);
-        }
-
-        if (settingButton != null)
-        {
-            settingButton.onClick.AddListener(OpenSettings);
-        }
+        startButton?.onClick.AddListener(OpenWeaponSelect); // ë°”ë¡œ ë¡œë“œ ëŒ€ì‹  íŒ¨ë„ ì—´ê¸°
+        settingButton?.onClick.AddListener(OpenSettings);
     }
 
-    private void LoadMainGame()
+    private void OpenWeaponSelect()
     {
-        // ¾À ÀÌ¸§ÀÌ³ª ÀÎµ¦½º¸¦ ÀÔ·ÂÇÏ¿© ¸ŞÀÎ °ÔÀÓÀ¸·Î ÀÌµ¿
-        // Build Settings¿¡ ¸ŞÀÎ ¾ÀÀÌ µî·ÏµÇ¾î ÀÖ¾î¾ß ÇÔ
-        SceneManager.LoadScene("GamePlay");
+        weaponSelectPanel?.SetActive(true);
     }
 
     private void OpenSettings()
     {
-        // ¼³Á¤Ã¢ ÄÑ±â
-        if (settingsPanel != null)
-        {
-            settingsPanel.SetActive(true);
-        }
+        settingsPanel?.SetActive(true);
+    }
+
+    public void OnWeaponConfirmed()
+    {
+        weaponSelectPanel.SetActive(false);
+        SceneManager.LoadScene("GamePlay");
     }
 }
