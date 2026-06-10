@@ -423,7 +423,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startButton: {fileID: 1437749978}
   settingButton: {fileID: 2011897076}
-  settingsPanelAnimator: {fileID: 0}
+  settingsPanelAnimator: {fileID: 1703034132}
   weaponSelectPanelAnimator: {fileID: 1703034132}
   weaponSelectUI: {fileID: 1703034128}
 --- !u!4 &221354116
@@ -1806,7 +1806,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1703034128
 MonoBehaviour:
   m_ObjectHideFlags: 0
