@@ -359,7 +359,7 @@ RectTransform:
   m_GameObject: {fileID: 57522756}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5594375, y: 1.5594375, z: 1.5594375}
+  m_LocalScale: {x: 1.6972919, y: 1.6972919, z: 1.6972919}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1029231009}
@@ -389,7 +389,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 0635319cd5d7d1644bde25529f60c468, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4301,7 +4301,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1029231009
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7472,14 +7472,14 @@ RectTransform:
   m_GameObject: {fileID: 2086169114}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3.6036954, y: 3.6036954, z: 3.6036954}
+  m_LocalScale: {x: 2.5912871, y: 2.5912871, z: 2.5912871}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1029231009}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -332, y: -24}
+  m_AnchoredPosition: {x: -330, y: -16.3}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2086169116
@@ -7502,7 +7502,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3b53b89663ec87b4e956aa48eb397e13, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b28963e0c12712f4db9b564cb4e612a9, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7982,6 +7982,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 853304880}
     m_Modifications:
+    - target: {fileID: 2649087539729602459, guid: f22eec4a8c3e9c748931565276133cae, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.4448706
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649087539729602459, guid: f22eec4a8c3e9c748931565276133cae, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.4448706
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649087539729602459, guid: f22eec4a8c3e9c748931565276133cae, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.4448706
+      objectReference: {fileID: 0}
+    - target: {fileID: 2649087539729602459, guid: f22eec4a8c3e9c748931565276133cae, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.90001
+      objectReference: {fileID: 0}
+    - target: {fileID: 4149248254281124907, guid: f22eec4a8c3e9c748931565276133cae, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: acdfdca2bd043494f92ec66fa16042d4, type: 3}
     - target: {fileID: 5001962201741577038, guid: f22eec4a8c3e9c748931565276133cae, type: 3}
       propertyPath: m_Name
       value: WeaponImg 0
