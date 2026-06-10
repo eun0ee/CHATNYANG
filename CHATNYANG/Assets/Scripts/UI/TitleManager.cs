@@ -8,37 +8,46 @@ public class TitleManager : MonoBehaviour
     [SerializeField] private Button startButton;
     [SerializeField] private Button settingButton;
 
-    [Header("Settings UI")]
-    [SerializeField] private GameObject settingsPanel;
+    [Header("Panels")]
+    [SerializeField] private PanelAnimator settingsPanelAnimator;
+    [SerializeField] private PanelAnimator weaponSelectPanelAnimator;
 
     [Header("Weapon Select UI")]
-    [SerializeField] private GameObject weaponSelectPanel; // 무기 선택 패널
-    [SerializeField] private WeaponSelectUI weaponSelectUI; // 아래에서 만들 컴포넌트
+    [SerializeField] private WeaponSelectUI weaponSelectUI;
 
     private void Start()
     {
         SoundManager.Instance.PlayBGM(BgmType.Title);
 
-        settingsPanel?.SetActive(false);
-        weaponSelectPanel?.SetActive(false);
-
-        startButton?.onClick.AddListener(OpenWeaponSelect); // 바로 로드 대신 패널 열기
+        startButton?.onClick.AddListener(OpenWeaponSelect);
         settingButton?.onClick.AddListener(OpenSettings);
     }
 
     private void OpenWeaponSelect()
     {
-        weaponSelectPanel?.SetActive(true);
+        weaponSelectPanelAnimator.Show();
     }
 
     private void OpenSettings()
     {
-        settingsPanel?.SetActive(true);
+        settingsPanelAnimator.Show();
+    }
+
+    // 설정창 닫기 버튼에서 호출
+    public void CloseSettings()
+    {
+        settingsPanelAnimator.Hide();
     }
 
     public void OnWeaponConfirmed()
     {
-        weaponSelectPanel.SetActive(false);
-        SceneManager.LoadScene("GamePlay");
+        weaponSelectPanelAnimator.Hide(() =>
+        {
+            SceneManager.LoadScene("GamePlay");
+        });
+    }
+    public void CloseWeaponSelect()
+    {
+        weaponSelectPanelAnimator.Hide();
     }
 }
