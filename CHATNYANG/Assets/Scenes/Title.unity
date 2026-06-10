@@ -176,7 +176,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_RaycastPadding: {x: 20, y: 20, z: 20, w: 50}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -297,7 +297,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_RaycastPadding: {x: 40, y: 40, z: 40, w: 40}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -779,7 +779,7 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_RaycastPadding: {x: 40, y: 40, z: 40, w: 40}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1754,7 +1754,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1703034128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1774,6 +1774,10 @@ MonoBehaviour:
   confirmButton: {fileID: 117167730}
   closeButton: {fileID: 1037271093}
   titleManager: {fileID: 221354115}
+  weaponButton0Normal: {fileID: 21300000, guid: d24feb5184fa8194d976e1d5ecaa1647, type: 3}
+  weaponButton0Selected: {fileID: 21300000, guid: e5890b8f5b1eb4248ada773cf9a81285, type: 3}
+  weaponButton1Normal: {fileID: 21300000, guid: d24feb5184fa8194d976e1d5ecaa1647, type: 3}
+  weaponButton1Selected: {fileID: 21300000, guid: e5890b8f5b1eb4248ada773cf9a81285, type: 3}
 --- !u!224 &1703034129
 RectTransform:
   m_ObjectHideFlags: 0

@@ -17,6 +17,12 @@ public class WeaponSelectUI : MonoBehaviour
 
     [SerializeField] private TitleManager titleManager;
 
+    [Header("무기 버튼 이미지")]
+    [SerializeField] private Sprite weaponButton0Normal;    // 버튼0 기본 이미지
+    [SerializeField] private Sprite weaponButton0Selected;  // 버튼0 선택 이미지
+    [SerializeField] private Sprite weaponButton1Normal;    // 버튼1 기본 이미지
+    [SerializeField] private Sprite weaponButton1Selected;  // 버튼1 선택 이미지
+
     // 선택 강조 색상
     private readonly Color _normalColor   = Color.white;
     private readonly Color _selectedColor = new Color(1f, 0.85f, 0.3f);
@@ -41,20 +47,21 @@ public class WeaponSelectUI : MonoBehaviour
 
     private void OnWeaponSelected(int index)
     {
-        // 하이라이트 초기화
-        weaponButton0.GetComponent<Image>().color = _normalColor;
-        weaponButton1.GetComponent<Image>().color = _normalColor;
+        Debug.Log($"[WeaponSelectUI] OnWeaponSelected 호출 / index: {index}");
+        
+        // 두 버튼 모두 기본 이미지로 초기화
+        weaponButton0.GetComponent<Image>().sprite = weaponButton0Normal;
+        weaponButton1.GetComponent<Image>().sprite = weaponButton1Normal;
 
-        // 선택된 버튼 강조
         if (index == 0)
         {
             _selectedPrefab = weaponPrefab0;
-            weaponButton0.GetComponent<Image>().color = _selectedColor;
+            weaponButton0.GetComponent<Image>().sprite = weaponButton0Selected;
         }
         else
         {
             _selectedPrefab = weaponPrefab1;
-            weaponButton1.GetComponent<Image>().color = _selectedColor;
+            weaponButton1.GetComponent<Image>().sprite = weaponButton1Selected;
         }
 
         confirmButton.interactable = true;
@@ -62,6 +69,8 @@ public class WeaponSelectUI : MonoBehaviour
 
     private void OnConfirm()
     {
+        Debug.Log($"[WeaponSelectUI] OnConfirm 호출 / 선택된 무기: {(_selectedPrefab != null ? _selectedPrefab.name : "null")}");
+    
         if (_selectedPrefab == null) return;
 
         if (WeaponSelectData.Instance != null)
@@ -72,10 +81,9 @@ public class WeaponSelectUI : MonoBehaviour
 
     private void OnClose()
     {
-        // 선택 초기화 후 패널 닫기
         _selectedPrefab = null;
-        weaponButton0.GetComponent<Image>().color = _normalColor;
-        weaponButton1.GetComponent<Image>().color = _normalColor;
+        weaponButton0.GetComponent<Image>().sprite = weaponButton0Normal;
+        weaponButton1.GetComponent<Image>().sprite = weaponButton1Normal;
         confirmButton.interactable = false;
 
         gameObject.SetActive(false);

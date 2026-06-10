@@ -183,7 +183,7 @@ MonoBehaviour:
     moveSpeed: 2
     damage: 20
     attackCooldown: 1
-    expReward: 25
+    expReward: 30
 --- !u!114 &3349405737804448031
 MonoBehaviour:
   m_ObjectHideFlags: 0
