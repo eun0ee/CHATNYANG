@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 6910671928496220391}
   - component: {fileID: 385726555515454142}
   - component: {fileID: 5663700000053873438}
-  - component: {fileID: 365050011384655550}
   - component: {fileID: 4433187862825233762}
   - component: {fileID: 2010894105275803936}
+  - component: {fileID: 3114689107547557490}
   m_Layer: 3
   m_Name: Enemy3
   m_TagString: Enemy
@@ -171,19 +171,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &365050011384655550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8547681170993358145}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4268ce2838089d44e839f3d0cdd5ce7d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 2
 --- !u!114 &4433187862825233762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,3 +200,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   expOrbPrefab: {fileID: 1708141714533642986, guid: 7f654cdfe01963145b89235002475708, type: 3}
+--- !u!114 &3114689107547557490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8547681170993358145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddb5f53f2250da14ca7b41e650e67fd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pattern: 2
+  _chargeTriggerRange: 4
+  _chargeSpeedMultiplier: 2.5
+  _chargeDuration: 0.6
+  _chargeCooldown: 1.5
+  _orbitDistance: 3
+  _orbitSpeedMultiplier: 1
+  _orbitClockwise: 1

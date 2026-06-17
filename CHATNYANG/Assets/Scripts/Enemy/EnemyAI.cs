@@ -1,9 +1,30 @@
 using UnityEngine;
 
+public enum MovementPattern
+{
+    Chase,  // ì§ì„  ì¶”ì 
+    Charge, // ëŒì§„
+    Orbit   // ì£¼ìœ„ë¥¼ ë”
+}
+
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(EnemyStats))]
 public class EnemyAI : MonoBehaviour
 {
+    [Header("ì´ë™ íŒ¨í„´")]
+    [SerializeField] private MovementPattern _pattern = MovementPattern.Chase;
+
+    [Header("Charge ì„¤ì •")]
+    [SerializeField] private float _chargeTriggerRange = 4f;
+    [SerializeField] private float _chargeSpeedMultiplier = 2.5f;
+    [SerializeField] private float _chargeDuration = 0.6f;
+    [SerializeField] private float _chargeCooldown = 1.5f;
+
+    [Header("Orbit ì„¤ì •")]
+    [SerializeField] private float _orbitDistance = 3f;
+    [SerializeField] private float _orbitSpeedMultiplier = 1f;
+    [SerializeField] private bool _orbitClockwise = true;
+
     private Rigidbody2D _rb;
     private EnemyStats _stats;
     private Transform _target;
@@ -11,6 +32,11 @@ public class EnemyAI : MonoBehaviour
     private float _attackTimer;
     private bool _isDead;
     private float _speedMultiplier = 1f;
+
+    private enum ChargeState { Approach, Dashing, Cooldown }
+    private ChargeState _chargeState = ChargeState.Approach;
+    private float _chargeStateTimer;
+    private Vector2 _chargeDirection;
 
     private void Awake()
     {
@@ -24,7 +50,7 @@ public class EnemyAI : MonoBehaviour
 
     private void Start()
     {
-        // ¾À¿¡¼­ Player ÅÂ±×·Î ÀÚµ¿ Å½»ö
+        // ì”¬ì—ì„œ Player íƒœê·¸ë¡œ ìë™ íƒìƒ‰
         var player = GameObject.FindWithTag("Player");
         if (player != null) _target = player.transform;
     }
@@ -32,7 +58,19 @@ public class EnemyAI : MonoBehaviour
     private void FixedUpdate()
     {
         if (_isDead || _target == null) return;
-        ChaseTarget();
+
+        switch (_pattern)
+        {
+            case MovementPattern.Chase:
+                ChaseTarget();
+                break;
+            case MovementPattern.Charge:
+                ChargeTarget();
+                break;
+            case MovementPattern.Orbit:
+                OrbitTarget();
+                break;
+        }
     }
 
     private void Update()
@@ -46,10 +84,79 @@ public class EnemyAI : MonoBehaviour
         _speedMultiplier = multiplier;
     }
 
+    public void SetPattern(MovementPattern pattern)
+    {
+        _pattern = pattern;
+        _chargeState = ChargeState.Approach; // íŒ¨í„´ ë³€ê²½ ì‹œ ìƒíƒœ ì´ˆê¸°í™”
+    }
+
     private void ChaseTarget()
     {
         Vector2 direction = (_target.position - transform.position).normalized;
         _rb.MovePosition(_rb.position + direction * (_stats.Data.moveSpeed * _speedMultiplier * Time.fixedDeltaTime));
+    }
+
+    private void ChargeTarget()
+    {
+        switch (_chargeState)
+        {
+            case ChargeState.Approach:
+                float distance = Vector2.Distance(_target.position, transform.position);
+                if (distance <= _chargeTriggerRange)
+                {
+                    _chargeDirection = (_target.position - transform.position).normalized;
+                    _chargeState = ChargeState.Dashing;
+                    _chargeStateTimer = _chargeDuration;
+                }
+                else
+                {
+                    ChaseTarget();
+                }
+                break;
+
+            case ChargeState.Dashing:
+                _rb.MovePosition(_rb.position + _chargeDirection * (_stats.Data.moveSpeed * _chargeSpeedMultiplier * _speedMultiplier * Time.fixedDeltaTime));
+                _chargeStateTimer -= Time.fixedDeltaTime;
+                if (_chargeStateTimer <= 0f)
+                {
+                    _chargeState = ChargeState.Cooldown;
+                    _chargeStateTimer = _chargeCooldown;
+                }
+                break;
+
+            case ChargeState.Cooldown:
+                ChaseTarget(); // ì¿¨ë‹¤ìš´ ì¤‘ì—” ì²œì²œíˆ ì¶”ì ë§Œ
+                _chargeStateTimer -= Time.fixedDeltaTime;
+                if (_chargeStateTimer <= 0f)
+                    _chargeState = ChargeState.Approach;
+                break;
+        }
+    }
+
+    private void OrbitTarget()
+    {
+        Vector2 toTarget = _target.position - transform.position;
+        float distance = toTarget.magnitude;
+        Vector2 radialDir = toTarget.normalized;
+
+        const float buffer = 0.3f;
+        Vector2 moveDir;
+
+        if (distance > _orbitDistance + buffer)
+        {
+            moveDir = radialDir; // ë„ˆë¬´ ë©€ë©´ ì ‘ê·¼
+        }
+        else if (distance < _orbitDistance - buffer)
+        {
+            moveDir = -radialDir; // ë„ˆë¬´ ê°€ê¹Œìš°ë©´ í›„í‡´
+        }
+        else
+        {
+            Vector2 tangent = new Vector2(-radialDir.y, radialDir.x);
+            moveDir = _orbitClockwise ? -tangent : tangent;
+        }
+
+        _rb.MovePosition(_rb.position + moveDir * (_stats.Data.moveSpeed * _orbitSpeedMultiplier * _speedMultiplier * Time.fixedDeltaTime));
     }
 
     private void OnTriggerStay2D(Collider2D other)
@@ -57,13 +164,11 @@ public class EnemyAI : MonoBehaviour
         if (!other.CompareTag("Player")) return;
         if (_attackTimer > 0f) return;
 
-        // PlayerStats¿¡ µ¥¹ÌÁö Àü´Ş
         var playerStats = other.GetComponent<PlayerStats>();
         playerStats?.TakeDamage(_stats.Data.damage);
 
         _attackTimer = _stats.Data.attackCooldown;
     }
 
-    // ¿ÜºÎ(¹«±â µî)¿¡¼­ Å¸°Ù ±³Ã¼ °¡´É
     public void SetTarget(Transform newTarget) => _target = newTarget;
 }

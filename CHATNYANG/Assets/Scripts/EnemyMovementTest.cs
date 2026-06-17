@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class EnemyMovementTest : MonoBehaviour
 {
-    // ÀÌµ¿ ¼Óµµ
+    // ï¿½Ìµï¿½ ï¿½Óµï¿½
     public float speed = 2f;
     private Transform targetPlayer;
 
     private void Start()
     {
-        // ¾À¿¡¼­ ÇÃ·¹ÀÌ¾î ÅÂ±×¸¦ °¡Áø ¿ÀºêÁ§Æ® Ã£±â
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Â±×¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® Ã£ï¿½ï¿½
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
@@ -20,7 +20,7 @@ public class EnemyMovementTest : MonoBehaviour
     {
         if (GetComponent<ConfusionStatus>() != null) return;
 
-        // ÇÃ·¹ÀÌ¾î°¡ Á¸ÀçÇÏ¸é ±× ¹æÇâÀ¸·Î ÀÌµ¿
+        // ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
         if (targetPlayer != null)
         {
             transform.position = Vector2.MoveTowards(transform.position, targetPlayer.position, speed * Time.deltaTime);
