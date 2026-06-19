@@ -3956,7 +3956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalWaves:
   - waveName: Wave 1
-    enemyPrefabIndex: 2
+    enemyPrefabIndex: 0
     spawnCount: 3
     spawnInterval: 2
     waveDuration: 30
