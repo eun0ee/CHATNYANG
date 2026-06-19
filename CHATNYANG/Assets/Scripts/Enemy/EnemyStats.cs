@@ -38,7 +38,11 @@ public class EnemyStats : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log($"[EnemyStats] {gameObject.name} ��� / expReward: {data.expReward}");
+        Debug.Log($"[EnemyStats] {gameObject.name} Dead / expReward: {data.expReward}");
+
+        // HUDManager의 싱글톤 인스턴스를 통해 킬 수를 1 올립니다.
+        HUDManager.Instance?.AddKill();
+
         OnDeath?.Invoke();
         Destroy(gameObject);
     }
