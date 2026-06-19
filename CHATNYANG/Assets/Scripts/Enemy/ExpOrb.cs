@@ -6,12 +6,12 @@ public class ExpOrb : MonoBehaviour
 {
     [Header("Orb Settings")]
     [SerializeField] private float attractRadius = 3f;
-    [SerializeField] private float moveSpeed     = 6f;
+    [SerializeField] private float moveSpeed = 6f;
 
-    private float            _expAmount;
+    private float _expAmount;
     private ExperienceSystem _expSystem;
-    private Transform        _target;
-    private bool             _isAttracting = false;
+    private Transform _target;
+    private bool _isAttracting = false;
 
     // ExperienceDrop에서 호출
     public void Init(float amount, ExperienceSystem expSystem)
@@ -27,6 +27,15 @@ public class ExpOrb : MonoBehaviour
 
         // 흡수 감지용 트리거 콜라이더 크기 설정
         GetComponent<CircleCollider2D>().radius = attractRadius;
+
+        // 물리 충돌 방지용 트리거 및 키네마틱 강제 설정
+        GetComponent<CircleCollider2D>().isTrigger = true;
+        var rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.bodyType = RigidbodyType2D.Kinematic;
+            rb.useFullKinematicContacts = true;
+        }
     }
 
     private void Update()
@@ -46,13 +55,6 @@ public class ExpOrb : MonoBehaviour
     {
         if (other.CompareTag("Player"))
             _isAttracting = true;
-    }
-
-    // 플레이어와 겹치면 획득
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.CompareTag("Player"))
-            Pickup();
     }
 
     // 추적 중 완전히 닿았을 때 획득 (Trigger끼리 겹칠 경우 대비)
