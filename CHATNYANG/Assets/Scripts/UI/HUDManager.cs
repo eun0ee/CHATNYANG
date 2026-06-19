@@ -38,7 +38,23 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private PanelAnimator gameOverPanelAnimator;
     [SerializeField] private Button titleButton;
 
-    
+    [Header("Game Over Results")]
+    [SerializeField] private TextMeshProUGUI resultSurvivalTimeText;
+    [SerializeField] private TextMeshProUGUI resultLevelText;
+    [SerializeField] private TextMeshProUGUI resultKillCountText;
+
+    [Header("Game Over Weapon History")]
+    [SerializeField] private WeaponManager weaponManager;
+    [SerializeField] private WeaponSlotUI[] resultWeaponSlots; // 게임오버 창에 배치한 슬롯들
+    [SerializeField] private Sprite normalAura;
+    [SerializeField] private Sprite rareAura;
+    [SerializeField] private Sprite epicAura;
+    [SerializeField] private Sprite uniqueAura;
+    [SerializeField] private Sprite legendaryAura;
+
+    // 현재 레벨을 추적하기 위한 변수 추가
+    private int currentLevel = 1;
+
 
     // ───────────────────────────────────────────────
     #region Unity Lifecycle
@@ -113,6 +129,8 @@ public class HUDManager : MonoBehaviour
     // OnLevelUp(newLevel) 수신
     private void RefreshLevelUI(int newLevel)
     {
+        currentLevel = newLevel; // 도달 레벨 저장
+
         if (levelText != null)
             levelText.text = $"Lv. {newLevel}";
 
@@ -208,7 +226,69 @@ public class HUDManager : MonoBehaviour
     {
         isTimerRunning = false;
         Time.timeScale = 0f;
+
+        // 1. 결과 텍스트 업데이트
+        UpdateGameOverTexts();
+
+        // 2. 무기 히스토리 업데이트
+        UpdateGameOverWeapons();
+
         gameOverPanelAnimator.Show();
+    }
+
+    private void UpdateGameOverTexts()
+    {
+        // 생존 시간 계산 (전체 시간 600초에서 남은 시간을 뺌)
+        float survivedTime = 600f - remainingTime;
+        int minutes = Mathf.FloorToInt(survivedTime / 60f);
+        int seconds = Mathf.FloorToInt(survivedTime % 60f);
+
+        if (resultSurvivalTimeText != null)
+            resultSurvivalTimeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+
+        if (resultLevelText != null)
+            resultLevelText.text = $"Lv. {currentLevel}";
+
+        if (resultKillCountText != null)
+            resultKillCountText.text = $"{killCount}";
+    }
+
+    private void UpdateGameOverWeapons()
+    {
+        if (weaponManager == null || resultWeaponSlots == null) return;
+
+        // 읽기 전용으로 현재 무기 리스트 가져오기
+        var currentWeapons = weaponManager.Weapons;
+
+        for (int i = 0; i < resultWeaponSlots.Length; i++)
+        {
+            if (i < currentWeapons.Count)
+            {
+                WeaponBase weapon = currentWeapons[i];
+                Sprite aura = GetAuraByRarity(weapon.currentRarity);
+
+                // WeaponSlotUI의 UpdateSlot 함수를 호출하여 아우라, 아이콘, 강화수치 적용
+                resultWeaponSlots[i].UpdateSlot(weapon.WeaponData.weaponIcon, aura, weapon.currentUpgradeLevel);
+            }
+            else
+            {
+                // 무기가 없는 빈 슬롯 처리
+                resultWeaponSlots[i].ClearSlot();
+            }
+        }
+    }
+
+    private Sprite GetAuraByRarity(WeaponRarity rarity)
+    {
+        switch (rarity)
+        {
+            case WeaponRarity.Normal: return normalAura;
+            case WeaponRarity.Rare: return rareAura;
+            case WeaponRarity.Epic: return epicAura;
+            case WeaponRarity.Unique: return uniqueAura;
+            case WeaponRarity.Legendary: return legendaryAura;
+            default: return normalAura;
+        }
     }
 
     private void OnTitleButtonClicked()

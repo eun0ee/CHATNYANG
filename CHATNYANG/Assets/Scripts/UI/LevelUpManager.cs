@@ -23,8 +23,12 @@ public class LevelUpManager : MonoBehaviour
     public Button resultCloseButton;
 
     [Header("Level Up Settings")]
-    public float levelUpTimeout = 20f;
     public int maxCharacterLimit = 5;
+
+    public float minLevelUpTimeout = 10f;
+    public float maxLevelUpTimeout = 20f;
+    public float timeIncreasePerLevel = 1f;
+
 
     [Header("Weapon Prefabs")]
     public GameObject catnipWeaponPrefab;
@@ -129,15 +133,12 @@ public class LevelUpManager : MonoBehaviour
     {
         Time.timeScale = 0f;
 
-        // 결과창과 결과창 배경은 끄기
         if (resultPanel != null) resultPanel.SetActive(false);
         if (resultDimBackground != null) resultDimBackground.SetActive(false);
 
-        // 렙업창과 렙업창 배경 켜기
         if (levelUpPanel != null) levelUpPanel.SetActive(true);
         if (levelUpDimBackground != null) levelUpDimBackground.SetActive(true);
 
-        // 보상을 받기 전에는 메인 창을 닫을 수 없도록 버튼 숨김
         if (levelUpCloseButton != null) levelUpCloseButton.gameObject.SetActive(false);
 
         if (playerInputField != null)
@@ -150,7 +151,20 @@ public class LevelUpManager : MonoBehaviour
         if (dealerDialogueText != null)
             dealerDialogueText.text = $"원하는 것을 {maxCharacterLimit}글자 이내로 말해 [Enter]를 눌러주세요.";
 
-        _timer = levelUpTimeout;
+        // 레벨 구간에 따른 고정 시간 할당
+        if (level <= 10)
+        {
+            _timer = 10f;
+        }
+        else if (level <= 20)
+        {
+            _timer = 15f;
+        }
+        else
+        {
+            _timer = 20f;
+        }
+
         _isWaitingForInput = true;
 
         if (_countdownCoroutine != null) StopCoroutine(_countdownCoroutine);
