@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 2010894105275803936}
   - component: {fileID: 3114689107547557490}
   m_Layer: 3
-  m_Name: Enemy3
+  m_Name: Enemy3 1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c46e5200d62c6944eb43e02dc8f14f1c, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.47843137, b: 0.47843137, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -104,11 +104,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data:
     enemyName: Enemy
-    maxHp: 60
+    maxHp: 250
     moveSpeed: 1.8
-    damage: 40
+    damage: 45
     attackCooldown: 1.2
-    expReward: 50
+    expReward: 130
 --- !u!58 &385726555515454142
 CircleCollider2D:
   m_ObjectHideFlags: 0

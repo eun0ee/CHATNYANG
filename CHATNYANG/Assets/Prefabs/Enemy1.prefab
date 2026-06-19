@@ -104,7 +104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   data:
     enemyName: Enemy
-    maxHp: 50
+    maxHp: 30
     moveSpeed: 2
     damage: 25
     attackCooldown: 1

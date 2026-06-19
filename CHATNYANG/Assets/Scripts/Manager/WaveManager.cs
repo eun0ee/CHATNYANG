@@ -25,14 +25,16 @@ public class WaveData
 }
 
 /// <summary>
-/// 웨이브 진행을 총괄하는 매니저.
-/// waves 배열 순서대로 웨이브를 실행하며,
-/// 마지막 웨이브가 끝나면 해당 웨이브를 무한 반복합니다.
+/// 일반 웨이브를 모두 진행한 후,
+/// 무한 반복용 웨이브 배열을 계속해서 순환하는 매니저.
 /// </summary>
 public class WaveManager : MonoBehaviour
 {
-    [Header("Waves")]
-    [SerializeField] private WaveData[] waves;
+    [Header("Normal Waves (Plays Once)")]
+    [SerializeField] private WaveData[] normalWaves;
+
+    [Header("Infinite Loop Waves (Repeats Forever)")]
+    [SerializeField] private WaveData[] infiniteLoopWaves;
 
     [Header("References")]
     [SerializeField] private EnemySpawner spawner;
@@ -45,15 +47,9 @@ public class WaveManager : MonoBehaviour
 
     private void Start()
     {
-        if (waves == null || waves.Length == 0)
-        {
-            Debug.LogWarning("[WaveManager] waves 배열이 비어 있습니다.");
-            return;
-        }
-
         if (spawner == null)
         {
-            Debug.LogError("[WaveManager] EnemySpawner가 연결되지 않았습니다.");
+            Debug.LogError("[WaveManager] EnemySpawner is missing");
             return;
         }
 
@@ -66,25 +62,37 @@ public class WaveManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 모든 웨이브를 순서대로 실행합니다.
-    /// 마지막 웨이브 이후에는 해당 웨이브를 무한 반복합니다.
+    /// 일반 웨이브를 1회씩 실행한 뒤, 
+    /// 설정된 무한 루프 웨이브들을 순환합니다.
     /// </summary>
     private IEnumerator RunWaves()
     {
-        for (int i = 0; i < waves.Length; i++)
+        // 1. 일반 웨이브 1회씩 순차 진행
+        if (normalWaves != null)
         {
-            Debug.Log($"[WaveManager] {waves[i].waveName} 시작 (Wave {i + 1}/{waves.Length})");
-            yield return StartCoroutine(RunSingleWave(waves[i]));
-            Debug.Log($"[WaveManager] {waves[i].waveName} 완료");
+            for (int i = 0; i < normalWaves.Length; i++)
+            {
+                if (_isGameOver) yield break;
+
+                Debug.Log($"[WaveManager] Normal Wave Started: {normalWaves[i].waveName}");
+                yield return StartCoroutine(RunSingleWave(normalWaves[i]));
+            }
         }
 
-        // 모든 웨이브 클리어 후 마지막 웨이브 무한 반복
-        WaveData lastWave = waves[waves.Length - 1];
-        Debug.Log("[WaveManager] 마지막 웨이브 무한 반복 시작");
-
-        while (!_isGameOver)
+        // 2. 무한 반복 웨이브들을 게임 오버 전까지 무한 순환
+        if (infiniteLoopWaves != null && infiniteLoopWaves.Length > 0)
         {
-            yield return StartCoroutine(RunSingleWave(lastWave));
+            Debug.Log("[WaveManager] Starting Infinite Loop Waves");
+            while (!_isGameOver)
+            {
+                for (int i = 0; i < infiniteLoopWaves.Length; i++)
+                {
+                    if (_isGameOver) yield break;
+
+                    Debug.Log($"[WaveManager] Infinite Wave Started: {infiniteLoopWaves[i].waveName}");
+                    yield return StartCoroutine(RunSingleWave(infiniteLoopWaves[i]));
+                }
+            }
         }
     }
 
@@ -107,7 +115,7 @@ public class WaveManager : MonoBehaviour
             {
                 float dt = Time.deltaTime;
                 elapsed += dt;
-                timer  += dt;
+                timer += dt;
 
                 // waveDuration 초과 시 즉시 웨이브 종료 (초과 스폰 방지)
                 if (timer >= wave.waveDuration) yield break;
@@ -119,12 +127,11 @@ public class WaveManager : MonoBehaviour
 
     /// <summary>
     /// 게임 오버 또는 씬 전환 시 호출해 무한 루프를 중단합니다.
-    /// 예) GameManager에서 OnGameOver 이벤트 연결
     /// </summary>
     public void StopWaves()
     {
         _isGameOver = true;
         StopAllCoroutines();
-        Debug.Log("[WaveManager] 웨이브 중단됨");
+        Debug.Log("[WaveManager] Waves Stopped");
     }
 }
