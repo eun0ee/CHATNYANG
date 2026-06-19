@@ -36,6 +36,13 @@ public class WaveManager : MonoBehaviour
     [Header("Infinite Loop Waves (Repeats Forever)")]
     [SerializeField] private WaveData[] infiniteLoopWaves;
 
+    [Header("Background Spawner")]
+    [SerializeField] private bool enableBackgroundSpawn = true;
+    [SerializeField] private int backgroundEnemyIndex = 0; // 초기 생성될 기본 적 인덱스 (Enemy 0)
+    [SerializeField] private int backgroundSpawnCount = 3; // 백그라운드에서 한 번에 생성될 수
+    [SerializeField] private float backgroundSpawnInterval = 5f; // 백그라운드 생성 주기
+    [SerializeField] private int[] backgroundUpgradeIndices; // 이 배열에 있는 인덱스의 적이 웨이브에 등장하면, 백그라운드 적도 이것으로 교체됨
+
     [Header("References")]
     [SerializeField] private EnemySpawner spawner;
 
@@ -54,11 +61,31 @@ public class WaveManager : MonoBehaviour
         }
 
         StartCoroutine(RunWaves());
+
+        // 백그라운드 무한 스폰 코루틴 시작
+        if (enableBackgroundSpawn)
+        {
+            StartCoroutine(BackgroundSpawnRoutine());
+        }
     }
 
     private void Update()
     {
         ElapsedTime += Time.deltaTime;
+    }
+
+    // 메인 웨이브와 별개로 독립적으로 계속해서 적을 스폰하는 로직
+    private IEnumerator BackgroundSpawnRoutine()
+    {
+        while (!_isGameOver)
+        {
+            yield return new WaitForSeconds(backgroundSpawnInterval);
+
+            if (!_isGameOver)
+            {
+                spawner.Spawn(backgroundEnemyIndex, backgroundSpawnCount);
+            }
+        }
     }
 
     /// <summary>
@@ -73,6 +100,9 @@ public class WaveManager : MonoBehaviour
             for (int i = 0; i < normalWaves.Length; i++)
             {
                 if (_isGameOver) yield break;
+
+                // 웨이브가 시작될 때 백그라운드 스폰 적 교체 여부 검사
+                CheckAndUpgradeBackgroundSpawner(normalWaves[i].enemyPrefabIndex);
 
                 Debug.Log($"[WaveManager] Normal Wave Started: {normalWaves[i].waveName}");
                 yield return StartCoroutine(RunSingleWave(normalWaves[i]));
@@ -89,9 +119,30 @@ public class WaveManager : MonoBehaviour
                 {
                     if (_isGameOver) yield break;
 
+                    CheckAndUpgradeBackgroundSpawner(infiniteLoopWaves[i].enemyPrefabIndex);
+
                     Debug.Log($"[WaveManager] Infinite Wave Started: {infiniteLoopWaves[i].waveName}");
                     yield return StartCoroutine(RunSingleWave(infiniteLoopWaves[i]));
                 }
+            }
+        }
+    }
+
+    // 현재 웨이브의 적 인덱스가 교체 리스트에 있다면 백그라운드 스폰 적을 업데이트
+    private void CheckAndUpgradeBackgroundSpawner(int currentWaveEnemyIndex)
+    {
+        if (!enableBackgroundSpawn || backgroundUpgradeIndices == null) return;
+
+        for (int i = 0; i < backgroundUpgradeIndices.Length; i++)
+        {
+            if (currentWaveEnemyIndex == backgroundUpgradeIndices[i])
+            {
+                if (backgroundEnemyIndex != currentWaveEnemyIndex)
+                {
+                    backgroundEnemyIndex = currentWaveEnemyIndex;
+                    Debug.Log($"[WaveManager] Background spawner upgraded to index: {backgroundEnemyIndex}");
+                }
+                break;
             }
         }
     }
