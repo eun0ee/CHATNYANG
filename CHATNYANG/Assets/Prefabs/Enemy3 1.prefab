@@ -33,8 +33,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -220,3 +220,15 @@ MonoBehaviour:
   _orbitDistance: 3
   _orbitSpeedMultiplier: 1
   _orbitClockwise: 1
+  useAvoidance: 1
+  avoidanceRadius: 1
+  avoidanceForce: 0.6
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  useVacuumPull: 0
+  pullRadius: 5
+  pullForce: 1.5
+  useSprayShoot: 1
+  projectilePrefab: {fileID: 8070980257339232667, guid: 681bafb14be938c4babac93c7fa8bbc5, type: 3}
+  shootCooldown: 5

@@ -220,3 +220,15 @@ MonoBehaviour:
   _orbitDistance: 3
   _orbitSpeedMultiplier: 1
   _orbitClockwise: 1
+  useAvoidance: 1
+  avoidanceRadius: 1
+  avoidanceForce: 0.6
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  useVacuumPull: 0
+  pullRadius: 5
+  pullForce: 1.5
+  useSprayShoot: 0
+  projectilePrefab: {fileID: 0}
+  shootCooldown: 3

@@ -3956,7 +3956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalWaves:
   - waveName: Wave 1
-    enemyPrefabIndex: 0
+    enemyPrefabIndex: 2
     spawnCount: 3
     spawnInterval: 2
     waveDuration: 30
@@ -7607,7 +7607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e97864e23c676ce42bf587ec61c3274c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useAPI: 1
+  useAPI: 0
 --- !u!114 &1679989194
 MonoBehaviour:
   m_ObjectHideFlags: 0
