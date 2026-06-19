@@ -20,170 +20,170 @@ MonoBehaviour:
   - rarity: 0
     upgradeLevels:
     - damage: 12
-      attackCooldown: 1.2
+      attackCooldown: 1.5
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 1.5
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 16
+      attackCooldown: 1.5
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 1.6
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 21
+      attackCooldown: 1.4
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 1.7
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 27
+      attackCooldown: 1.4
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 1.8
       slowFactor: 0
       areaDuration: 0
   - rarity: 1
     upgradeLevels:
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 35
+      attackCooldown: 1.3
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 1.9
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 44
+      attackCooldown: 1.3
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 2
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 54
+      attackCooldown: 1.25
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 2.2
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 66
+      attackCooldown: 1.25
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 2.3
       slowFactor: 0
       areaDuration: 0
   - rarity: 2
     upgradeLevels:
-    - damage: 12
+    - damage: 80
       attackCooldown: 1.2
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 2.4
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
+    - damage: 96
       attackCooldown: 1.2
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 2.5
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 114
+      attackCooldown: 1.1
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 2.7
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 134
+      attackCooldown: 1
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 2.8
       slowFactor: 0
       areaDuration: 0
   - rarity: 3
     upgradeLevels:
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 160
+      attackCooldown: 1
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 3
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 190
+      attackCooldown: 1
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 3.4
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 224
+      attackCooldown: 0.9
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 3.7
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 262
+      attackCooldown: 0.9
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 4
       slowFactor: 0
       areaDuration: 0
   - rarity: 4
     upgradeLevels:
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 315
+      attackCooldown: 0.8
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 4.3
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 375
+      attackCooldown: 0.8
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 4.8
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 445
+      attackCooldown: 0.7
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 5.6
       slowFactor: 0
       areaDuration: 0
-    - damage: 12
-      attackCooldown: 1.2
+    - damage: 530
+      attackCooldown: 0.7
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 1.2
+      aoeRadius: 6
       slowFactor: 0
       areaDuration: 0

@@ -27,163 +27,163 @@ MonoBehaviour:
       aoeRadius: 4
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 7
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 4.1
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 8
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 4.2
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 9
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 4.4
       slowFactor: 0
       areaDuration: 0
   - rarity: 1
     upgradeLevels:
-    - damage: 6
+    - damage: 10
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 4.6
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 11
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 4.8
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 12
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 5
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 13
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 5.2
       slowFactor: 0
       areaDuration: 0
   - rarity: 2
     upgradeLevels:
-    - damage: 6
+    - damage: 16
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 5.6
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 17
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 5.9
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 18
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 6.2
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 19
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 6.5
       slowFactor: 0
       areaDuration: 0
   - rarity: 3
     upgradeLevels:
-    - damage: 6
+    - damage: 22
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 7
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 24
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 7.3
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 26
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 7.6
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 28
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 8
       slowFactor: 0
       areaDuration: 0
   - rarity: 4
     upgradeLevels:
-    - damage: 6
+    - damage: 30
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 8.6
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 32
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 9.1
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 34
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 9.6
       slowFactor: 0
       areaDuration: 0
-    - damage: 6
+    - damage: 36
       attackCooldown: 2
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 0
-      aoeRadius: 4
+      aoeRadius: 10
       slowFactor: 0
       areaDuration: 0
