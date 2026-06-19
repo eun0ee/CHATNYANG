@@ -133,6 +133,12 @@ public class LevelUpManager : MonoBehaviour
     {
         Time.timeScale = 0f;
 
+        // 레벨업 시 최대 체력 2, 현재 체력 2 증가 (UI 자동 갱신됨)
+        if (_playerStats != null)
+        {
+            _playerStats.IncreaseMaxHp(2f);
+        }
+
         if (resultPanel != null) resultPanel.SetActive(false);
         if (resultDimBackground != null) resultDimBackground.SetActive(false);
 
@@ -306,7 +312,7 @@ public class LevelUpManager : MonoBehaviour
                 selectedIcon = potionIcon;
                 if (_playerStats != null)
                 {
-                    _playerStats.currentHp = Mathf.Min(_playerStats.currentHp + 30f, _playerStats.maxHp);
+                    _playerStats.Heal(30f); // UI 갱신 이벤트가 포함된 회복 함수 사용
                     rewardGiven = true;
                 }
                 break;
@@ -323,7 +329,7 @@ public class LevelUpManager : MonoBehaviour
             rewardName = "중복 무기 (대체 포션)";
             selectedIcon = potionIcon;
             if (_playerStats != null)
-                _playerStats.currentHp = Mathf.Min(_playerStats.currentHp + 30f, _playerStats.maxHp);
+                _playerStats.Heal(30f); // UI 갱신 이벤트가 포함된 회복 함수 사용
         }
 
         string rarityName = "노말";

@@ -3938,8 +3938,93 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a915cac91582f9c48882a5ef681b2491, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  normalWaves: []
-  infiniteLoopWaves: []
+  normalWaves:
+  - waveName: Wave 1
+    enemyPrefabIndex: 0
+    spawnCount: 3
+    spawnInterval: 2
+    waveDuration: 30
+  - waveName: Wave 2
+    enemyPrefabIndex: 0
+    spawnCount: 5
+    spawnInterval: 1.5
+    waveDuration: 40
+  - waveName: Wave 3
+    enemyPrefabIndex: 1
+    spawnCount: 2
+    spawnInterval: 3
+    waveDuration: 30
+  - waveName: Wave 4
+    enemyPrefabIndex: 0
+    spawnCount: 8
+    spawnInterval: 1
+    waveDuration: 50
+  - waveName: Wave 5
+    enemyPrefabIndex: 2
+    spawnCount: 1
+    spawnInterval: 5
+    waveDuration: 50
+  - waveName: Wave 6
+    enemyPrefabIndex: 3
+    spawnCount: 2
+    spawnInterval: 4
+    waveDuration: 50
+  - waveName: Wave 7
+    enemyPrefabIndex: 4
+    spawnCount: 4
+    spawnInterval: 2
+    waveDuration: 60
+  - waveName: Wave 8
+    enemyPrefabIndex: 11
+    spawnCount: 3
+    spawnInterval: 3
+    waveDuration: 60
+  - waveName: Wave 9
+    enemyPrefabIndex: 4
+    spawnCount: 10
+    spawnInterval: 1.5
+    waveDuration: 60
+  - waveName: Wave 10
+    enemyPrefabIndex: 8
+    spawnCount: 2
+    spawnInterval: 6
+    waveDuration: 60
+  - waveName: Wave 11
+    enemyPrefabIndex: 10
+    spawnCount: 3
+    spawnInterval: 4
+    waveDuration: 60
+  - waveName: Wave 12
+    enemyPrefabIndex: 5
+    spawnCount: 5
+    spawnInterval: 2
+    waveDuration: 60
+  infiniteLoopWaves:
+  - waveName: Inf Wave 1
+    enemyPrefabIndex: 5
+    spawnCount: 15
+    spawnInterval: 1
+    waveDuration: 30
+  - waveName: Inf Wave 2
+    enemyPrefabIndex: 7
+    spawnCount: 5
+    spawnInterval: 2
+    waveDuration: 30
+  - waveName: Inf Wave 3
+    enemyPrefabIndex: 9
+    spawnCount: 3
+    spawnInterval: 4
+    waveDuration: 40
+  - waveName: Inf Wave 4
+    enemyPrefabIndex: 11
+    spawnCount: 5
+    spawnInterval: 3
+    waveDuration: 40
+  - waveName: Inf Wave 5
+    enemyPrefabIndex: 5
+    spawnCount: 25
+    spawnInterval: 0.8
+    waveDuration: 30
   spawner: {fileID: 1715103015}
 --- !u!4 &713822521
 Transform:
@@ -7500,7 +7585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e97864e23c676ce42bf587ec61c3274c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useAPI: 0
+  useAPI: 1
 --- !u!114 &1679989194
 MonoBehaviour:
   m_ObjectHideFlags: 0

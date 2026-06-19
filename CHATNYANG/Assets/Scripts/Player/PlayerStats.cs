@@ -95,4 +95,19 @@ public class PlayerStats : MonoBehaviour
         Debug.Log("Player Dead");
         HUDManager.Instance?.ShowGameOver();
     }
+
+    // 지정된 수치만큼 체력을 회복하고 UI를 갱신하는 함수
+    public void Heal(float amount)
+    {
+        currentHp = Mathf.Min(currentHp + amount, maxHp);
+        OnHpChanged?.Invoke(currentHp, maxHp);
+    }
+
+    // 레벨업 시 최대 체력과 현재 체력을 동시에 올려주고 UI를 갱신하는 함수
+    public void IncreaseMaxHp(float amount)
+    {
+        maxHp += amount;
+        currentHp += amount;
+        OnHpChanged?.Invoke(currentHp, maxHp);
+    }
 }
