@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using UnityEngine.Audio; // 오디오 관련 네임스페이스 추가
 
 public class HUDManager : MonoBehaviour
 {
@@ -10,7 +11,6 @@ public class HUDManager : MonoBehaviour
 
     [Header("Timer")]
     [SerializeField] private TextMeshProUGUI timerText;
-    // 카운트다운 대신 0부터 시작하는 경과 시간 변수로 변경
     private float elapsedTime = 0f;
     private bool isTimerRunning = true;
 
@@ -23,18 +23,22 @@ public class HUDManager : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] private Button stopButton;
     [SerializeField] private Button settingButton;
+    [SerializeField] private Button settingCloseButton; // 설정창 내부의 닫기 버튼용
     private bool isStopped = false;
 
     [Header("Panels")]
-    [SerializeField] private GameObject settingPanel;
+    [SerializeField] private PanelAnimator settingPanelAnimator;
+    [SerializeField] private PanelAnimator dimBackgroundAnimator; // 배경 어둡게 하는 패널용
+
+    [Header("Audio Settings")]
+    [SerializeField] private AudioMixer mainMixer;
+    [SerializeField] private Slider bgmSlider;
+    [SerializeField] private Slider sfxSlider;
 
     [Header("Experience")]
     [SerializeField] private Slider expSlider;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private ExperienceSystem expSystem;
-
-    [Header("Panels")]
-    [SerializeField] private PanelAnimator settingPanelAnimator;
 
     [Header("Game Over")]
     [SerializeField] private PanelAnimator gameOverPanelAnimator;
@@ -72,9 +76,13 @@ public class HUDManager : MonoBehaviour
 
     private void Start()
     {
-        stopButton.onClick.AddListener(OnStopButtonClicked);
-        settingButton.onClick.AddListener(OnSettingButtonClicked);
-        titleButton.onClick.AddListener(OnTitleButtonClicked);
+        if (stopButton != null) stopButton.onClick.AddListener(OnStopButtonClicked);
+        if (settingButton != null) settingButton.onClick.AddListener(OnSettingButtonClicked);
+        if (titleButton != null) titleButton.onClick.AddListener(OnTitleButtonClicked);
+        if (settingCloseButton != null) settingCloseButton.onClick.AddListener(CloseSettingPanel);
+
+        if (bgmSlider != null) bgmSlider.onValueChanged.AddListener(SetBGMVolume);
+        if (sfxSlider != null) sfxSlider.onValueChanged.AddListener(SetSFXVolume);
 
         if (expSystem != null)
         {
@@ -113,9 +121,14 @@ public class HUDManager : MonoBehaviour
 
     private void Update()
     {
+        // ESC 키 입력 검사를 시간 흐름(isTimerRunning)보다 위에서 처리하여 멈춰있을 때도 닫히게 함
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            OnSettingButtonClicked();
+        }
+
         if (!isTimerRunning) return;
 
-        // 경과 시간을 계속 누적시킵니다.
         elapsedTime += Time.deltaTime;
         UpdateTimerUI();
     }
@@ -149,20 +162,14 @@ public class HUDManager : MonoBehaviour
     #endregion
 
     // ───────────────────────────────────────────────
-    #region Timer
+    #region Timer & Stats
 
     private void UpdateTimerUI()
     {
-        // 남은 시간 계산에서 경과 시간 계산으로 변경
         int minutes = Mathf.FloorToInt(elapsedTime / 60f);
         int seconds = Mathf.FloorToInt(elapsedTime % 60f);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
-
-    #endregion
-
-    // ───────────────────────────────────────────────
-    #region Public API — Stats
 
     public void AddKill(int amount = 1)
     {
@@ -182,7 +189,7 @@ public class HUDManager : MonoBehaviour
     #endregion
 
     // ───────────────────────────────────────────────
-    #region Button Handlers
+    #region Settings & Button Handlers
 
     private void OnStopButtonClicked()
     {
@@ -197,6 +204,8 @@ public class HUDManager : MonoBehaviour
 
     private void OnSettingButtonClicked()
     {
+        if (settingPanelAnimator == null) return;
+
         bool open = !settingPanelAnimator.IsVisible;
 
         if (open)
@@ -204,6 +213,7 @@ public class HUDManager : MonoBehaviour
             isTimerRunning = false;
             Time.timeScale = 0f;
             settingPanelAnimator.Show();
+            if (dimBackgroundAnimator != null) dimBackgroundAnimator.Show();
         }
         else
         {
@@ -213,14 +223,37 @@ public class HUDManager : MonoBehaviour
 
     public void CloseSettingPanel()
     {
+        if (settingPanelAnimator == null) return;
+
         settingPanelAnimator.Hide(() =>
         {
-            isTimerRunning = true;
-            Time.timeScale = 1f;
+            // 설정창을 닫을 때, 기존에 멈춤(Stop) 버튼을 누른 상태가 아니었다면 시간을 다시 흐르게 함
+            if (!isStopped)
+            {
+                isTimerRunning = true;
+                Time.timeScale = 1f;
+            }
         });
+
+        if (dimBackgroundAnimator != null) dimBackgroundAnimator.Hide();
+    }
+
+    private void SetBGMVolume(float volume)
+    {
+        float safeVolume = Mathf.Clamp(volume, 0.0001f, 1f);
+        if (mainMixer != null) mainMixer.SetFloat("BGMVolume", Mathf.Log10(safeVolume) * 20f);
+    }
+
+    private void SetSFXVolume(float volume)
+    {
+        float safeVolume = Mathf.Clamp(volume, 0.0001f, 1f);
+        if (mainMixer != null) mainMixer.SetFloat("SFXVolume", Mathf.Log10(safeVolume) * 20f);
     }
 
     #endregion
+
+    // ───────────────────────────────────────────────
+    #region Game Over
 
     public void ShowGameOver()
     {
@@ -278,7 +311,6 @@ public class HUDManager : MonoBehaviour
 
     private void UpdateGameOverTexts()
     {
-        // 생존 시간을 600에서 빼는 대신 경과 시간(elapsedTime)을 그대로 사용
         float survivedTime = elapsedTime;
         int minutes = Mathf.FloorToInt(survivedTime / 60f);
         int seconds = Mathf.FloorToInt(survivedTime % 60f);
@@ -333,4 +365,6 @@ public class HUDManager : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene("Title");
     }
+
+    #endregion
 }

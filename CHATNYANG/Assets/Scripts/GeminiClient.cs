@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Text;
@@ -53,11 +52,7 @@ public class GeminiClient : MonoBehaviour
     [Tooltip("Uncheck to use dummy response without calling actual API.")]
     [SerializeField] private bool useAPI = true;
 
-    [SerializeField] private float apiTimeoutDuration = 4f;
-
-    // 다중 API 키를 저장할 배열과 현재 사용할 키의 인덱스 (클래스가 기억함)
-    private string[] apiKeys;
-    private int currentKeyIndex = 0;
+    private string apiKey = "";
 
     private string url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=";
 
@@ -92,34 +87,18 @@ public class GeminiClient : MonoBehaviour
     {
         if (useAPI)
         {
-            LoadAPIKeys();
+            LoadAPIKey();
         }
     }
 
-    private void LoadAPIKeys()
+    private void LoadAPIKey()
     {
         string keyPath = Path.Combine(Application.dataPath, "../api_key.txt");
 
         if (File.Exists(keyPath))
         {
-            string[] lines = File.ReadAllLines(keyPath);
-            List<string> validKeys = new List<string>();
-
-            // 엔터로 구분된 줄 중 빈 줄을 무시하고 유효한 키만 리스트에 추가
-            foreach (string line in lines)
-            {
-                if (!string.IsNullOrWhiteSpace(line))
-                {
-                    validKeys.Add(line.Trim());
-                }
-            }
-
-            apiKeys = validKeys.ToArray();
-
-            if (apiKeys.Length == 0)
-            {
-                Debug.LogError("API Key file is empty.");
-            }
+            // 단일 키만 읽어오도록 원상 복구
+            apiKey = File.ReadAllText(keyPath).Trim();
         }
         else
         {
@@ -138,12 +117,14 @@ public class GeminiClient : MonoBehaviour
             yield break;
         }
 
-        if (apiKeys == null || apiKeys.Length == 0)
+        if (string.IsNullOrEmpty(apiKey))
         {
-            Debug.LogError("No API Keys loaded.");
+            Debug.LogError("API Key is not loaded.");
             callback?.Invoke(null);
             yield break;
         }
+
+        string fullUrl = url + apiKey;
 
         GeminiRequest requestBody = new GeminiRequest();
         requestBody.contents = new RequestContent[1];
@@ -154,79 +135,37 @@ public class GeminiClient : MonoBehaviour
 
         string jsonPayload = JsonUtility.ToJson(requestBody);
 
-        int keysTried = 0;
-        bool isSuccess = false;
-
-        // 가지고 있는 모든 키를 순회하며 시도
-        while (keysTried < apiKeys.Length && !isSuccess)
+        using (UnityWebRequest request = new UnityWebRequest(fullUrl, "POST"))
         {
-            string activeKey = apiKeys[currentKeyIndex];
-            string fullUrl = url + activeKey;
+            byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
+            request.uploadHandler = new UploadHandlerRaw(bodyRaw);
+            request.downloadHandler = new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
 
-            int maxRetriesPerKey = 2;
-            int currentRetry = 0;
-            bool keyFailed = false;
+            // 타임아웃을 0으로 설정하여 무한 대기
+            request.timeout = 0;
 
-            // 현재 선택된 키로 2번까지 시도
-            while (currentRetry < maxRetriesPerKey && !isSuccess && !keyFailed)
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
             {
-                using (UnityWebRequest request = new UnityWebRequest(fullUrl, "POST"))
+                var response = JsonUtility.FromJson<GeminiResponse>(request.downloadHandler.text);
+                if (response != null && response.candidates != null && response.candidates.Length > 0)
                 {
-                    byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonPayload);
-                    request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-                    request.downloadHandler = new DownloadHandlerBuffer();
-                    request.SetRequestHeader("Content-Type", "application/json");
-
-                    request.timeout = Mathf.CeilToInt(apiTimeoutDuration);
-
-                    yield return request.SendWebRequest();
-
-                    if (request.result == UnityWebRequest.Result.Success)
-                    {
-                        isSuccess = true;
-                        var response = JsonUtility.FromJson<GeminiResponse>(request.downloadHandler.text);
-                        if (response != null && response.candidates != null && response.candidates.Length > 0)
-                        {
-                            string aiResult = response.candidates[0].content.parts[0].text;
-                            callback?.Invoke(aiResult);
-                        }
-                        else
-                        {
-                            callback?.Invoke(null);
-                        }
-                    }
-                    else
-                    {
-                        currentRetry++;
-                        Debug.LogWarning("API Request Failed. Retry: " + currentRetry + "/" + maxRetriesPerKey + " Error: " + request.error);
-
-                        if (currentRetry >= maxRetriesPerKey)
-                        {
-                            keyFailed = true;
-                        }
-                        else
-                        {
-                            // 재시도 대기 시간을 0.5초로 줄임
-                            yield return new WaitForSecondsRealtime(0.5f);
-                        }
-                    }
+                    string aiResult = response.candidates[0].content.parts[0].text;
+                    callback?.Invoke(aiResult);
+                }
+                else
+                {
+                    callback?.Invoke(null);
                 }
             }
-
-            // 현재 키가 2번 다 실패했을 경우 다음 키로 인덱스 영구 변경
-            if (keyFailed)
+            else
             {
-                Debug.LogWarning("Key index " + currentKeyIndex + " exhausted. Switching to next key.");
-                currentKeyIndex = (currentKeyIndex + 1) % apiKeys.Length;
-                keysTried++;
+                // 에러 발생 시 상세 로그 출력
+                Debug.LogError("API Request Failed: " + request.error + "\nDetail: " + request.downloadHandler.text);
+                callback?.Invoke(null);
             }
-        }
-
-        // 모든 키를 다 시도했는데도 실패한 경우
-        if (!isSuccess)
-        {
-            Debug.LogError("All available API keys failed.");
-            callback?.Invoke(null);
         }
     }
 }
