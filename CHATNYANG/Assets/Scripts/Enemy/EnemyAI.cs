@@ -52,6 +52,9 @@ public class EnemyAI : MonoBehaviour
     private bool _isDead;
     private float _speedMultiplier = 1f;
 
+    // 넉백 관련 변수 추가
+    private float _knockbackTimer;
+
     private enum ChargeState { Approach, Dashing, Cooldown }
     private ChargeState _chargeState = ChargeState.Approach;
     private float _chargeStateTimer;
@@ -97,6 +100,17 @@ public class EnemyAI : MonoBehaviour
     {
         if (_isDead || _target == null) return;
 
+        // 넉백 중일 때는 물리 연산에 맡기고 모든 이동/기믹 AI를 잠시 중단합니다.
+        if (_knockbackTimer > 0f)
+        {
+            _knockbackTimer -= Time.fixedDeltaTime;
+            if (_knockbackTimer <= 0f)
+            {
+                _rb.velocity = Vector2.zero; // 넉백 종료 시 속도 초기화
+            }
+            return;
+        }
+
         // 진공청소기 장판 기믹 실행
         if (useVacuumArea)
         {
@@ -134,8 +148,8 @@ public class EnemyAI : MonoBehaviour
         if (_attackTimer > 0f)
             _attackTimer -= Time.deltaTime;
 
-        // 분무기 기믹: 쿨타임마다 투사체 발사
-        if (useSprayShoot && projectilePrefab != null)
+        // 분무기 기믹: 쿨타임마다 투사체 발사 (넉백 중이 아닐 때만)
+        if (useSprayShoot && projectilePrefab != null && _knockbackTimer <= 0f)
         {
             _shootTimer -= Time.deltaTime;
             if (_shootTimer <= 0f)
@@ -144,6 +158,14 @@ public class EnemyAI : MonoBehaviour
                 _shootTimer = shootCooldown;
             }
         }
+    }
+
+    // --- 넉백 적용 전용 public 함수 ---
+    public void ApplyKnockback(Vector2 force, float duration)
+    {
+        _knockbackTimer = duration;
+        _rb.velocity = Vector2.zero; // 기존에 받던 힘 초기화
+        _rb.AddForce(force, ForceMode2D.Impulse); // 강력한 밀침 적용
     }
 
     // --- 진공청소기 장판 로직 ---

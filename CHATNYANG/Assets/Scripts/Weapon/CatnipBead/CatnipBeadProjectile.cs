@@ -17,6 +17,8 @@ public class CatnipBeadProjectile : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        // 추가: 물리 충돌 시 적을 밀어내지 않도록 구슬의 질량을 극도로 낮춤
+        rb.mass = 0.0001f;
     }
 
     public void Initialize(Vector2 direction, WeaponData data, WeaponRarity rarity = WeaponRarity.Normal, int upgradeLevel = 0)

@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 [RequireComponent(typeof(Collider2D))]
 public class FeatherRodSlash : MonoBehaviour
@@ -36,27 +35,18 @@ public class FeatherRodSlash : MonoBehaviour
             EnemyStats enemy = other.GetComponent<EnemyStats>();
             if (enemy != null)
             {
+                // 1. 데미지 적용
                 enemy.TakeDamage(damage);
 
-                Vector2 knockbackDir = ((Vector2)other.transform.position - sourcePosition).normalized;
-
-                Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
-                if (rb != null)
+                // 2. 안전한 넉백 로직 (EnemyAI 자체 함수 호출)
+                EnemyAI enemyAI = other.GetComponent<EnemyAI>();
+                if (enemyAI != null)
                 {
-                    StartCoroutine(ApplyKnockback(rb, knockbackDir));
+                    Vector2 knockbackDir = ((Vector2)other.transform.position - sourcePosition).normalized;
+                    // 적을 0.15초 동안 넉백시킵니다.
+                    enemyAI.ApplyKnockback(knockbackDir * knockbackPower, 0.15f);
                 }
             }
-        }
-    }
-
-    private IEnumerator ApplyKnockback(Rigidbody2D rb, Vector2 direction)
-    {
-        rb.AddForce(direction * knockbackPower, ForceMode2D.Impulse);
-        yield return new WaitForSeconds(0.1f);
-
-        if (rb != null)
-        {
-            rb.velocity = Vector2.zero;
         }
     }
 }

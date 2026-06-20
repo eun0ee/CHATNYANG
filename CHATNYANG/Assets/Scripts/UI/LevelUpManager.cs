@@ -8,6 +8,7 @@ public class LevelUpManager : MonoBehaviour
 {
     [Header("Main Panel UI")]
     public GameObject levelUpPanel;
+    public PanelAnimator levelUpPanelAnimator; // 애니메이션 연동 변수 추가
     public GameObject levelUpDimBackground;
     public TMP_InputField playerInputField;
     public TextMeshProUGUI timerText;
@@ -16,6 +17,7 @@ public class LevelUpManager : MonoBehaviour
 
     [Header("Result Panel UI")]
     public GameObject resultPanel;
+    public PanelAnimator resultPanelAnimator; // 애니메이션 연동 변수 추가
     public GameObject resultDimBackground;
     public TextMeshProUGUI resultText;
     public Image itemIconImage;
@@ -97,9 +99,10 @@ public class LevelUpManager : MonoBehaviour
             playerInputField.onSubmit.AddListener(OnInputFieldSubmit);
         }
 
-        // 시작 시 모든 패널과 배경 비활성화
-        if (levelUpPanel != null) levelUpPanel.SetActive(false);
-        if (resultPanel != null) resultPanel.SetActive(false);
+        // 애니메이터가 연결되어 있다면 강제로 끄지 않고 투명한 대기 상태 유지
+        if (levelUpPanelAnimator == null && levelUpPanel != null) levelUpPanel.SetActive(false);
+        if (resultPanelAnimator == null && resultPanel != null) resultPanel.SetActive(false);
+
         if (levelUpDimBackground != null) levelUpDimBackground.SetActive(false);
         if (resultDimBackground != null) resultDimBackground.SetActive(false);
 
@@ -139,10 +142,18 @@ public class LevelUpManager : MonoBehaviour
             _playerStats.IncreaseMaxHp(2f);
         }
 
-        if (resultPanel != null) resultPanel.SetActive(false);
+        // 결과창 닫기 (애니메이션)
+        if (resultPanelAnimator != null) resultPanelAnimator.Hide();
+        else if (resultPanel != null) resultPanel.SetActive(false);
         if (resultDimBackground != null) resultDimBackground.SetActive(false);
 
-        if (levelUpPanel != null) levelUpPanel.SetActive(true);
+        // 레벨업창 열기 (애니메이션)
+        if (levelUpPanelAnimator != null)
+        {
+            if (levelUpPanel != null) levelUpPanel.SetActive(true); // 혹시 꺼져있을 때를 대비
+            levelUpPanelAnimator.Show();
+        }
+        else if (levelUpPanel != null) levelUpPanel.SetActive(true);
         if (levelUpDimBackground != null) levelUpDimBackground.SetActive(true);
 
         if (levelUpCloseButton != null) levelUpCloseButton.gameObject.SetActive(false);
@@ -373,14 +384,23 @@ public class LevelUpManager : MonoBehaviour
 
     private void ShowResultUI()
     {
-        if (resultPanel != null) resultPanel.SetActive(true);
+        // 결과창 표시 (애니메이션)
+        if (resultPanelAnimator != null)
+        {
+            if (resultPanel != null) resultPanel.SetActive(true);
+            resultPanelAnimator.Show();
+        }
+        else if (resultPanel != null) resultPanel.SetActive(true);
+
         if (resultDimBackground != null) resultDimBackground.SetActive(true);
     }
 
     // 결과창만 닫고, 뒤에 남은 렙업창의 닫기 버튼을 활성화하는 함수
     private void CloseResultUI()
     {
-        if (resultPanel != null) resultPanel.SetActive(false);
+        if (resultPanelAnimator != null) resultPanelAnimator.Hide();
+        else if (resultPanel != null) resultPanel.SetActive(false);
+
         if (resultDimBackground != null) resultDimBackground.SetActive(false);
 
         // 보상을 확인하고 결과창을 닫았으므로 이제 메인 창을 닫을 수 있게 버튼 활성화
@@ -398,11 +418,16 @@ public class LevelUpManager : MonoBehaviour
 
         _isWaitingForInput = false;
 
-        // 게임 재개 시 모든 패널과 배경 숨김
-        if (levelUpPanel != null) levelUpPanel.SetActive(false);
+        // 메인 패널 숨김 (애니메이션)
+        if (levelUpPanelAnimator != null) levelUpPanelAnimator.Hide();
+        else if (levelUpPanel != null) levelUpPanel.SetActive(false);
+
         if (levelUpDimBackground != null) levelUpDimBackground.SetActive(false);
 
-        if (resultPanel != null) resultPanel.SetActive(false);
+        // 결과창 숨김 (애니메이션)
+        if (resultPanelAnimator != null) resultPanelAnimator.Hide();
+        else if (resultPanel != null) resultPanel.SetActive(false);
+
         if (resultDimBackground != null) resultDimBackground.SetActive(false);
 
         Time.timeScale = 1f;

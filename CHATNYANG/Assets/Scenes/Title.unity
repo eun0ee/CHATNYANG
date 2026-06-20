@@ -2230,6 +2230,7 @@ GameObject:
   - component: {fileID: 2011897078}
   - component: {fileID: 2011897077}
   - component: {fileID: 2011897076}
+  - component: {fileID: 2011897079}
   m_Layer: 5
   m_Name: SettingBtn
   m_TagString: Untagged
@@ -2338,6 +2339,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2011897074}
   m_CullTransparentMesh: 1
+--- !u!114 &2011897079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2011897074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 001eb96c3c65dd646a097058026cd296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickSound: 3
 --- !u!1 &2033092192
 GameObject:
   m_ObjectHideFlags: 0

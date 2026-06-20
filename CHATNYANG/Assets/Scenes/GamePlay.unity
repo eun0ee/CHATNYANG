@@ -1897,6 +1897,7 @@ GameObject:
   - component: {fileID: 246407944}
   - component: {fileID: 246407946}
   - component: {fileID: 246407945}
+  - component: {fileID: 246407947}
   m_Layer: 5
   m_Name: NewLvUpPanel
   m_TagString: Untagged
@@ -1969,6 +1970,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 246407943}
   m_CullTransparentMesh: 1
+--- !u!114 &246407947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246407943}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608b5f435a0545b4f8ae6eae38800013, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0.35
+  easeType: 27
 --- !u!1 &259336475
 GameObject:
   m_ObjectHideFlags: 0
@@ -3956,8 +3971,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalWaves:
   - waveName: Wave 1
-    enemyPrefabIndex: 8
-    spawnCount: 3
+    enemyPrefabIndex: 0
+    spawnCount: 6
     spawnInterval: 2
     waveDuration: 30
   - waveName: Wave 2
@@ -5284,13 +5299,14 @@ GameObject:
   - component: {fileID: 1029231009}
   - component: {fileID: 1029231011}
   - component: {fileID: 1029231010}
+  - component: {fileID: 1029231012}
   m_Layer: 5
   m_Name: ResultPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1029231009
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5354,6 +5370,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1029231008}
   m_CullTransparentMesh: 1
+--- !u!114 &1029231012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1029231008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608b5f435a0545b4f8ae6eae38800013, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0.35
+  easeType: 27
 --- !u!1001 &1061006450
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7696,12 +7726,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levelUpPanel: {fileID: 246407943}
+  levelUpPanelAnimator: {fileID: 246407947}
   levelUpDimBackground: {fileID: 169448840}
   playerInputField: {fileID: 1075785483}
   timerText: {fileID: 1610424504}
   dealerDialogueText: {fileID: 245444564}
   levelUpCloseButton: {fileID: 1835310082}
   resultPanel: {fileID: 1029231008}
+  resultPanelAnimator: {fileID: 1029231012}
   resultDimBackground: {fileID: 1380438943}
   resultText: {fileID: 435789525}
   itemIconImage: {fileID: 57522758}

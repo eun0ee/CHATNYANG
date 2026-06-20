@@ -9,18 +9,23 @@ public class PanelAnimator : MonoBehaviour
     private RectTransform _rect;
     private CanvasGroup _canvasGroup;
 
+    // 원래 설정된 스케일 값을 기억하기 위한 변수
+    private Vector3 _originalScale;
+
     public bool IsVisible => _canvasGroup != null && _canvasGroup.blocksRaycasts;
 
     private void Awake()
     {
         _rect = GetComponent<RectTransform>();
 
+        // 게임 시작 시 Inspector에 설정된 원래 크기를 저장합니다.
+        _originalScale = _rect.localScale;
+
         _canvasGroup = GetComponent<CanvasGroup>();
         if (_canvasGroup == null)
             _canvasGroup = gameObject.AddComponent<CanvasGroup>();
     }
 
-    // Awake 대신 Start에서 숨김 초기화
     private void Start()
     {
         HideImmediate();
@@ -44,7 +49,8 @@ public class PanelAnimator : MonoBehaviour
         _canvasGroup.interactable = true;
         _canvasGroup.blocksRaycasts = true;
 
-        _rect.DOScale(Vector3.one, duration)
+        // Vector3.one 대신 저장해둔 _originalScale을 사용해 원래 크기로 복구합니다.
+        _rect.DOScale(_originalScale, duration)
              .SetEase(easeType)
              .SetUpdate(true);
 

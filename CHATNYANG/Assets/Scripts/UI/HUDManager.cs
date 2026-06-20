@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class HUDManager : MonoBehaviour
 {
@@ -30,7 +31,7 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private Slider expSlider;
     [SerializeField] private TextMeshProUGUI levelText;
     [SerializeField] private ExperienceSystem expSystem;
-    
+
     [Header("Panels")]
     [SerializeField] private PanelAnimator settingPanelAnimator;
 
@@ -52,9 +53,13 @@ public class HUDManager : MonoBehaviour
     [SerializeField] private Sprite uniqueAura;
     [SerializeField] private Sprite legendaryAura;
 
-    // 현재 레벨을 추적하기 위한 변수 추가
     private int currentLevel = 1;
 
+    // UI 애니메이션 원래 크기 저장용 변수
+    private Vector3 _survivalOriginalScale;
+    private Vector3 _levelOriginalScale;
+    private Vector3 _killOriginalScale;
+    private Vector3[] _weaponOriginalScales;
 
     // ───────────────────────────────────────────────
     #region Unity Lifecycle
@@ -75,7 +80,21 @@ public class HUDManager : MonoBehaviour
         if (expSystem != null)
         {
             expSystem.OnExpChanged += RefreshExpUI;
-            expSystem.OnLevelUp    += RefreshLevelUI;
+            expSystem.OnLevelUp += RefreshLevelUI;
+        }
+
+        // 게임 시작 시 인스펙터에 설정된 원래 크기를 미리 저장합니다.
+        if (resultSurvivalTimeText != null) _survivalOriginalScale = resultSurvivalTimeText.rectTransform.localScale;
+        if (resultLevelText != null) _levelOriginalScale = resultLevelText.rectTransform.localScale;
+        if (resultKillCountText != null) _killOriginalScale = resultKillCountText.rectTransform.localScale;
+
+        if (resultWeaponSlots != null)
+        {
+            _weaponOriginalScales = new Vector3[resultWeaponSlots.Length];
+            for (int i = 0; i < resultWeaponSlots.Length; i++)
+            {
+                _weaponOriginalScales[i] = resultWeaponSlots[i].GetComponent<RectTransform>().localScale;
+            }
         }
 
         UpdateTimerUI();
@@ -90,7 +109,7 @@ public class HUDManager : MonoBehaviour
         if (expSystem != null)
         {
             expSystem.OnExpChanged -= RefreshExpUI;
-            expSystem.OnLevelUp    -= RefreshLevelUI;
+            expSystem.OnLevelUp -= RefreshLevelUI;
         }
     }
 
@@ -115,21 +134,19 @@ public class HUDManager : MonoBehaviour
     // ───────────────────────────────────────────────
     #region Exp / Level UI
 
-    // OnExpChanged(currentExp, requiredExp) 수신
     private void RefreshExpUI(float current, float required)
     {
         if (expSlider != null)
         {
             expSlider.minValue = 0f;
             expSlider.maxValue = required;
-            expSlider.value    = current;
+            expSlider.value = current;
         }
     }
 
-    // OnLevelUp(newLevel) 수신
     private void RefreshLevelUI(int newLevel)
     {
-        currentLevel = newLevel; // 도달 레벨 저장
+        currentLevel = newLevel;
 
         if (levelText != null)
             levelText.text = $"Lv. {newLevel}";
@@ -174,7 +191,7 @@ public class HUDManager : MonoBehaviour
     }
 
     private void UpdateKillUI() => killCountText.text = $"{killCount}";
-    private void UpdateCoinUI() => coinCountText.text  = $"{coinCount}";
+    private void UpdateCoinUI() => coinCountText.text = $"{coinCount}";
 
     #endregion
 
@@ -187,7 +204,6 @@ public class HUDManager : MonoBehaviour
         isTimerRunning = !isStopped;
         Time.timeScale = isStopped ? 0f : 1f;
 
-        // 버튼 텍스트 토글 (선택)
         var label = stopButton.GetComponentInChildren<TextMeshProUGUI>();
         if (label != null)
             label.text = isStopped ? "▶ 재개" : "⏸ 정지";
@@ -195,7 +211,6 @@ public class HUDManager : MonoBehaviour
 
     private void OnSettingButtonClicked()
     {
-        // PanelAnimator의 blocksRaycasts로 열림 여부 판단
         bool open = !settingPanelAnimator.IsVisible;
 
         if (open)
@@ -221,24 +236,65 @@ public class HUDManager : MonoBehaviour
 
     #endregion
 
-    // PlayerStats.Die()에서 호출
     public void ShowGameOver()
     {
         isTimerRunning = false;
         Time.timeScale = 0f;
 
-        // 1. 결과 텍스트 업데이트
         UpdateGameOverTexts();
-
-        // 2. 무기 히스토리 업데이트
         UpdateGameOverWeapons();
 
         gameOverPanelAnimator.Show();
+        AnimateGameOverElements();
+    }
+
+    private void AnimateGameOverElements()
+    {
+        // 1. 애니메이션할 모든 요소의 크기를 0으로 초기화
+        resultSurvivalTimeText.rectTransform.localScale = Vector3.zero;
+        resultLevelText.rectTransform.localScale = Vector3.zero;
+        resultKillCountText.rectTransform.localScale = Vector3.zero;
+
+        for (int i = 0; i < resultWeaponSlots.Length; i++)
+        {
+            resultWeaponSlots[i].GetComponent<RectTransform>().localScale = Vector3.zero;
+        }
+
+        Sequence seq = DOTween.Sequence().SetUpdate(true);
+
+        float popDuration = 0.35f;
+        float delayBetween = 0.15f;
+
+        seq.AppendInterval(0.3f);
+
+        // Vector3.one 대신 저장해둔 원래 크기(Original Scale)로 복구하며 띠용 효과를 줍니다.
+        seq.Append(resultSurvivalTimeText.rectTransform.DOScale(_survivalOriginalScale, popDuration).SetEase(Ease.OutBack));
+        seq.AppendInterval(delayBetween);
+
+        seq.Append(resultLevelText.rectTransform.DOScale(_levelOriginalScale, popDuration).SetEase(Ease.OutBack));
+        seq.AppendInterval(delayBetween);
+
+        seq.Append(resultKillCountText.rectTransform.DOScale(_killOriginalScale, popDuration).SetEase(Ease.OutBack));
+        seq.AppendInterval(delayBetween);
+
+        var currentWeapons = weaponManager.Weapons;
+        for (int i = 0; i < resultWeaponSlots.Length; i++)
+        {
+            if (i < currentWeapons.Count)
+            {
+                seq.Append(resultWeaponSlots[i].GetComponent<RectTransform>().DOScale(_weaponOriginalScales[i], popDuration).SetEase(Ease.OutBack));
+                seq.AppendInterval(0.1f);
+            }
+            else
+            {
+                // 빈 슬롯은 원래 크기로 조용히 되돌려 놓습니다.
+                resultWeaponSlots[i].GetComponent<RectTransform>().localScale = _weaponOriginalScales[i];
+            }
+        }
     }
 
     private void UpdateGameOverTexts()
     {
-        // 생존 시간 계산 (전체 시간 600초에서 남은 시간을 뺌)
         float survivedTime = 600f - remainingTime;
         int minutes = Mathf.FloorToInt(survivedTime / 60f);
         int seconds = Mathf.FloorToInt(survivedTime % 60f);
@@ -257,7 +313,6 @@ public class HUDManager : MonoBehaviour
     {
         if (weaponManager == null || resultWeaponSlots == null) return;
 
-        // 읽기 전용으로 현재 무기 리스트 가져오기
         var currentWeapons = weaponManager.Weapons;
 
         for (int i = 0; i < resultWeaponSlots.Length; i++)
@@ -267,12 +322,10 @@ public class HUDManager : MonoBehaviour
                 WeaponBase weapon = currentWeapons[i];
                 Sprite aura = GetAuraByRarity(weapon.currentRarity);
 
-                // WeaponSlotUI의 UpdateSlot 함수를 호출하여 아우라, 아이콘, 강화수치 적용
                 resultWeaponSlots[i].UpdateSlot(weapon.WeaponData.weaponIcon, aura, weapon.currentUpgradeLevel);
             }
             else
             {
-                // 무기가 없는 빈 슬롯 처리
                 resultWeaponSlots[i].ClearSlot();
             }
         }
