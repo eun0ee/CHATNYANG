@@ -6,7 +6,7 @@ public class FurBrushWeapon : WeaponBase
     {
         if (weaponData.projectilePrefab == null) return;
 
-        WeaponStatValues stats = weaponData.GetStats(WeaponRarity.Normal, 0);
+        WeaponStatValues stats = weaponData.GetStats(currentRarity, currentUpgradeLevel);
         if (stats == null) return;
 
         float angleStep = 360f / stats.projectileCount;
@@ -22,7 +22,7 @@ public class FurBrushWeapon : WeaponBase
             FurProjectile projectileScript = fur.GetComponent<FurProjectile>();
             if (projectileScript != null)
             {
-                projectileScript.Initialize(direction, weaponData);
+                projectileScript.Initialize(direction, weaponData, currentRarity, currentUpgradeLevel);
             }
         }
     }

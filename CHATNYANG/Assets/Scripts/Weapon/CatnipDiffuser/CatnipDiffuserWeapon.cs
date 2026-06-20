@@ -2,14 +2,12 @@ using UnityEngine;
 
 public class CatnipDiffuserWeapon : WeaponBase
 {
-    [Header("Confusion Settings")]
-    [SerializeField] private float confusionDuration = 2f;
-
     protected override void ExecuteAttack()
     {
-        WeaponStatValues stats = weaponData.GetStats(WeaponRarity.Normal, 0);
+        WeaponStatValues stats = weaponData.GetStats(currentRarity, currentUpgradeLevel);
         if (stats == null) return;
 
+        // 시각적 아우라 생성 및 유지시간 설정
         if (weaponData.areaPrefab != null)
         {
             GameObject aura = Instantiate(weaponData.areaPrefab, transform.position, Quaternion.identity, transform);
@@ -17,7 +15,9 @@ public class CatnipDiffuserWeapon : WeaponBase
             float effectScale = stats.aoeRadius * 2f;
             aura.transform.localScale = new Vector3(effectScale, effectScale, 1f);
 
-            Destroy(aura, 0.5f);
+            // 하드코딩된 0.5초 대신 기획된 areaDuration을 사용합니다.
+            float destroyTime = stats.areaDuration > 0f ? stats.areaDuration : 2f;
+            Destroy(aura, destroyTime);
         }
 
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, stats.aoeRadius);
@@ -37,7 +37,9 @@ public class CatnipDiffuserWeapon : WeaponBase
                         confusion = col.gameObject.AddComponent<ConfusionStatus>();
                     }
 
-                    confusion.ActivateStatus(confusionDuration, enemyStats.Data.moveSpeed);
+                    // 혼란 유지 시간도 아우라 유지 시간과 동일하게 맞춰줍니다.
+                    float confuseTime = stats.areaDuration > 0f ? stats.areaDuration : 2f;
+                    confusion.ActivateStatus(confuseTime, enemyStats.Data.moveSpeed);
                 }
             }
         }

@@ -6,8 +6,8 @@ public class BentoniteSandWeapon : WeaponBase
     {
         if (weaponData.projectilePrefab == null) return;
 
-        // 임시로 노말 0강 스탯을 가져옴. 향후 WeaponBase에서 등급 변수를 추가하면 그것을 사용하도록 수정 요망.
-        WeaponStatValues stats = weaponData.GetStats(WeaponRarity.Normal, 0);
+        // 무기의 현재 등급과 레벨 상태를 가져옵니다.
+        WeaponStatValues stats = weaponData.GetStats(currentRarity, currentUpgradeLevel);
         if (stats == null) return;
 
         Transform target = FindNearestEnemy();
@@ -21,8 +21,8 @@ public class BentoniteSandWeapon : WeaponBase
 
             if (projectileScript != null)
             {
-                // 인자를 넘겨주지 않으면 자동으로 노말 0강으로 세팅됨
-                projectileScript.Initialize(targetPos, weaponData);
+                // 투사체에도 현재 등급과 레벨을 전달합니다.
+                projectileScript.Initialize(targetPos, weaponData, currentRarity, currentUpgradeLevel);
             }
         }
     }

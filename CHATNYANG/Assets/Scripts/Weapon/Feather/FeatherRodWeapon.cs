@@ -7,8 +7,7 @@ public class FeatherRodWeapon : WeaponBase
     {
         if (weaponData.areaPrefab == null) return;
 
-        // 임시로 Normal 0강 스탯을 가져옵니다.
-        WeaponStatValues stats = weaponData.GetStats(WeaponRarity.Normal, 0);
+        WeaponStatValues stats = weaponData.GetStats(currentRarity, currentUpgradeLevel);
         if (stats == null) return;
 
         StartCoroutine(SwingRoutine(stats.projectileCount));
@@ -37,7 +36,7 @@ public class FeatherRodWeapon : WeaponBase
 
             if (slashScript != null)
             {
-                slashScript.Initialize(weaponData, transform.position);
+                slashScript.Initialize(weaponData, transform.position, currentRarity, currentUpgradeLevel);
             }
 
             yield return new WaitForSeconds(0.05f);

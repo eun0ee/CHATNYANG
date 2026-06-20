@@ -13,7 +13,8 @@ public class MouseToyWeapon : WeaponBase
 
         if (mouseScript != null)
         {
-            mouseScript.Initialize(weaponData, target);
+            // 쥐돌이 역시 현재 무기의 등급과 강화 상태를 전달받도록 수정
+            mouseScript.Initialize(weaponData, target, currentRarity, currentUpgradeLevel);
         }
     }
 

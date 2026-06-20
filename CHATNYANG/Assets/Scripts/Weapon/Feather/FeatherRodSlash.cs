@@ -11,6 +11,7 @@ public class FeatherRodSlash : MonoBehaviour
     {
         sourcePosition = sourcePos;
 
+        // 수정됨: 무조건 Normal, 0을 가져오던 로직 제거. 전달받은 rarity와 upgradeLevel을 확실하게 사용!
         WeaponStatValues stats = data.GetStats(rarity, upgradeLevel);
 
         if (stats == null)

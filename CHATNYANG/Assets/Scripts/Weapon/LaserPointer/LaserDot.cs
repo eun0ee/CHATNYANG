@@ -20,7 +20,6 @@ public class LaserDot : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        // 최신 유니티 문법에 맞게 강제 키네마틱 변환 (물리적 밀림 방지)
         rb.bodyType = RigidbodyType2D.Kinematic;
     }
 
@@ -41,6 +40,10 @@ public class LaserDot : MonoBehaviour
             damage = stats.damage;
             moveSpeed = stats.projectileSpeed;
             radius = stats.aoeRadius;
+
+            // 크기를 강제로 키우던 transform.localScale 덮어쓰기 코드를 삭제했습니다.
+            // 프리팹에 설정된 0.2 크기가 그대로 유지됩니다.
+
             Destroy(gameObject, stats.attackCooldown);
         }
 
@@ -85,8 +88,6 @@ public class LaserDot : MonoBehaviour
             {
                 enemiesInRange.Add(other);
 
-                // 핵심 해결 로직: 레이저가 너무 빨라서 0.25초 틱이 돌기 전에 빠져나가는 것을 방지.
-                // 닿는 즉시 일단 무조건 1회 데미지를 입힙니다!
                 EnemyStats enemy = other.GetComponent<EnemyStats>();
                 if (enemy != null)
                 {

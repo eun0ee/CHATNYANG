@@ -99,3 +99,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   zigzagFrequency: 15
   zigzagMagnitude: 4
+  effectScaleMultiplier: 0.3

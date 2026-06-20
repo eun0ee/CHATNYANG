@@ -38,6 +38,12 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float vacuumActiveTime = 2f;    // 장판 전개 시간 (2초)
     [SerializeField] private float vacuumCooldown = 3f;      // 스킬 쿨타임
 
+    [Header("기믹: 진공청소기 장판 시각 효과")]
+    [SerializeField] private GameObject vacuumVisual; // 장판 이펙트 오브젝트
+    [SerializeField] private Animator vacuumAnimator;   // 장판 애니메이터 (선택)
+    // 장판 이미지가 너무 크거나 작을 경우 인스펙터에서 줄이거나 키워서 사용
+    [SerializeField] private float vacuumVisualMultiplier = 1f;
+
     [Header("기믹: 분무기 투사체 발사")]
     [SerializeField] private bool useSprayShoot = false;
     [SerializeField] private GameObject projectilePrefab;
@@ -81,7 +87,11 @@ public class EnemyAI : MonoBehaviour
         {
             _isDead = true;
             if (useVacuumArea && _isPlayerSlowed) ApplySlowToPlayer(false);
+
+            if (vacuumVisual != null) vacuumVisual.SetActive(false);
         };
+
+        if (vacuumVisual != null) vacuumVisual.SetActive(false);
     }
 
     private void Start()
@@ -178,6 +188,22 @@ public class EnemyAI : MonoBehaviour
             {
                 _vacuumState = VacuumState.Preparing;
                 _vacuumTimer = vacuumPrepTime;
+
+                // 장판 시각 효과 활성화 및 크기 조절
+                if (vacuumVisual != null)
+                {
+                    vacuumVisual.SetActive(true);
+
+                    // 실제 기믹 범위(지름)에 시각적 배율을 곱해 최종 크기 결정
+                    float finalScale = vacuumTriggerRadius * 2f * vacuumVisualMultiplier;
+                    vacuumVisual.transform.localScale = new Vector3(finalScale, finalScale, 1f);
+                }
+
+                // 준비 애니메이션 트리거
+                if (vacuumAnimator != null)
+                {
+                    vacuumAnimator.SetTrigger("Prepare");
+                }
             }
         }
         else if (_vacuumState == VacuumState.Preparing)
@@ -188,6 +214,12 @@ public class EnemyAI : MonoBehaviour
                 // 0.5초가 지나면 2초간 슬로우 전개 상태로 돌입
                 _vacuumState = VacuumState.Active;
                 _vacuumTimer = vacuumActiveTime;
+
+                // 장판 전개 애니메이션 트리거
+                if (vacuumAnimator != null)
+                {
+                    vacuumAnimator.SetTrigger("Active");
+                }
             }
         }
         else if (_vacuumState == VacuumState.Active)
@@ -203,6 +235,12 @@ public class EnemyAI : MonoBehaviour
                 ApplySlowToPlayer(false); // 장판 종료 시 무조건 해제
                 _vacuumState = VacuumState.Cooldown;
                 _vacuumTimer = vacuumCooldown;
+
+                // 장판 시각 효과 비활성화
+                if (vacuumVisual != null)
+                {
+                    vacuumVisual.SetActive(false);
+                }
             }
         }
         else if (_vacuumState == VacuumState.Cooldown)

@@ -10,11 +10,18 @@ public class BentoniteProjectile : MonoBehaviour
     private float speed;
     private float damage;
 
-    // 확장성을 위해 rarity와 upgradeLevel 매개변수 추가
+    // 장판에게 넘겨주기 위해 투사체 본인이 등급과 레벨을 기억할 변수 추가
+    private WeaponRarity currentRarity;
+    private int currentUpgradeLevel;
+
     public void Initialize(Vector2 target, WeaponData weaponData, WeaponRarity rarity = WeaponRarity.Normal, int upgradeLevel = 0)
     {
         targetPosition = target;
         data = weaponData;
+
+        // 전달받은 등급과 레벨을 저장해둡니다.
+        currentRarity = rarity;
+        currentUpgradeLevel = upgradeLevel;
 
         WeaponStatValues stats = data.GetStats(rarity, upgradeLevel);
 
@@ -70,7 +77,9 @@ public class BentoniteProjectile : MonoBehaviour
         if (data.areaPrefab != null)
         {
             GameObject puddle = Instantiate(data.areaPrefab, transform.position, Quaternion.identity);
-            puddle.GetComponent<BentoniteArea>()?.Initialize(data);
+
+            // 장판을 초기화할 때, 아까 기억해둔 등급과 레벨을 함께 넘겨줍니다.
+            puddle.GetComponent<BentoniteArea>()?.Initialize(data, currentRarity, currentUpgradeLevel);
         }
 
         Destroy(gameObject);

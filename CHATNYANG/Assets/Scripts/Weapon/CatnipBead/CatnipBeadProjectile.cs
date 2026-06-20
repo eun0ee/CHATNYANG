@@ -1,24 +1,50 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Collider2D))]
 public class CatnipBeadProjectile : MonoBehaviour
 {
     private float damage;
     private int maxBounce;
     private int currentBounce;
     private Rigidbody2D rb;
+    private Collider2D myCollider;
 
     private float lifeTime = 10f;
 
-    // 원래 속도와 직전 프레임의 속도를 기억할 변수
     private float moveSpeed;
     private Vector2 lastVelocity;
+
+    // 게임 내에 존재하는 모든 구슬의 콜라이더를 추적하여 서로 충돌하지 않게 함
+    public static List<Collider2D> activeBeads = new List<Collider2D>();
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        // 추가: 물리 충돌 시 적을 밀어내지 않도록 구슬의 질량을 극도로 낮춤
+        myCollider = GetComponent<Collider2D>();
         rb.mass = 0.0001f;
+
+        // 스폰될 때, 이미 날아가고 있는 다른 구슬들과의 물리적 충돌을 완전히 무시하도록 설정
+        foreach (Collider2D otherBead in activeBeads)
+        {
+            if (otherBead != null)
+            {
+                Physics2D.IgnoreCollision(myCollider, otherBead);
+            }
+        }
+
+        // 나 자신도 리스트에 등록
+        activeBeads.Add(myCollider);
+    }
+
+    private void OnDestroy()
+    {
+        // 파괴될 때 리스트에서 제거
+        if (activeBeads.Contains(myCollider))
+        {
+            activeBeads.Remove(myCollider);
+        }
     }
 
     public void Initialize(Vector2 direction, WeaponData data, WeaponRarity rarity = WeaponRarity.Normal, int upgradeLevel = 0)
@@ -45,7 +71,6 @@ public class CatnipBeadProjectile : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // 충돌 직전의 속도와 방향을 계속 기록
         lastVelocity = rb.velocity;
     }
 
@@ -63,11 +88,7 @@ public class CatnipBeadProjectile : MonoBehaviour
         if (currentBounce < maxBounce)
         {
             currentBounce++;
-
-            // 직전 프레임의 방향(lastVelocity)을 기준으로 반사각 계산
             Vector2 reflectDir = Vector2.Reflect(lastVelocity.normalized, collision.contacts[0].normal);
-
-            // 원래 속도(moveSpeed)를 강제로 다시 곱해줌으로써 속도 감소 방지
             rb.velocity = reflectDir * Mathf.Max(lastVelocity.magnitude, moveSpeed);
         }
         else

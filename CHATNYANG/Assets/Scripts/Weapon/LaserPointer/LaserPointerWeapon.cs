@@ -6,7 +6,7 @@ public class LaserPointerWeapon : WeaponBase
     {
         if (weaponData.projectilePrefab == null) return;
 
-        WeaponStatValues stats = weaponData.GetStats(WeaponRarity.Normal, 0);
+        WeaponStatValues stats = weaponData.GetStats(currentRarity, currentUpgradeLevel);
         if (stats == null) return;
 
         for (int i = 0; i < stats.projectileCount; i++)
@@ -16,7 +16,7 @@ public class LaserPointerWeapon : WeaponBase
             LaserDot projectileScript = laser.GetComponent<LaserDot>();
             if (projectileScript != null)
             {
-                projectileScript.Initialize(transform, weaponData);
+                projectileScript.Initialize(transform, weaponData, currentRarity, currentUpgradeLevel);
             }
         }
     }

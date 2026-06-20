@@ -11,8 +11,14 @@ public class MouseToy : MonoBehaviour
     private float areaDuration;
 
     [Header("Zigzag Settings")]
-    [SerializeField] private float zigzagFrequency = 15f;
-    [SerializeField] private float zigzagMagnitude = 4f;
+    // 좌우로 흔들리는 속도를 15에서 8로 낮춰 어지러움 완화
+    [SerializeField] private float zigzagFrequency = 8f;
+    // 흔들리는 폭을 4에서 2로 낮춰 안정적인 궤적 형성
+    [SerializeField] private float zigzagMagnitude = 2f;
+
+    [Header("Effect Settings")]
+    // 이펙트 이미지가 너무 클 경우 인스펙터에서 0.5 등으로 줄여서 사용
+    [SerializeField] private float effectScaleMultiplier = 1f;
 
     private float aliveTimer = 0f;
 
@@ -31,7 +37,8 @@ public class MouseToy : MonoBehaviour
 
         if (stats != null)
         {
-            speed = stats.projectileSpeed;
+            // 전반적인 이동 속도 하락을 위해 스탯 속도의 75%만 적용
+            speed = stats.projectileSpeed * 0.75f;
             explosionRadius = stats.aoeRadius;
             damage = stats.damage;
             areaDuration = stats.areaDuration;
@@ -66,19 +73,15 @@ public class MouseToy : MonoBehaviour
         {
             float angle = Mathf.Atan2(finalMovement.y, finalMovement.x) * Mathf.Rad2Deg;
 
-            // 1. 이미지가 왼쪽을 보고 있으므로 180도를 더해 시선을 이동 방향과 맞춰줍니다.
             transform.rotation = Quaternion.Euler(0, 0, angle + 180f);
 
-            // 2. 오른쪽으로 갈 때 이미지가 위아래로 뒤집어지는 현상을 방지합니다.
             Vector3 currentScale = transform.localScale;
             if (finalMovement.x > 0)
             {
-                // 오른쪽으로 이동 중: Y 스케일을 마이너스로 반전시켜 똑바로 보이게 함
                 currentScale.y = -Mathf.Abs(currentScale.y);
             }
             else if (finalMovement.x < 0)
             {
-                // 왼쪽으로 이동 중: Y 스케일을 다시 원래대로 원복
                 currentScale.y = Mathf.Abs(currentScale.y);
             }
             transform.localScale = currentScale;
@@ -109,6 +112,10 @@ public class MouseToy : MonoBehaviour
         if (data.areaPrefab != null)
         {
             GameObject effect = Instantiate(data.areaPrefab, transform.position, Quaternion.identity);
+
+            // 폭발 범위에 배율을 곱해 시각적 크기를 조정
+            float finalScale = explosionRadius * effectScaleMultiplier;
+            effect.transform.localScale = new Vector3(finalScale, finalScale, 1f);
 
             float destroyTime = areaDuration > 0f ? areaDuration : 0.2f;
             Destroy(effect, destroyTime);
