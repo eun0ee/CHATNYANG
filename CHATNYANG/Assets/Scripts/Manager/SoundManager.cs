@@ -8,12 +8,20 @@ public enum BgmType
     GamePlay
 }
 
+// 1. 일반 효과음 Enum (UI, 피격, 획득 등)
 public enum SfxType
+{
+    Hit,
+    BtnClick,
+    ExpPickup
+}
+
+// 2. 무기 전용 효과음 Enum으로 분리!
+public enum WeaponSfxType
 {
     Attack,
     LaserAttack,
-    Hit,
-    BtnClick
+    Slash
 }
 
 public class SoundManager : MonoBehaviour
@@ -24,14 +32,22 @@ public class SoundManager : MonoBehaviour
     public AudioSource bgmSource;
     public AudioClip[] bgmClips;
 
-    [Header("SFX Settings")]
-    public int sfxPoolSize = 15;
+    [Header("General SFX Settings")]
     public AudioClip[] sfxClips;
 
+    [Header("Weapon SFX Settings")]
+    public AudioClip[] weaponSfxClips; // 무기 소리만 따로 넣을 배열
+
+    [Header("Pool Settings")]
+    public int sfxPoolSize = 15;
     private Queue<AudioSource> sfxPool;
 
     private float lastHitPlayTime = 0f;
     private readonly float hitSoundCooldown = 0.05f;
+
+    [Header("Mixer Settings")]
+    public AudioMixerGroup sfxMixerGroup;       // 일반 효과음 믹서
+    public AudioMixerGroup weaponMixerGroup;    // 무기 효과음 믹서
 
     private void Awake()
     {
@@ -47,9 +63,6 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    [Header("Mixer Settings")]
-    public AudioMixerGroup sfxMixerGroup;
-
     private void InitializeSfxPool()
     {
         sfxPool = new Queue<AudioSource>();
@@ -60,13 +73,6 @@ public class SoundManager : MonoBehaviour
 
             AudioSource source = obj.AddComponent<AudioSource>();
             source.playOnAwake = false;
-
-            // SFX 믹서 그룹 할당
-            if (sfxMixerGroup != null)
-            {
-                source.outputAudioMixerGroup = sfxMixerGroup;
-            }
-
             sfxPool.Enqueue(source);
         }
     }
@@ -74,35 +80,44 @@ public class SoundManager : MonoBehaviour
     public void PlayBGM(BgmType type)
     {
         int index = (int)type;
-        if (index < 0 || index >= bgmClips.Length || bgmClips[index] == null)
-        {
-            return;
-        }
+        if (index < 0 || index >= bgmClips.Length || bgmClips[index] == null) return;
 
         bgmSource.clip = bgmClips[index];
         bgmSource.loop = true;
         bgmSource.Play();
     }
 
+    // 일반 효과음 재생 함수
     public void PlaySFX(SfxType type)
     {
         if (type == SfxType.Hit)
         {
-            if (Time.time - lastHitPlayTime < hitSoundCooldown)
-            {
-                return;
-            }
+            if (Time.time - lastHitPlayTime < hitSoundCooldown) return;
             lastHitPlayTime = Time.time;
         }
 
         int index = (int)type;
-        if (index < 0 || index >= sfxClips.Length || sfxClips[index] == null)
-        {
-            return;
-        }
+        if (index < 0 || index >= sfxClips.Length || sfxClips[index] == null) return;
 
         AudioSource source = sfxPool.Dequeue();
         source.clip = sfxClips[index];
+        source.outputAudioMixerGroup = sfxMixerGroup; // 일반 믹서로 연결
+        source.Play();
+
+        sfxPool.Enqueue(source);
+    }
+
+    // 무기 전용 사운드 재생 함수 (새로 추가됨)
+    public void PlayWeaponSFX(WeaponSfxType type)
+    {
+        int index = (int)type;
+        if (index < 0 || index >= weaponSfxClips.Length || weaponSfxClips[index] == null) return;
+
+        AudioSource source = sfxPool.Dequeue();
+        source.clip = weaponSfxClips[index];
+
+        // 무기 믹서가 할당되어 있으면 무기로, 아니면 기본 sfx 믹서로 안전하게 연결
+        source.outputAudioMixerGroup = weaponMixerGroup != null ? weaponMixerGroup : sfxMixerGroup;
         source.Play();
 
         sfxPool.Enqueue(source);

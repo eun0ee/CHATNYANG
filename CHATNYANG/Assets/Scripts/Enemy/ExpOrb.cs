@@ -69,6 +69,13 @@ public class ExpOrb : MonoBehaviour
     private void Pickup()
     {
         _expSystem?.AddExperience(_expAmount);
+
+        // 추가된 부분: 사운드 매니저가 있다면 경험치 획득 소리를 재생합니다.
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.PlaySFX(SfxType.ExpPickup);
+        }
+
         Destroy(gameObject);
     }
 }

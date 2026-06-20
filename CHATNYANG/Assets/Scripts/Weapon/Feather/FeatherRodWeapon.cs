@@ -29,9 +29,17 @@ public class FeatherRodWeapon : WeaponBase
         float spawnOffset = 0.6f;
         Vector3 spawnPos = transform.position + (Vector3)(direction * spawnOffset);
 
+        //사운드 재생 위치를 루프 밖으로 뺐습니다! (공격 시작할 때 딱 한 번만 슉! 소리가 납니다)
+        if (SoundManager.Instance != null)
+        {
+            // PlaySFX 가 아니라 PlayWeaponSFX 로 호출!
+            SoundManager.Instance.PlayWeaponSFX(WeaponSfxType.Slash);
+        }
+
         for (int i = 0; i < count; i++)
         {
             GameObject slash = Instantiate(weaponData.areaPrefab, spawnPos, rotation, transform);
+
             FeatherRodSlash slashScript = slash.GetComponent<FeatherRodSlash>();
 
             if (slashScript != null)
