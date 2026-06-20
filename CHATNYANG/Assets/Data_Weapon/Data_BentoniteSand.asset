@@ -24,7 +24,7 @@ MonoBehaviour:
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 7
-      aoeRadius: 0.8
+      aoeRadius: 0.5
       slowFactor: 0.8
       areaDuration: 3
     - damage: 19
@@ -58,7 +58,7 @@ MonoBehaviour:
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 7
-      aoeRadius: 1
+      aoeRadius: 1.0
       slowFactor: 0.7
       areaDuration: 3
     - damage: 47
@@ -66,7 +66,7 @@ MonoBehaviour:
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 7
-      aoeRadius: 1
+      aoeRadius: 1.0
       slowFactor: 0.7
       areaDuration: 3
     - damage: 57
@@ -74,7 +74,7 @@ MonoBehaviour:
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 7
-      aoeRadius: 1
+      aoeRadius: 1.0
       slowFactor: 0.7
       areaDuration: 3
     - damage: 68
@@ -82,7 +82,7 @@ MonoBehaviour:
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 7
-      aoeRadius: 1
+      aoeRadius: 1.0
       slowFactor: 0.7
       areaDuration: 3
   - rarity: 2
@@ -104,7 +104,7 @@ MonoBehaviour:
       slowFactor: 0.5
       areaDuration: 3
     - damage: 115
-      attackCooldown: 2
+      attackCooldown: 2.0
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 7
@@ -168,7 +168,7 @@ MonoBehaviour:
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 7
-      aoeRadius: 1.5
+      aoeRadius: 1.8
       slowFactor: 0.4
       areaDuration: 3
     - damage: 410
@@ -176,14 +176,14 @@ MonoBehaviour:
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 7
-      aoeRadius: 1.5
+      aoeRadius: 1.8
       slowFactor: 0.4
       areaDuration: 3
     - damage: 480
-      attackCooldown: 1
+      attackCooldown: 1.0
       projectileCount: 1
       bounceCount: 0
       projectileSpeed: 7
-      aoeRadius: 1.5
+      aoeRadius: 2.0
       slowFactor: 0.4
       areaDuration: 3

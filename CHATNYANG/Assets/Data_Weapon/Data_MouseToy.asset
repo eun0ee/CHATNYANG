@@ -19,171 +19,171 @@ MonoBehaviour:
   rarityTiers:
   - rarity: 0
     upgradeLevels:
-    - damage: 25
-      attackCooldown: 4
+    - damage: 20
+      attackCooldown: 4.0
       projectileCount: 0
       bounceCount: 0
       projectileSpeed: 5
-      aoeRadius: 1.8
+      aoeRadius: 1.5
       slowFactor: 0
       areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+    - damage: 28
+      attackCooldown: 3.8
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 5.5
+      aoeRadius: 1.6
       slowFactor: 0
       areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+    - damage: 38
+      attackCooldown: 3.6
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 5.5
+      aoeRadius: 1.6
       slowFactor: 0
       areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+    - damage: 50
+      attackCooldown: 3.4
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 6
+      aoeRadius: 1.7
       slowFactor: 0
       areaDuration: 0.2
   - rarity: 1
     upgradeLevels:
-    - damage: 25
-      attackCooldown: 4
+    - damage: 70
+      attackCooldown: 3.2
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
+      projectileSpeed: 6.5
       aoeRadius: 1.8
       slowFactor: 0
-      areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+      areaDuration: 0.3
+    - damage: 95
+      attackCooldown: 3.0
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 6.5
+      aoeRadius: 1.9
       slowFactor: 0
-      areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+      areaDuration: 0.3
+    - damage: 125
+      attackCooldown: 2.8
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 7
+      aoeRadius: 2.0
       slowFactor: 0
-      areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+      areaDuration: 0.3
+    - damage: 160
+      attackCooldown: 2.6
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 7
+      aoeRadius: 2.1
       slowFactor: 0
-      areaDuration: 0.2
+      areaDuration: 0.3
   - rarity: 2
     upgradeLevels:
-    - damage: 25
-      attackCooldown: 4
+    - damage: 210
+      attackCooldown: 2.4
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 7.5
+      aoeRadius: 2.2
       slowFactor: 0
-      areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+      areaDuration: 0.4
+    - damage: 260
+      attackCooldown: 2.3
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 8
+      aoeRadius: 2.3
       slowFactor: 0
-      areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+      areaDuration: 0.4
+    - damage: 320
+      attackCooldown: 2.2
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 8
+      aoeRadius: 2.4
       slowFactor: 0
-      areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+      areaDuration: 0.4
+    - damage: 390
+      attackCooldown: 2.1
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 8.5
+      aoeRadius: 2.5
       slowFactor: 0
-      areaDuration: 0.2
+      areaDuration: 0.4
   - rarity: 3
     upgradeLevels:
-    - damage: 25
-      attackCooldown: 4
+    - damage: 480
+      attackCooldown: 1.9
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 9
+      aoeRadius: 2.6
       slowFactor: 0
-      areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+      areaDuration: 0.5
+    - damage: 580
+      attackCooldown: 1.8
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 9
+      aoeRadius: 2.7
       slowFactor: 0
-      areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+      areaDuration: 0.5
+    - damage: 700
+      attackCooldown: 1.7
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 9.5
+      aoeRadius: 2.7
       slowFactor: 0
-      areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+      areaDuration: 0.5
+    - damage: 840
+      attackCooldown: 1.6
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 10
+      aoeRadius: 2.8
       slowFactor: 0
-      areaDuration: 0.2
+      areaDuration: 0.5
   - rarity: 4
     upgradeLevels:
-    - damage: 25
-      attackCooldown: 4
+    - damage: 1000
+      attackCooldown: 1.5
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 10.5
+      aoeRadius: 2.8
       slowFactor: 0
-      areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+      areaDuration: 0.6
+    - damage: 1200
+      attackCooldown: 1.4
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 11
+      aoeRadius: 2.9
       slowFactor: 0
-      areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+      areaDuration: 0.6
+    - damage: 1450
+      attackCooldown: 1.3
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 11.5
+      aoeRadius: 2.9
       slowFactor: 0
-      areaDuration: 0.2
-    - damage: 25
-      attackCooldown: 4
+      areaDuration: 0.6
+    - damage: 1750
+      attackCooldown: 1.2
       projectileCount: 0
       bounceCount: 0
-      projectileSpeed: 5
-      aoeRadius: 1.8
+      projectileSpeed: 12
+      aoeRadius: 3.0
       slowFactor: 0
-      areaDuration: 0.2
+      areaDuration: 0.6
