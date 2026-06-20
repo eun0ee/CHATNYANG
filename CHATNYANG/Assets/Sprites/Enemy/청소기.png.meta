@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c46e5200d62c6944eb43e02dc8f14f1c
+guid: 0e38bb05d45c9974ca978aed88551850
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -95,7 +95,91 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: "\uCCAD\uC18C\uAE30_0"
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 2568
+        height: 2508
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b3d28a3bd87c1c4bba21e8f42d31c31
+      internalID: -1098519391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uCCAD\uC18C\uAE30_1"
+      rect:
+        serializedVersion: 2
+        x: 2568
+        y: 0
+        width: 2568
+        height: 2508
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a6c85290cb68659449794a052b9bfa06
+      internalID: -642368744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uCCAD\uC18C\uAE30_2"
+      rect:
+        serializedVersion: 2
+        x: 5136
+        y: 0
+        width: 2568
+        height: 2508
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9007b25725ea4942a6013c3af7c6308
+      internalID: 461723961
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uCCAD\uC18C\uAE30_3"
+      rect:
+        serializedVersion: 2
+        x: 7704
+        y: 0
+        width: 2568
+        height: 2508
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c592c0d5a5bf49a4295f67229a7c213e
+      internalID: 1290742357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -106,7 +190,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      "\uCCAD\uC18C\uAE30_0": -1098519391
+      "\uCCAD\uC18C\uAE30_1": -642368744
+      "\uCCAD\uC18C\uAE30_2": 461723961
+      "\uCCAD\uC18C\uAE30_3": 1290742357
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

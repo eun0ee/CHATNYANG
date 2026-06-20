@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c46e5200d62c6944eb43e02dc8f14f1c
+guid: d69bf5a704f6c0345bcb5420b17032cf
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -95,7 +95,91 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: "\uBD84\uBB34\uAE30_0"
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 2568
+        height: 2508
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 24d1c567b547f8a4ebbc08745c3edddc
+      internalID: 998436306
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uBD84\uBB34\uAE30_1"
+      rect:
+        serializedVersion: 2
+        x: 2568
+        y: 0
+        width: 2568
+        height: 2508
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 716af7852f7c89544ad3e07712cef422
+      internalID: -1044273524
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uBD84\uBB34\uAE30_2"
+      rect:
+        serializedVersion: 2
+        x: 5136
+        y: 0
+        width: 2568
+        height: 2508
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35e824b05f1de594ca5f90a355e72203
+      internalID: -1005240533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "\uBD84\uBB34\uAE30_3"
+      rect:
+        serializedVersion: 2
+        x: 7704
+        y: 0
+        width: 2568
+        height: 2508
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 105b974e41d10874498c6acf99e0decb
+      internalID: 717419140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -106,7 +190,11 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      "\uBD84\uBB34\uAE30_0": 998436306
+      "\uBD84\uBB34\uAE30_1": -1044273524
+      "\uBD84\uBB34\uAE30_2": -1005240533
+      "\uBD84\uBB34\uAE30_3": 717419140
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

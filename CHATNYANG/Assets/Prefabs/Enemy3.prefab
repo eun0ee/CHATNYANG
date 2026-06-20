@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4433187862825233762}
   - component: {fileID: 2010894105275803936}
   - component: {fileID: 3114689107547557490}
+  - component: {fileID: 1143175299105786833}
   m_Layer: 3
   m_Name: Enemy3
   m_TagString: Enemy
@@ -226,9 +227,32 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 8
-  useVacuumPull: 0
-  pullRadius: 5
-  pullForce: 1.5
+  useVacuumArea: 0
+  vacuumTriggerRadius: 3
+  vacuumPrepTime: 0.5
+  vacuumActiveTime: 2
+  vacuumCooldown: 3
   useSprayShoot: 1
   projectilePrefab: {fileID: 8070980257339232667, guid: 681bafb14be938c4babac93c7fa8bbc5, type: 3}
   shootCooldown: 5
+--- !u!95 &1143175299105786833
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8547681170993358145}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a9868cb1eec4d3b4f860bbd386e4b73c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
