@@ -54,7 +54,7 @@ public class GeminiClient : MonoBehaviour
 
     private string apiKey = "";
 
-    private string url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=";
+    private string url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=";
 
     private string systemInstruction = @"Role: 변덕스럽고 건방진 고양이 신. 유저(꼬마 고양이)의 5자 내외 기도를 분석해 무기 하사 또는 패널티 부여.
 
