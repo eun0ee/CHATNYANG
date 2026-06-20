@@ -10,7 +10,8 @@ public class HUDManager : MonoBehaviour
 
     [Header("Timer")]
     [SerializeField] private TextMeshProUGUI timerText;
-    private float remainingTime = 600f; // 10분
+    // 카운트다운 대신 0부터 시작하는 경과 시간 변수로 변경
+    private float elapsedTime = 0f;
     private bool isTimerRunning = true;
 
     [Header("Stats")]
@@ -46,7 +47,7 @@ public class HUDManager : MonoBehaviour
 
     [Header("Game Over Weapon History")]
     [SerializeField] private WeaponManager weaponManager;
-    [SerializeField] private WeaponSlotUI[] resultWeaponSlots; // 게임오버 창에 배치한 슬롯들
+    [SerializeField] private WeaponSlotUI[] resultWeaponSlots;
     [SerializeField] private Sprite normalAura;
     [SerializeField] private Sprite rareAura;
     [SerializeField] private Sprite epicAura;
@@ -55,7 +56,6 @@ public class HUDManager : MonoBehaviour
 
     private int currentLevel = 1;
 
-    // UI 애니메이션 원래 크기 저장용 변수
     private Vector3 _survivalOriginalScale;
     private Vector3 _levelOriginalScale;
     private Vector3 _killOriginalScale;
@@ -66,7 +66,6 @@ public class HUDManager : MonoBehaviour
 
     private void Awake()
     {
-        // 싱글턴
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
     }
@@ -83,7 +82,6 @@ public class HUDManager : MonoBehaviour
             expSystem.OnLevelUp += RefreshLevelUI;
         }
 
-        // 게임 시작 시 인스펙터에 설정된 원래 크기를 미리 저장합니다.
         if (resultSurvivalTimeText != null) _survivalOriginalScale = resultSurvivalTimeText.rectTransform.localScale;
         if (resultLevelText != null) _levelOriginalScale = resultLevelText.rectTransform.localScale;
         if (resultKillCountText != null) _killOriginalScale = resultKillCountText.rectTransform.localScale;
@@ -117,15 +115,8 @@ public class HUDManager : MonoBehaviour
     {
         if (!isTimerRunning) return;
 
-        remainingTime -= Time.deltaTime;
-
-        if (remainingTime <= 0f)
-        {
-            remainingTime = 0f;
-            isTimerRunning = false;
-            OnTimerEnd();
-        }
-
+        // 경과 시간을 계속 누적시킵니다.
+        elapsedTime += Time.deltaTime;
         UpdateTimerUI();
     }
 
@@ -162,15 +153,10 @@ public class HUDManager : MonoBehaviour
 
     private void UpdateTimerUI()
     {
-        int minutes = Mathf.FloorToInt(remainingTime / 60f);
-        int seconds = Mathf.FloorToInt(remainingTime % 60f);
+        // 남은 시간 계산에서 경과 시간 계산으로 변경
+        int minutes = Mathf.FloorToInt(elapsedTime / 60f);
+        int seconds = Mathf.FloorToInt(elapsedTime % 60f);
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-    }
-
-    private void OnTimerEnd()
-    {
-        Debug.Log("타이머 종료!");
-        // TODO: 게임 종료 / 결과 화면 처리
     }
 
     #endregion
@@ -250,7 +236,6 @@ public class HUDManager : MonoBehaviour
 
     private void AnimateGameOverElements()
     {
-        // 1. 애니메이션할 모든 요소의 크기를 0으로 초기화
         resultSurvivalTimeText.rectTransform.localScale = Vector3.zero;
         resultLevelText.rectTransform.localScale = Vector3.zero;
         resultKillCountText.rectTransform.localScale = Vector3.zero;
@@ -267,7 +252,6 @@ public class HUDManager : MonoBehaviour
 
         seq.AppendInterval(0.3f);
 
-        // Vector3.one 대신 저장해둔 원래 크기(Original Scale)로 복구하며 띠용 효과를 줍니다.
         seq.Append(resultSurvivalTimeText.rectTransform.DOScale(_survivalOriginalScale, popDuration).SetEase(Ease.OutBack));
         seq.AppendInterval(delayBetween);
 
@@ -287,7 +271,6 @@ public class HUDManager : MonoBehaviour
             }
             else
             {
-                // 빈 슬롯은 원래 크기로 조용히 되돌려 놓습니다.
                 resultWeaponSlots[i].GetComponent<RectTransform>().localScale = _weaponOriginalScales[i];
             }
         }
@@ -295,7 +278,8 @@ public class HUDManager : MonoBehaviour
 
     private void UpdateGameOverTexts()
     {
-        float survivedTime = 600f - remainingTime;
+        // 생존 시간을 600에서 빼는 대신 경과 시간(elapsedTime)을 그대로 사용
+        float survivedTime = elapsedTime;
         int minutes = Mathf.FloorToInt(survivedTime / 60f);
         int seconds = Mathf.FloorToInt(survivedTime % 60f);
 

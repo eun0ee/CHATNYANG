@@ -8,7 +8,7 @@ public class LevelUpManager : MonoBehaviour
 {
     [Header("Main Panel UI")]
     public GameObject levelUpPanel;
-    public PanelAnimator levelUpPanelAnimator; // 애니메이션 연동 변수 추가
+    public PanelAnimator levelUpPanelAnimator;
     public GameObject levelUpDimBackground;
     public TMP_InputField playerInputField;
     public TextMeshProUGUI timerText;
@@ -17,7 +17,7 @@ public class LevelUpManager : MonoBehaviour
 
     [Header("Result Panel UI")]
     public GameObject resultPanel;
-    public PanelAnimator resultPanelAnimator; // 애니메이션 연동 변수 추가
+    public PanelAnimator resultPanelAnimator;
     public GameObject resultDimBackground;
     public TextMeshProUGUI resultText;
     public Image itemIconImage;
@@ -26,11 +26,12 @@ public class LevelUpManager : MonoBehaviour
 
     [Header("Level Up Settings")]
     public int maxCharacterLimit = 5;
-
     public float minLevelUpTimeout = 10f;
     public float maxLevelUpTimeout = 20f;
     public float timeIncreasePerLevel = 1f;
 
+    [Tooltip("고양이 신 대사 타이핑 속도")]
+    public float textTypingSpeed = 0.05f; // 타이핑 속도 조절 변수 추가
 
     [Header("Weapon Prefabs")]
     public GameObject catnipWeaponPrefab;
@@ -72,6 +73,10 @@ public class LevelUpManager : MonoBehaviour
     private Coroutine _countdownCoroutine;
     private string _lastPlayerInput = "";
 
+    // 타이핑 애니메이션을 위한 변수 추가
+    private string _finalDialogue = "";
+    private Coroutine _typewriterCoroutine;
+
     [System.Serializable]
     public class DealerResponse
     {
@@ -99,7 +104,6 @@ public class LevelUpManager : MonoBehaviour
             playerInputField.onSubmit.AddListener(OnInputFieldSubmit);
         }
 
-        // 애니메이터가 연결되어 있다면 강제로 끄지 않고 투명한 대기 상태 유지
         if (levelUpPanelAnimator == null && levelUpPanel != null) levelUpPanel.SetActive(false);
         if (resultPanelAnimator == null && resultPanel != null) resultPanel.SetActive(false);
 
@@ -136,21 +140,18 @@ public class LevelUpManager : MonoBehaviour
     {
         Time.timeScale = 0f;
 
-        // 레벨업 시 최대 체력 2, 현재 체력 2 증가 (UI 자동 갱신됨)
         if (_playerStats != null)
         {
             _playerStats.IncreaseMaxHp(2f);
         }
 
-        // 결과창 닫기 (애니메이션)
         if (resultPanelAnimator != null) resultPanelAnimator.Hide();
         else if (resultPanel != null) resultPanel.SetActive(false);
         if (resultDimBackground != null) resultDimBackground.SetActive(false);
 
-        // 레벨업창 열기 (애니메이션)
         if (levelUpPanelAnimator != null)
         {
-            if (levelUpPanel != null) levelUpPanel.SetActive(true); // 혹시 꺼져있을 때를 대비
+            if (levelUpPanel != null) levelUpPanel.SetActive(true);
             levelUpPanelAnimator.Show();
         }
         else if (levelUpPanel != null) levelUpPanel.SetActive(true);
@@ -168,19 +169,9 @@ public class LevelUpManager : MonoBehaviour
         if (dealerDialogueText != null)
             dealerDialogueText.text = $"원하는 것을 {maxCharacterLimit}글자 이내로 말해 [Enter]를 눌러주세요.";
 
-        // 레벨 구간에 따른 고정 시간 할당
-        if (level <= 10)
-        {
-            _timer = 10f;
-        }
-        else if (level <= 20)
-        {
-            _timer = 15f;
-        }
-        else
-        {
-            _timer = 20f;
-        }
+        if (level <= 10) _timer = 10f;
+        else if (level <= 20) _timer = 15f;
+        else _timer = 20f;
 
         _isWaitingForInput = true;
 
@@ -239,7 +230,11 @@ public class LevelUpManager : MonoBehaviour
     private void Finish(string message, string itemTag, string rarity)
     {
         if (timerText != null) timerText.text = "처리 완료";
-        if (dealerDialogueText != null) dealerDialogueText.text = message;
+
+        // 결과창 뒤에 가려져 있을 때의 텍스트 설정
+        if (dealerDialogueText != null) dealerDialogueText.text = "응답이 도착했다냥!";
+        _finalDialogue = message; // 타이핑될 최종 대사를 미리 저장해둠
+
         ApplyRewardEffect(itemTag, rarity);
         ShowResultUI();
     }
@@ -256,7 +251,10 @@ public class LevelUpManager : MonoBehaviour
         try
         {
             DealerResponse response = JsonUtility.FromJson<DealerResponse>(cleanJson);
-            if (dealerDialogueText != null) dealerDialogueText.text = response.dialogue;
+
+            // 결과창 뒤에 가려져 있을 때의 텍스트 설정
+            if (dealerDialogueText != null) dealerDialogueText.text = "응답이 도착했다냥!";
+            _finalDialogue = response.dialogue; // 타이핑될 최종 대사를 미리 저장해둠
 
             string parsedRarity = string.IsNullOrEmpty(response.rarity) ? "Normal" : response.rarity;
             ApplyRewardEffect(response.item_tag, parsedRarity);
@@ -283,47 +281,19 @@ public class LevelUpManager : MonoBehaviour
 
         switch (itemTag)
         {
-            case "Weapon_Catnip":
-                rewardName = "캣닢 씨앗";
-                selectedIcon = catnipIcon;
-                rewardGiven = GiveWeapon(catnipWeaponPrefab);
-                break;
-            case "Weapon_Bentonite":
-                rewardName = "벤토나이트 흙";
-                selectedIcon = bentoniteIcon;
-                rewardGiven = GiveWeapon(bentoniteWeaponPrefab);
-                break;
-            case "Weapon_FurBrush":
-                rewardName = "빗살무늬 브러쉬";
-                selectedIcon = furBrushIcon;
-                rewardGiven = GiveWeapon(furBrushWeaponPrefab);
-                break;
-            case "Weapon_Laser":
-                rewardName = "자동 레이저 포인터";
-                selectedIcon = laserIcon;
-                rewardGiven = GiveWeapon(laserWeaponPrefab);
-                break;
-            case "Weapon_FeatherRod":
-                rewardName = "깃털 낚시대";
-                selectedIcon = featherRodIcon;
-                rewardGiven = GiveWeapon(featherRodWeaponPrefab);
-                break;
-            case "Weapon_MouseToy":
-                rewardName = "태엽 쥐돌이";
-                selectedIcon = mouseToyIcon;
-                rewardGiven = GiveWeapon(mouseToyWeaponPrefab);
-                break;
-            case "Weapon_CatnipDiffuser":
-                rewardName = "캣닢 디퓨저";
-                selectedIcon = catnipDiffuserIcon;
-                rewardGiven = GiveWeapon(catnipDiffuserWeaponPrefab);
-                break;
+            case "Weapon_Catnip": rewardName = "캣닢 씨앗"; selectedIcon = catnipIcon; rewardGiven = GiveWeapon(catnipWeaponPrefab); break;
+            case "Weapon_Bentonite": rewardName = "벤토나이트 흙"; selectedIcon = bentoniteIcon; rewardGiven = GiveWeapon(bentoniteWeaponPrefab); break;
+            case "Weapon_FurBrush": rewardName = "빗살무늬 브러쉬"; selectedIcon = furBrushIcon; rewardGiven = GiveWeapon(furBrushWeaponPrefab); break;
+            case "Weapon_Laser": rewardName = "자동 레이저 포인터"; selectedIcon = laserIcon; rewardGiven = GiveWeapon(laserWeaponPrefab); break;
+            case "Weapon_FeatherRod": rewardName = "깃털 낚시대"; selectedIcon = featherRodIcon; rewardGiven = GiveWeapon(featherRodWeaponPrefab); break;
+            case "Weapon_MouseToy": rewardName = "태엽 쥐돌이"; selectedIcon = mouseToyIcon; rewardGiven = GiveWeapon(mouseToyWeaponPrefab); break;
+            case "Weapon_CatnipDiffuser": rewardName = "캣닢 디퓨저"; selectedIcon = catnipDiffuserIcon; rewardGiven = GiveWeapon(catnipDiffuserWeaponPrefab); break;
             case "Heal_Potion":
                 rewardName = "회복 포션";
                 selectedIcon = potionIcon;
                 if (_playerStats != null)
                 {
-                    _playerStats.Heal(30f); // UI 갱신 이벤트가 포함된 회복 함수 사용
+                    _playerStats.Heal(30f);
                     rewardGiven = true;
                 }
                 break;
@@ -331,6 +301,13 @@ public class LevelUpManager : MonoBehaviour
             default:
                 rewardName = "쓸모없는 쓰레기";
                 selectedIcon = trashIcon;
+
+                // 쓰레기 획득 시 최대 체력과 현재 체력 10 증가
+                if (_playerStats != null)
+                {
+                    _playerStats.IncreaseMaxHp(10f);
+                }
+
                 rewardGiven = true;
                 break;
         }
@@ -340,7 +317,7 @@ public class LevelUpManager : MonoBehaviour
             rewardName = "중복 무기 (대체 포션)";
             selectedIcon = potionIcon;
             if (_playerStats != null)
-                _playerStats.Heal(30f); // UI 갱신 이벤트가 포함된 회복 함수 사용
+                _playerStats.Heal(30f);
         }
 
         string rarityName = "노말";
@@ -384,7 +361,6 @@ public class LevelUpManager : MonoBehaviour
 
     private void ShowResultUI()
     {
-        // 결과창 표시 (애니메이션)
         if (resultPanelAnimator != null)
         {
             if (resultPanel != null) resultPanel.SetActive(true);
@@ -395,7 +371,7 @@ public class LevelUpManager : MonoBehaviour
         if (resultDimBackground != null) resultDimBackground.SetActive(true);
     }
 
-    // 결과창만 닫고, 뒤에 남은 렙업창의 닫기 버튼을 활성화하는 함수
+    // 결과창 닫기 버튼을 누르면 이 함수가 실행됩니다.
     private void CloseResultUI()
     {
         if (resultPanelAnimator != null) resultPanelAnimator.Hide();
@@ -403,28 +379,54 @@ public class LevelUpManager : MonoBehaviour
 
         if (resultDimBackground != null) resultDimBackground.SetActive(false);
 
-        // 보상을 확인하고 결과창을 닫았으므로 이제 메인 창을 닫을 수 있게 버튼 활성화
         if (levelUpCloseButton != null) levelUpCloseButton.gameObject.SetActive(true);
+
+        // 결과창이 닫힐 때, 고양이 신의 대사 타이핑 애니메이션을 시작합니다!
+        if (_typewriterCoroutine != null) StopCoroutine(_typewriterCoroutine);
+        if (dealerDialogueText != null)
+        {
+            _typewriterCoroutine = StartCoroutine(TypewriterRoutine(_finalDialogue));
+        }
+    }
+
+    // 타자기가 쳐지는 효과를 내는 코루틴
+    private IEnumerator TypewriterRoutine(string text)
+    {
+        dealerDialogueText.text = "";
+        string currentText = "";
+
+        for (int i = 0; i < text.Length; i++)
+        {
+            currentText += text[i];
+            dealerDialogueText.text = currentText;
+
+            // Time.timeScale이 0인 상태이므로 WaitForSecondsRealtime을 사용해야 시간이 흐릅니다.
+            yield return new WaitForSecondsRealtime(textTypingSpeed);
+        }
     }
 
     private void ResumeGame()
     {
-        // 혹시라도 돌아가고 있을지 모르는 타이머 강제 종료 방어 로직
         if (_countdownCoroutine != null)
         {
             StopCoroutine(_countdownCoroutine);
             _countdownCoroutine = null;
         }
 
+        // 패널을 닫을 때 실행 중인 타이핑 애니메이션 코루틴도 안전하게 중단시킵니다.
+        if (_typewriterCoroutine != null)
+        {
+            StopCoroutine(_typewriterCoroutine);
+            _typewriterCoroutine = null;
+        }
+
         _isWaitingForInput = false;
 
-        // 메인 패널 숨김 (애니메이션)
         if (levelUpPanelAnimator != null) levelUpPanelAnimator.Hide();
         else if (levelUpPanel != null) levelUpPanel.SetActive(false);
 
         if (levelUpDimBackground != null) levelUpDimBackground.SetActive(false);
 
-        // 결과창 숨김 (애니메이션)
         if (resultPanelAnimator != null) resultPanelAnimator.Hide();
         else if (resultPanel != null) resultPanel.SetActive(false);
 
