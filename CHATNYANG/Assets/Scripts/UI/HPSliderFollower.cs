@@ -5,6 +5,7 @@ public class HPSliderFollower : MonoBehaviour
     [SerializeField] private Transform target;
     [SerializeField] private Vector3 worldOffset = new Vector3(0f, 1.2f, 0f);
     [SerializeField] private float smoothSpeed = 15f; // 높을수록 즉각 반응
+    [SerializeField] private CanvasGroup canvasGroup;
 
     private RectTransform _rect;
 
@@ -16,11 +17,10 @@ public class HPSliderFollower : MonoBehaviour
     private void LateUpdate()
     {
         if (target == null) return;
-
         Vector3 screenPos = Camera.main.WorldToScreenPoint(target.position + worldOffset);
-
         bool isVisible = screenPos.z > 0f;
-        gameObject.SetActive(isVisible);
+
+        canvasGroup.alpha = isVisible ? 1f : 0f;
         if (!isVisible) return;
 
         // 픽셀 반올림으로 진동 방지

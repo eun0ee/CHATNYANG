@@ -24,15 +24,17 @@ public class ExperienceSystem : MonoBehaviour
         if (CurrentLevel >= maxLevel) return;
 
         CurrentExp += amount;
-        OnExpChanged?.Invoke(CurrentExp, RequiredExp);
 
         while (CurrentExp >= RequiredExp && CurrentLevel < maxLevel)
         {
-            CurrentExp  -= RequiredExp;
+            CurrentExp -= RequiredExp;
             CurrentLevel++;
-            RequiredExp  = CalcRequiredExp(CurrentLevel);
+            RequiredExp = CalcRequiredExp(CurrentLevel);
             OnLevelUp?.Invoke(CurrentLevel);
         }
+
+        // 레벨업 처리 끝난 뒤 최종값으로 한 번만 발동
+        OnExpChanged?.Invoke(CurrentExp, RequiredExp);
     }
 
     private float CalcRequiredExp(int level)

@@ -12,6 +12,7 @@ public class ExpOrb : MonoBehaviour
     private ExperienceSystem _expSystem;
     private Transform _target;
     private bool _isAttracting = false;
+    private bool _isPickedUp = false;
 
     // ExperienceDrop에서 호출
     public void Init(float amount, ExperienceSystem expSystem)
@@ -68,6 +69,9 @@ public class ExpOrb : MonoBehaviour
 
     private void Pickup()
     {
+        if (_isPickedUp) return;  // ← 추가: 이미 획득했으면 무시
+        _isPickedUp = true;       // ← 추가: 즉시 플래그 설정
+
         _expSystem?.AddExperience(_expAmount);
 
         // 추가된 부분: 사운드 매니저가 있다면 경험치 획득 소리를 재생합니다.

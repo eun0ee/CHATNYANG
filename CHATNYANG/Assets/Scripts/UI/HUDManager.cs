@@ -154,9 +154,6 @@ public class HUDManager : MonoBehaviour
 
         if (levelText != null)
             levelText.text = $"Lv. {newLevel}";
-
-        if (expSystem != null)
-            RefreshExpUI(expSystem.CurrentExp, expSystem.RequiredExp);
     }
 
     #endregion

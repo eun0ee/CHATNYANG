@@ -33,7 +33,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -226,9 +226,14 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 8
-  useVacuumPull: 0
-  pullRadius: 5
-  pullForce: 1.5
+  useVacuumArea: 0
+  vacuumTriggerRadius: 3
+  vacuumPrepTime: 0.5
+  vacuumActiveTime: 2
+  vacuumCooldown: 3
+  vacuumVisual: {fileID: 0}
+  vacuumAnimator: {fileID: 0}
+  vacuumVisualMultiplier: 1
   useSprayShoot: 1
   projectilePrefab: {fileID: 8070980257339232667, guid: 681bafb14be938c4babac93c7fa8bbc5, type: 3}
   shootCooldown: 3

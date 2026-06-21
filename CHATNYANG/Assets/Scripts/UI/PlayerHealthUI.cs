@@ -31,18 +31,18 @@ public class PlayerHealthUI : MonoBehaviour
 
     private void UpdateUI(float currentHp, float maxHp)
     {
-        // 슬라이더 바 업데이트
         if (hpSlider != null)
         {
+            // value가 maxValue보다 크면 Unity가 자동으로 clamp해버려서
+            // maxValue를 먼저 올린 뒤 value를 설정해야 함
+            // 단, 이 순서 자체가 한 프레임 내 렌더링 틱과 겹치면 깜빡임 발생
+            // → wholeNumbers + 명시적 순서로 고정
             hpSlider.maxValue = maxHp;
             hpSlider.value = currentHp;
         }
 
-        // 텍스트 업데이트 (예: "HP: 85/100")
         if (hpText != null)
-        {
             hpText.text = $"HP: {Mathf.CeilToInt(currentHp)}/{Mathf.CeilToInt(maxHp)}";
-        }
     }
 
     private void OnDestroy()

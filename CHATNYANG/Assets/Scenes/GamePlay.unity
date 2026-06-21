@@ -3146,8 +3146,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "[ \uD138 \uBFDC\uBFDC \uBE0C\uB7EC\uC26C ] Legendary"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 188335ad4bff05245a5cdceacaa959cb, type: 2}
-  m_sharedMaterial: {fileID: 1916853205768341589, guid: 188335ad4bff05245a5cdceacaa959cb, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 721fb337e247a9144a37edc4023cefbe, type: 2}
+  m_sharedMaterial: {fileID: 6368203143006286804, guid: 721fb337e247a9144a37edc4023cefbe, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4021,7 +4021,7 @@ MonoBehaviour:
     spawnInterval: 2
     waveDuration: 30
   - waveName: Wave 2
-    enemyPrefabIndex: 0
+    enemyPrefabIndex: 1
     spawnCount: 3
     spawnInterval: 1.5
     waveDuration: 40
@@ -7784,6 +7784,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1644822063}
   - component: {fileID: 1644822064}
+  - component: {fileID: 1644822065}
   m_Layer: 5
   m_Name: HPSlider
   m_TagString: Untagged
@@ -7828,6 +7829,19 @@ MonoBehaviour:
   target: {fileID: 214378417}
   worldOffset: {x: 0, y: -0.2, z: 0}
   smoothSpeed: 15
+  canvasGroup: {fileID: 1644822065}
+--- !u!225 &1644822065
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644822062}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1649998140
 GameObject:
   m_ObjectHideFlags: 0
