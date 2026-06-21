@@ -35,8 +35,8 @@ public class DisplayManager : MonoBehaviour
         }
         else
         {
-            // 창모드 전환 시 기본 크기를 16:9 비율인 1280x720으로 맞춥니다.
-            Screen.SetResolution(1280, 720, FullScreenMode.Windowed);
+            // 창모드 전환 시 기본 크기를 16:9 비율인 1920, 1080으로 맞춥니다.
+            Screen.SetResolution(1920, 1080, FullScreenMode.Windowed);
         }
     }
 }
