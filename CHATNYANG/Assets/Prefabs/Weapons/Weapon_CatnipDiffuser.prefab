@@ -45,5 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponData: {fileID: 11400000, guid: 34fef9a02de0b9b41a1954461e9dd873, type: 2}
-  currentRarity: 0
+  currentRarity: 4
   currentUpgradeLevel: 0

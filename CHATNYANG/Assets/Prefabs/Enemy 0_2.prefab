@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: -7233064556909734606}
   - component: {fileID: 2259555152327086100}
   - component: {fileID: 5492837639388407255}
-  - component: {fileID: 3349405737804448031}
   - component: {fileID: 7729575301802518953}
   - component: {fileID: -6755839713549088300}
   - component: {fileID: 78945117161397283}
@@ -172,19 +171,6 @@ MonoBehaviour:
     damage: 50
     attackCooldown: 1
     expReward: 150
---- !u!114 &3349405737804448031
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7155164302551491639}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0b31950e1fdc2f4f8797c7b688e3a3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  expOrbPrefab: {fileID: 1708141714533642986, guid: 7f654cdfe01963145b89235002475708, type: 3}
 --- !u!114 &7729575301802518953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,6 +218,9 @@ MonoBehaviour:
   vacuumPrepTime: 0.5
   vacuumActiveTime: 2
   vacuumCooldown: 3
+  vacuumVisual: {fileID: 0}
+  vacuumAnimator: {fileID: 0}
+  vacuumVisualMultiplier: 1
   useSprayShoot: 0
   projectilePrefab: {fileID: 0}
   shootCooldown: 3
